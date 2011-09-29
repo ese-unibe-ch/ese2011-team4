@@ -14,9 +14,9 @@ import models.*;
 import org.junit.Test;
 import org.junit.Before;
 
-import play.test.FunctionalTest;
+import play.test.UnitTest;
 
-public class UserTest extends FunctionalTest{
+public class UserTest extends UnitTest{
 	Calendar cal;
 	User testA, testB;
 	Event e1, e2, e3, e4;

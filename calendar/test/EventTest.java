@@ -12,9 +12,9 @@ import models.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.FunctionalTest;
+import play.test.UnitTest;
 
-public class EventTest extends FunctionalTest {
+public class EventTest extends UnitTest {
 	Calendar cal;
 	User testA, testB;
 	Event e1, e2, e3;
