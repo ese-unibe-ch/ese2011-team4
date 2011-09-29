@@ -15,7 +15,7 @@ public class User {
 		return new Calendar(name,  this);
 	}
 	
-	public void createEvent(Calendar cal, String name, Date startDate, Date endDate, boolean isPrivate) throws EndDateBeforeStartDateException {
+	public void createEvent(Calendar cal, String name, Date startDate, Date endDate, boolean isPrivate) throws InvalidEventException {
 		cal.addEvent(name, startDate, endDate, isPrivate);
 	}
 	

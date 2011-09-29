@@ -24,7 +24,7 @@ public class CalendarTest extends UnitTest {
 	DateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
 	
 	@Before
-	public void setup() throws ParseException, EndDateBeforeStartDateException {
+	public void setup() throws ParseException, InvalidEventException {
 		testA = new User("A");
 		testB = new User("B");
 		cal = new Calendar("Test Calendar", testA);
@@ -79,6 +79,9 @@ public class CalendarTest extends UnitTest {
 	
 	@Test
 	public void visibility()  {
+		cal.addEvent(e1);
+		cal.addEvent(e2);
+		
 		assertTrue(cal.isVisible(testA, e1));
 		assertTrue(cal.isVisible(testA, e2));
 		assertTrue(cal.isVisible(testB, e1));
@@ -134,7 +137,7 @@ public class CalendarTest extends UnitTest {
 	}
 	
 	@Test
-	public void addLongEvent() throws ParseException, EndDateBeforeStartDateException {
+	public void addLongEvent() throws ParseException, InvalidEventException {
 		Date start = dateFormat.parse("11.01.1990 11:00");
 		Date end = dateFormat.parse("11.02.1990 16:00");
 		

@@ -21,7 +21,7 @@ public class EventTest extends UnitTest {
 	DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	
 	@Before
-	public void setup() throws ParseException, EndDateBeforeStartDateException {
+	public void setup() throws ParseException, InvalidEventException {
 		testA = new User("A");
 		testB = new User("B");
 		cal = new Calendar("Test Calendar", testA);
@@ -44,11 +44,11 @@ public class EventTest extends UnitTest {
 		assertEquals(e1.getName(), "Test Event 1");
 		assertEquals(e1.getStartDate(), dateFormat.parse("11.01.1990 11:00"));
 		assertEquals(e1.getEndDate(), dateFormat.parse("11.01.1990 16:00"));
-		assertFalse(e1.getPrivacy());
+		assertFalse(e1.isPrivate());
 	}
 	
-	@Test(expected=EndDateBeforeStartDateException.class)
-	public void createInvalidEvent() throws ParseException, EndDateBeforeStartDateException {
+	@Test(expected=InvalidEventException.class)
+	public void createInvalidEvent() throws ParseException, InvalidEventException {
 		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		Date start = dateFormat.parse("11.01.1990 17:00");
 		Date end = dateFormat.parse("11.01.1990 16:00");
@@ -60,5 +60,13 @@ public class EventTest extends UnitTest {
 		assertTrue(e1.compareTo(e2) < 0);
 		assertTrue(e1.compareTo(e3) > 0);
 		assertTrue(e2.compareTo(e3) > 0);
+	}
+	
+	@Test
+	public void isThisDay() throws ParseException {
+		assertTrue(e1.isThisDay(dateFormat.parse("11.01.1990 23:00")));
+		assertTrue(e1.isThisDay(dateFormat.parse("11.01.1990 00:00")));
+		assertFalse(e1.isThisDay(dateFormat.parse("12.01.1990 00:00")));
+		assertFalse(e1.isThisDay(dateFormat.parse("11.01.1991 12:00")));
 	}
 }

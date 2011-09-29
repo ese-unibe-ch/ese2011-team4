@@ -7,8 +7,8 @@
 *~
 *.log
 .orig
-/tmp
-/modules
-/lib
-/test-result
-/logs
+*/tmp
+*/modules
+*/lib
+*/test-result
+*/logs

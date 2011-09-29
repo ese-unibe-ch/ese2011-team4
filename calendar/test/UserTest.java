@@ -24,7 +24,7 @@ public class UserTest extends UnitTest{
 	DateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
 	
 	@Before
-	public void setup() throws ParseException, EndDateBeforeStartDateException {
+	public void setup() throws ParseException, InvalidEventException {
 		testA = new User("A");
 		testB = new User("B");
 		cal = new Calendar("Test Calendar", testA);
@@ -60,7 +60,7 @@ public class UserTest extends UnitTest{
 	}
 	
 	@Test
-	public void createEventForUser() throws ParseException, EndDateBeforeStartDateException {
+	public void createEventForUser() throws ParseException, InvalidEventException {
 		Date start = dateFormat.parse("11.01.1990 11:00");
 		Date end = dateFormat.parse("11.01.1990 11:11");
 		testA.createEvent(cal, "TestEvent", start, end, false);

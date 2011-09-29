@@ -16,7 +16,7 @@ public class Calendar {
 		this.events = new LinkedList<Event>();
 	}
 	
-	public void addEvent(String name, Date startDate, Date endDate, boolean privacy) throws EndDateBeforeStartDateException {
+	public void addEvent(String name, Date startDate, Date endDate, boolean privacy) throws InvalidEventException {
 		addEvent(new Event(name, startDate, endDate, privacy));
 	}
 	
@@ -27,32 +27,24 @@ public class Calendar {
 
 	public LinkedList<Event> getListForDate(User user, Date date) {
 		LinkedList<Event> list = new LinkedList<Event>();
-		Iterator<Event> it = getIteratorForUser(user, date);
-		Date limit = new Date();
-		limit.setTime(date.getTime()+86400000);
 		
-		while(it.hasNext()) {
-			Event e = it.next();
-			if(e.getStartDate().after(limit))
-				return list;
-			list.add(e);
-		}
+		for(Event e : events)
+			if(e.isThisDay(date) && (isVisible(user, e)))
+				list.add(e);
+		
 		return list;
 	}
 	
 	public boolean isVisible(User user, Event event) {
-		assert events.contains(event);
-		return !event.getPrivacy() || user == owner;
+		return events.contains(event) && !event.isPrivate() || user == owner;
 	}
 
 	public Iterator<Event> getIteratorForUser(User user, Date date) {
 		LinkedList<Event> list = new LinkedList<Event>();
-		Iterator<Event> it = events.iterator();
-		while(it.hasNext()) {
-			Event e = it.next();
-			if(e.getStartDate().after(date) && isVisible(user, e))
+		
+		for(Event e : events)
+			if(e.getEndDate().after(date) && isVisible(user, e))
 				list.add(e);
-		}
 		
 		return list.iterator();
 	}
