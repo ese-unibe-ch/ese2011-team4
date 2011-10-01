@@ -1,7 +1,52 @@
-# you describe your data using the YAML notation here
-# and then load them using Fixtures.load("data.yml")
+# Test data
 
-# User(bob):
-#   email: bob@gmail.com
-#   password: secret
-#   fullname: Bob
+User(jack):
+    email:          jack.vincennes@lapolice.com
+    password:       secret
+    fullname:       Jack Vincennes
+    isAdmin:        true
+    
+User(bud):
+    email:          bud.white@lapolice.com
+    password:       secret
+    fullname:       Bud White
+    
+Calendar(firstJackCalendar):
+    name:           Jacks Agenda
+    owner:          jack
+
+Calendar(secondJackCalendar):
+    name:           Jacks Secret Agenda
+    owner:          jack
+    
+Calendar(budCalendar):
+    name:           Buds Schedule
+    owner:          bud
+
+Event(e1):
+    name:           Meet Lynn Bracken
+    startDate:      11.09.1953 13:00
+    endDate:        11.09.1953 15:00
+    calendar:       firstJackCalendar
+    isPrivate:      false
+    
+Event(e2):
+    name:           Hit Exley
+    startDate:      11.09.1953 17:00
+    endDate:        11.09.1953 18:00
+    calendar:       firstJackCalendar
+    isPrivate:      true
+    
+Event(e3):
+    name:           Work
+    startDate:      12.09.1953 08:00
+    endDate:        12.09.1953 11:00
+    calendar:       budCalendar
+    isPrivate:      false
+    
+Event(e4):
+    name:            Coffee (or much more Whiskey)
+    startDate:        12.09.1953 14:00
+    endDate:        12.09.1953 17:00
+    calendar:       secondJackCalendar
+    isPrivate:      true

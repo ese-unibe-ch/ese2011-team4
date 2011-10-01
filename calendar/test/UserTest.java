@@ -14,6 +14,7 @@ import models.*;
 import org.junit.Test;
 import org.junit.Before;
 
+import play.test.Fixtures;
 import play.test.UnitTest;
 
 public class UserTest extends UnitTest{
@@ -24,78 +25,40 @@ public class UserTest extends UnitTest{
 	DateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
 	
 	@Before
-	public void setup() throws ParseException, InvalidEventException {
-		testA = new User("A");
-		testB = new User("B");
-		cal = new Calendar("Test Calendar", testA);
-		
-		Date start = dateFormat.parse("11.01.1990 11:00");
-		Date end = dateFormat.parse("11.01.1990 16:00");
-		e1 = new Event("Test Event 1", start, end, false);
-		
-		start = dateFormat.parse("11.01.1990 12:00");
-		end = dateFormat.parse("11.01.1990 15:00");
-		e2 = new Event("Test Event 2", start, end, true);
-		
-		start = dateFormat.parse("11.01.1990 08:00");
-		end = dateFormat.parse("11.01.1990 16:00");
-		e3 = new Event("Test Event 3", start, end, false);
-		
-		start = dateFormat.parse("12.01.1990 08:00");
-		end = dateFormat.parse("12.01.1990 16:00");
-		e4 = new Event("Test Event 4", start, end, false);
+	public void setup() {
+		Fixtures.deleteDatabase();
 	}
 	
 	@Test
-	public void createUser() {
-		testA = new User("testA");
-		assertEquals(testA.getName(), "testA");
+	public void createAndRetrieveUser() {
+		new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		User jack = User.find("byEmail", "jack.vincennes@lapolice.com").first();
+		
+		assertNotNull(jack);
+		assertEquals("Jack Vincennes", jack.fullname);
 	}
 	
 	@Test
-	public void createCalendarFromUser() {
-		cal = testA.createCalendar("testA's Calendar");
-		assertEquals(cal.getOwner(), testA);
-		assertEquals(cal.getName(), "testA's Calendar");
+	public void tryConnectAsUser() {
+		new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		assertNotNull(User.connect("jack.vincennes@lapolice.com", "secret"));
+		assertNull(User.connect("jack.vincennes@lapolice.com", "notsosecret"));
+		assertNull(User.connect("bud.white@lapolice.com", "secret"));
 	}
 	
 	@Test
-	public void createEventForUser() throws ParseException, InvalidEventException {
-		Date start = dateFormat.parse("11.01.1990 11:00");
-		Date end = dateFormat.parse("11.01.1990 11:11");
-		testA.createEvent(cal, "TestEvent", start, end, false);
+	public void createCalendar() throws InvalidEventException, ParseException {
+		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		jack.createCalendar("Jacks Agenda");
 		
-		assertFalse(cal.getEvents().isEmpty());
-	}
-	
-	@Test
-	public void obtainListForDate() throws ParseException {
-		Date specificDate = dayFormat.parse("11.01.1990");
-		cal.addEvent(e1);
-		cal.addEvent(e2);
-		cal.addEvent(e3);
-		cal.addEvent(e4);
+		assertEquals(1, Calendar.count());
 		
-		List<Event> list = testA.getList(cal, specificDate);
-		assertTrue(list.contains(e1));
-		assertTrue(list.contains(e2));
-		assertTrue(list.contains(e3));
-		assertFalse(list.contains(e4));
-	}
-	
-	@Test
-	public void createIteratorForDate() throws ParseException {
-		Date specificDate = dayFormat.parse("11.01.1990");
-		cal.addEvent(e1);
-		cal.addEvent(e2);
-		cal.addEvent(e3);
-		cal.addEvent(e4);
+		List<Calendar> jacksCalendars = Calendar.find("byOwner", jack).fetch();
 		
-		Iterator<Event> it = testA.getIterator(cal, specificDate);
-		
-		assertEquals(it.next(), e3);
-		assertEquals(it.next(), e1);
-		assertEquals(it.next(), e2);
-		assertEquals(it.next(), e4);
+		assertEquals(1, jacksCalendars.size());
+		Calendar firstCalendar = jacksCalendars.get(0);
+	    assertNotNull(firstCalendar);
+	    assertEquals(jack, firstCalendar.owner);
+	    assertEquals("Jacks Agenda", firstCalendar.name);
 	}
 }

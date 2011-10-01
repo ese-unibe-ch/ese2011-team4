@@ -14,140 +14,68 @@ import models.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import play.test.Fixtures;
 import play.test.UnitTest;
 
 public class CalendarTest extends UnitTest {
-	Calendar cal;
-	User testA, testB;
-	Event e1, e2, e3, e4;
 	DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-	DateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
 	
 	@Before
-	public void setup() throws ParseException, InvalidEventException {
-		testA = new User("A");
-		testB = new User("B");
-		cal = new Calendar("Test Calendar", testA);
-		
-		Date start = dateFormat.parse("11.01.1990 11:00");
-		Date end = dateFormat.parse("11.01.1990 16:00");
-		e1 = new Event("Test Event 1", start, end, false);
-		
-		start = dateFormat.parse("11.01.1990 12:00");
-		end = dateFormat.parse("11.01.1990 15:00");
-		e2 = new Event("Test Event 2", start, end, true);
-		
-		start = dateFormat.parse("11.01.1990 08:00");
-		end = dateFormat.parse("11.01.1990 16:00");
-		e3 = new Event("Test Event 3", start, end, false);
-		
-		start = dateFormat.parse("12.01.1990 08:00");
-		end = dateFormat.parse("12.01.1990 16:00");
-		e4 = new Event("Test Event 4", start, end, false);
+	public void setup() {
+		Fixtures.deleteDatabase();
 	}
 	
 	@Test
 	public void createCalendar() {
-		assertEquals(cal.getOwner(), testA);
-		assertEquals(cal.getName(), "Test Calendar");
+		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		new Calendar(jack, "Jacks Agenda").save();
+		
+		Calendar cal = Calendar.find("byOwner", jack).first();
+		
+		assertNotNull(cal);
+		assertEquals("Jacks Agenda", cal.name);
 	}
 	
 	@Test
-	public void emptyCalendar() {
-		assertTrue(cal.getEvents().isEmpty());
-	}
-	
-	@Test
-	public void addEvent() {
-		cal.addEvent(e1);
+	public void addAndDeleteEvents() throws InvalidEventException, ParseException {
+		// Create a new user and save it
+		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
 		
-		assertFalse(cal.getEvents().isEmpty());
-		assertTrue(cal.getEvents().contains(e1));
-	}
-	
-	@Test
-	public void sortingEvents() {
-		cal.addEvent(e1);
-		cal.addEvent(e2);
-		cal.addEvent(e3);
+		// Create a new Calendar and save it
+		Calendar jacksCalendar = new Calendar(jack, "Jacks Agenda").save();
 		
-		List<Event> test = cal.getEvents();
+		// Create new events
+		jacksCalendar.addEvent("Meet Lynn Bracken", dateFormat.parse("11.09.1953 13:00"), dateFormat.parse("11.09.1953 15:00"), false);
+		jacksCalendar.addEvent("Hit Exley", dateFormat.parse("11.09.1953 17:00"), dateFormat.parse("11.09.1953 18:00"), true);
 		
-		for(int i = 0; i < test.size() - 1; i++)
-			assertTrue(test.get(i).getStartDate().before(test.get(i+1).getStartDate()));
-	}
-	
-	@Test
-	public void visibility()  {
-		cal.addEvent(e1);
-		cal.addEvent(e2);
+		// Count things
+	    assertEquals(1, User.count());
+	    assertEquals(1, Calendar.count());
+	    assertEquals(2, Event.count());
+	    
+	    // Retrieve calendar
+	    jacksCalendar = Calendar.find("byOwner", jack).first();
+	    assertNotNull(jacksCalendar);
 		
-		assertTrue(cal.isVisible(testA, e1));
-		assertTrue(cal.isVisible(testA, e2));
-		assertTrue(cal.isVisible(testB, e1));
-		assertFalse(cal.isVisible(testB, e2));
-	}
-	
-	@Test
-	public void iterator() throws ParseException {
-		cal.addEvent(e1);
-		cal.addEvent(e2);
-		cal.addEvent(e3);
-		cal.addEvent(e4);
+	    // Navigate to events
+		assertEquals(2, jacksCalendar.events.size());
 		
-		Iterator<Event> it = cal.getIteratorForUser(testA, dayFormat.parse("11.01.1990"));
-		assertEquals(it.next(), e3);
-		assertEquals(it.next(), e1);
-		assertEquals(it.next(), e2);
-		assertEquals(it.next(), e4);
-		
-		it = cal.getIteratorForUser(testB, dayFormat.parse("11.01.1990"));
-		assertEquals(it.next(), e3);
-		assertEquals(it.next(), e1);
-		assertEquals(it.next(), e4);
-		
-		it = cal.getIteratorForUser(testA, dayFormat.parse("12.01.1990"));
-		assertEquals(it.next(), e4);
-	}
-	
-	@Test
-	public void getList() throws ParseException {
-		cal.addEvent(e1);
-		cal.addEvent(e2);
-		cal.addEvent(e3);
-		cal.addEvent(e4);
-		
-		List<Event> list = cal.getListForDate(testA, dayFormat.parse("11.01.1990"));
-		assertTrue(list.contains(e1));
-		assertTrue(list.contains(e2));
-		assertTrue(list.contains(e3));
-		assertFalse(list.contains(e4));
-		
-		list = cal.getListForDate(testB, dayFormat.parse("11.01.1990"));
-		assertTrue(list.contains(e1));
-		assertFalse(list.contains(e2));
-		assertTrue(list.contains(e3));
-		assertFalse(list.contains(e4));
-		
-		list = cal.getListForDate(testA, dayFormat.parse("12.01.1990"));
-		assertFalse(list.contains(e1));
-		assertFalse(list.contains(e2));
-		assertFalse(list.contains(e3));
-		assertTrue(list.contains(e4));
-	}
-	
-	@Test
-	public void addLongEvent() throws ParseException, InvalidEventException {
-		Date start = dateFormat.parse("11.01.1990 11:00");
-		Date end = dateFormat.parse("11.02.1990 16:00");
-		
-		Event longEvent = new Event("Long Event", start, end, false);
-		cal.addEvent(longEvent);
-		
-		List<Event> list = cal.getListForDate(testA, dayFormat.parse("11.01.1990"));
-		assertTrue(list.contains(longEvent));
-		
-		list = cal.getListForDate(testA, dayFormat.parse("11.02.1990"));
-		assertFalse(list.contains(longEvent));
+		Event firstEvent = jacksCalendar.events.get(0);
+	    assertNotNull(firstEvent);
+	    assertEquals(dateFormat.parse("11.09.1953 13:00"), firstEvent.startDate);
+	    assertEquals(dateFormat.parse("11.09.1953 15:00"), firstEvent.endDate);
+	    assertFalse(firstEvent.isPrivate);
+	 
+	    Event secondEvent = jacksCalendar.events.get(1);
+	    assertNotNull(secondEvent);
+	    assertEquals(dateFormat.parse("11.09.1953 17:00"), secondEvent.startDate);
+	    assertEquals(dateFormat.parse("11.09.1953 18:00"), secondEvent.endDate);
+	    assertTrue(secondEvent.isPrivate);
+	    
+	    // Delete Calendar
+	    jacksCalendar.delete();
+	    assertEquals(1, User.count());
+	    assertEquals(0, Calendar.count());
+	    assertEquals(0, Event.count());
 	}
 }

@@ -1,42 +1,44 @@
 package models;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.Entity;
 
-public class User {
-	private String name;
+import play.db.jpa.Model;
 
-	public User(String name) {
-		this.name = name;
+@Entity
+public class User extends Model {
+	public String email;
+	public String password;
+	public String fullname;
+	public boolean isAdmin;
+
+	public User(String email, String password, String fullname) {
+		this.email = email;
+		this.password = password;
+		this.fullname = fullname;
+	}
+	
+	public static User connect(String email, String password) {
+		return find("byEmailAndPassword", email, password).first();
 	}
 
 	public Calendar createCalendar(String name) {
-		return new Calendar(name,  this);
+		return new Calendar(this,  name).save();
 	}
 	
-	public void createEvent(Calendar cal, String name, Date startDate, Date endDate, boolean isPrivate) throws InvalidEventException {
-		cal.addEvent(name, startDate, endDate, isPrivate);
+	public List<Event> getEventsForCalendar(Calendar cal, Date date) {
+		return cal.getListForDate(this, date);
 	}
-	
+
 	public Iterator<Event> getIterator(Calendar cal, Date date) {
 		return cal.getIteratorForUser(this, date);
 	}
 
 	@Override
 	public String toString() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public List<Event> getList(Calendar cal, Date date) {
-		return cal.getListForDate(this, date);
+		return fullname+"("+email+")";
 	}
 }
