@@ -1,13 +1,13 @@
 # Test data
 
 User(jack):
-    email:          jack.vincennes@lapolice.com
+    email:          jack.vincennes@lapd.com
     password:       secret
     fullname:       Jack Vincennes
     isAdmin:        true
     
 User(bud):
-    email:          bud.white@lapolice.com
+    email:          bud.white@lapd.com
     password:       secret
     fullname:       Bud White
     

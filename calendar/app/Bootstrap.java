@@ -12,8 +12,4 @@ public class Bootstrap extends Job {
             Fixtures.loadModels("initial-data.yml");
         }
     }
-<<<<<<< HEAD
-=======
- 
->>>>>>> 31a4477... Bootstraped the application with some initial data
 }

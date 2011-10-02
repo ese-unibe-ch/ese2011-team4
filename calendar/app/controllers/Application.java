@@ -9,7 +9,8 @@ import models.*;
 
 public class Application extends Controller {
     public static void index() {
-    	List<Calendar> calendars = Calendar.all().fetch();
+    	String connectedUser = Security.connected();
+    	List<Calendar> calendars = Calendar.find("owner.email", connectedUser).fetch();
     	List<User> users = User.all().fetch();
         render(calendars, users);
     }

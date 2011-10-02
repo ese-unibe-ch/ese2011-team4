@@ -14,12 +14,19 @@
                 calpal.
             </div>
             <ul id="tools">
-                <li>
-                    <a href="#">Log in</a>
-                </li>
-                <li>
-                	<a href="#">Register</a>
-                </li>
+            	#{if session.username}
+            		<li>
+            			<a href="@{Secure.logout()}">Log out</a>
+            		</li>
+            	#{/if}
+            	#{else}
+	                <li>
+	                    <a href="@{Secure.login()}">Log in</a>
+	                </li>
+	                <li>
+	                	<a href="#">Register</a>
+	                </li>
+            	#{/else}
             </ul>
         </div>
         

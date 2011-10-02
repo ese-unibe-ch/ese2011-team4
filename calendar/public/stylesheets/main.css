@@ -61,6 +61,10 @@ body {
 	margin-bottom: 20px;
 }
 
+.list-title {
+	margin-top: 0px;
+}
+
 #main-left {
 	float: left;
 	width: 560px;
@@ -71,11 +75,11 @@ body {
     margin-right: 10px;
 }
 
-.user-calendars ul {
+#main-left ul {
 	list-style: none;
 }
 
-.user-calendars h3 {
+#main-left h3 {
 	display: inline;
 }
 
