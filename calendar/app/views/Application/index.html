@@ -1,4 +1,54 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-#{welcome /}
+<div id="main-left">
+	#{if calendars.size() > 1}
+		<div class="user-calendars">
+			<h2 class="list-title">Your calendars</h2>
+			<div class="list">
+				<ul>
+				#{list items:calendars, as:'calendar'}
+					<div class="calendar">
+						<li>
+							<h3 class="calendar-name">
+								<a href="#">${calendar.name}</a>
+							</h3>
+							<div class="calendar-metadata">
+								<span class="calendar-events">
+									has ${calendar.events.size() ?: 'no'} 
+									event${calendar.events.size().pluralize()}
+		                       	</span>
+							</div>
+						</li>
+					</div>
+				#{/list}
+				</ul>
+			</div>
+		</div>
+	#{/if}
+
+	#{else}
+	    <div class="empty">
+	        You don't have any calendars to display.
+	    </div>
+	#{/else}
+</div>
+
+<div id="main-right">
+	<div class="user-list">
+		<h2 class="list-title">Users</h2>
+		<div class="list">
+			<ul>
+			#{list items:users, as:'user'}
+				<div class="user">
+					<li>
+						<h3 class="user-name">
+							<a href="#">${user.fullname}</a>
+						</h3>
+					</li>
+				</div>
+			#{/list}
+			</ul>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,109 @@
+/** Main layout **/
+
+html, body {
+    background: #A32947 !important;
+    font-family: Helvetica, Arial, Sans !important;
+}
+
+body {
+    width: 920px;
+    padding: 0 30px;
+    margin: auto;
+}
+
+/** Calendar header **/
+
+#header {
+    padding: 10px 0;
+    position: relative;
+}
+
+#logo {
+    display: block;
+    height: 49px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: -4px;
+    text-shadow: 1px 2px 2px #000;
+}
+
+#tools {
+    list-style: none;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0px;
+    top: 30px;
+}
+
+#tools a {
+	display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 2px;
+    padding-right: 20px;
+}
+
+#tools a:hover {
+	background-color: #fff;
+	color: #A32947;
+}
+
+/** Main content **/
+
+#main {
+	float: left;
+	width: 920px;
+	margin-bottom: 20px;
+}
+
+#main-left {
+	float: left;
+	width: 560px;
+	background: #C47078;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    padding: 20px;
+    margin-right: 10px;
+}
+
+.user-calendars ul {
+	list-style: none;
+}
+
+.user-calendars h3 {
+	display: inline;
+}
+
+#main-right {
+	float: left;
+	width: 260px;
+	background: #C47078;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    padding: 20px;
+    margin-left: 10px;
+}
+
+/** Calendars **/
+
+
+/** Footer **/
+
+#footer {
+    border-top: 1px solid #FF0000;
+    font-size: 70%;
+    padding: 10px 30px;
+    text-align: center;
+    color: #FFFFFF;
+    clear: left;
+}
+
+#footer a {
+    color: #FFFFFF;
+    font-weight: bold;
+}
