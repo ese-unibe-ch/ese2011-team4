@@ -1,0 +1,21 @@
+<div id="main-left">
+	<h2 class="title">Calendar: ${_calendar.name}</h2>
+	<h3>Upcoming events</h3>
+	#{if _events.size() > 0}
+		<ul>
+		#{list items:_events, as:'event'}
+			<li><h4>${event.name}</h4>
+			<div class="event-metadata">
+				${event.startDate.format('dd. MM yyyy HH:mm')} - ${event.endDate.format('dd. MM yyyy HH:mm')}				
+			</div>
+			</li>
+		#{/list}
+		</ul>
+	#{/if}
+	
+	#{else}
+	<div class="empty">
+        There are currently no events.
+    </div>
+    #{/else}
+</div>

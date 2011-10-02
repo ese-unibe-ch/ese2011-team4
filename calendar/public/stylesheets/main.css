@@ -18,7 +18,7 @@ body {
     position: relative;
 }
 
-#logo {
+#logo a {
     display: block;
     height: 49px;
     margin-left: 20px;
@@ -28,6 +28,7 @@ body {
     font-weight: bold;
     letter-spacing: -4px;
     text-shadow: 1px 2px 2px #000;
+   	text-decoration: none;
 }
 
 #tools {
@@ -61,8 +62,19 @@ body {
 	margin-bottom: 20px;
 }
 
-.list-title {
+#main a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#main a:hover {
+	color: #A32947;
+	background-color: #FFF;
+}
+
+.title {
 	margin-top: 0px;
+	color: #FFF;
 }
 
 #main-left {
@@ -83,6 +95,12 @@ body {
 	display: inline;
 }
 
+.calendar-metadata {
+	font-size: 0.8em;
+	margin-bottom: 1em;
+	display: inline;
+}
+
 #main-right {
 	float: left;
 	width: 260px;
@@ -91,6 +109,10 @@ body {
     -moz-border-radius: 16px;
     padding: 20px;
     margin-left: 10px;
+}
+
+.user li h3 {
+	margin: 0px;
 }
 
 /** Calendars **/
@@ -108,6 +130,6 @@ body {
 }
 
 #footer a {
-    color: #FFFFFF;
+    color: #FFF;
     font-weight: bold;
 }

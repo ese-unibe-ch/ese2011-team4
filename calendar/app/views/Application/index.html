@@ -3,14 +3,14 @@
 
 <div id="main-left">
 	#{if calendars.size() > 1}
-		<h2 class="list-title">Your calendars</h2>
+		<h2 class="title">Your calendars</h2>
 		<div class="list">
 			<ul>
 			#{list items:calendars, as:'calendar'}
 				<div class="calendar">
 					<li>
-						<h3 class="calendar-name">
-							<a href="#">${calendar.name}</a>
+						<h3>
+							<a href="@{Application.show(calendar.id)}">${calendar.name}</a>
 						</h3>
 						<div class="calendar-metadata">
 							<span class="calendar-events">
@@ -34,7 +34,7 @@
 
 <div id="main-right">
 		#{if session.username}
-			<h2 class="list-title">Users</h2>
+			<h2 class="title">Users</h2>
 			<div class="list">
 				<ul>
 				#{list items:users, as:'user'}

@@ -6,7 +6,8 @@
 *       /                                       module:secure
 
 # Home page
-GET     /                                       Application.index();
+GET     /                                       Application.index
+GET     /calendar/{id}                          Application.show
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

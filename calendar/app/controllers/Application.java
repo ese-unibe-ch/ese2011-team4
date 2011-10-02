@@ -14,4 +14,10 @@ public class Application extends Controller {
     	List<User> users = User.all().fetch();
         render(calendars, users);
     }
+    
+    public static void show(Long id) {
+    	Calendar calendar = Calendar.findById(id);
+    	List<Event> events = Event.find("byCalendar", calendar).fetch();
+    	render(calendar, events);
+    }
 }
