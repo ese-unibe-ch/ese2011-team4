@@ -27,7 +27,7 @@ public class CalendarTest extends UnitTest {
 	
 	@Test
 	public void createCalendar() {
-		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		new Calendar(jack, "Jacks Agenda").save();
 		
 		Calendar cal = Calendar.find("byOwner", jack).first();
@@ -39,7 +39,7 @@ public class CalendarTest extends UnitTest {
 	@Test
 	public void addAndDeleteEvents() throws InvalidEventException, ParseException {
 		// Create a new user and save it
-		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		
 		// Create a new Calendar and save it
 		Calendar jacksCalendar = new Calendar(jack, "Jacks Agenda").save();

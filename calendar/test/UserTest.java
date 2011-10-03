@@ -31,8 +31,8 @@ public class UserTest extends UnitTest{
 	
 	@Test
 	public void createAndRetrieveUser() {
-		new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
-		User jack = User.find("byEmail", "jack.vincennes@lapolice.com").first();
+		new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		
 		assertNotNull(jack);
 		assertEquals("Jack Vincennes", jack.fullname);
@@ -40,15 +40,15 @@ public class UserTest extends UnitTest{
 	
 	@Test
 	public void tryConnectAsUser() {
-		new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
-		assertNotNull(User.connect("jack.vincennes@lapolice.com", "secret"));
-		assertNull(User.connect("jack.vincennes@lapolice.com", "notsosecret"));
-		assertNull(User.connect("bud.white@lapolice.com", "secret"));
+		new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
+		assertNotNull(User.connect("jack.vincennes@lapd.com", "secret"));
+		assertNull(User.connect("jack.vincennes@lapd.com", "notsosecret"));
+		assertNull(User.connect("bud.white@lapd.com", "secret"));
 	}
 	
 	@Test
 	public void createCalendar() throws InvalidEventException, ParseException {
-		User jack = new User("jack.vincennes@lapolice.com", "secret", "Jack Vincennes").save();
+		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		jack.createCalendar("Jacks Agenda");
 		
 		assertEquals(1, Calendar.count());

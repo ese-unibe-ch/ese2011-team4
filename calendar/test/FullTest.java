@@ -29,23 +29,24 @@ public class FullTest extends UnitTest {
 	    assertEquals(4, Event.count());
 	 
 	    // Try to connect as users
-	    assertNotNull(User.connect("jack.vincennes@lapolice.com", "secret"));
-	    assertNotNull(User.connect("bud.white@lapolice.com", "secret"));
-	    assertNull(User.connect("bud.white@lapolice.com", "notsosecret"));
+	    assertNotNull(User.connect("jack.vincennes@lapd.com", "secret"));
+	    assertNotNull(User.connect("bud.white@lapd.com", "secret"));
+	    assertNull(User.connect("bud.white@lapd.com", "notsosecret"));
 	    assertNull(User.connect("sid.hudgens@hollywood.com", "secret"));
 	 
 	    // Find all of Jack's calendars
-	    List<Calendar> jacksCalendars = Calendar.find("owner.email", "jack.vincennes@lapolice.com").fetch();
+	    List<Calendar> jacksCalendars = Calendar.find("owner.email", "jack.vincennes@lapd.com").fetch();
 	    assertEquals(2, jacksCalendars.size());
 	 
 	    // Find all of Jack's events
-	    List<Event> jackEvents = Event.find("calendar.owner.email", "jack.vincennes@lapolice.com").fetch();
+	    List<Event> jackEvents = Event.find("calendar.owner.email", "jack.vincennes@lapd.com").fetch();
 	    assertEquals(3, jackEvents.size());
 	 
 	    // Find the next event
 	    Event nextEvent = Event.find("order by startDate asc").first();
 	    assertNotNull(nextEvent);
 	    assertEquals("Meet Lynn Bracken", nextEvent.name);
+	    assertEquals(dateFormat.parse("11.09.1953 13:00"), nextEvent.startDate);
 	 
 	    // Add a new event
 	    jacksCalendars.get(0).addEvent("Cinema", dateFormat.parse("13.09.1953 21:00"), dateFormat.parse("13.09.1953 23:00"), false);

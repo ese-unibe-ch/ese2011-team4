@@ -1,13 +1,13 @@
 # Test data
 
 User(jack):
-    email:          jack.vincennes@lapolice.com
+    email:          jack.vincennes@lapd.com
     password:       secret
     fullname:       Jack Vincennes
     isAdmin:        true
     
 User(bud):
-    email:          bud.white@lapolice.com
+    email:          bud.white@lapd.com
     password:       secret
     fullname:       Bud White
     
@@ -25,28 +25,28 @@ Calendar(budCalendar):
 
 Event(e1):
     name:           Meet Lynn Bracken
-    startDate:      11.09.1953 13:00
-    endDate:        11.09.1953 15:00
+    startDate:      1953-09-11 13:00:00 +1
+    endDate:        1953-09-11 15:00:00 +1
     calendar:       firstJackCalendar
     isPrivate:      false
     
 Event(e2):
     name:           Hit Exley
-    startDate:      11.09.1953 17:00
-    endDate:        11.09.1953 18:00
+    startDate:      1953-09-11 17:00:00 +1
+    endDate:        1953-09-11 18:00:00 +1
     calendar:       firstJackCalendar
     isPrivate:      true
     
 Event(e3):
     name:           Work
-    startDate:      12.09.1953 08:00
-    endDate:        12.09.1953 11:00
+    startDate:      1953-09-12 08:00:00 +1
+    endDate:        1953-09-12 11:00:00 +1
     calendar:       budCalendar
     isPrivate:      false
     
 Event(e4):
-    name:            Coffee (or much more Whiskey)
-    startDate:        12.09.1953 14:00
-    endDate:        12.09.1953 17:00
+    name:           Coffee (or much more Whiskey)
+    startDate:      1953-09-12 14:00:00 +1
+    endDate:        1953-09-12 17:00:00 +1
     calendar:       secondJackCalendar
     isPrivate:      true

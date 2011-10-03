@@ -11,7 +11,7 @@ body {
     margin: auto;
 }
 
-/** Calendar header **/
+/** Application header **/
 
 #header {
     padding: 10px 0;
@@ -73,8 +73,7 @@ body {
 }
 
 .title {
-	margin-top: 0px;
-	color: #FFF;
+	margin: 0px;
 }
 
 #main-left {
@@ -87,11 +86,12 @@ body {
     margin-right: 10px;
 }
 
-#main-left ul {
+#calendar-list ul {
 	list-style: none;
+	padding: 0px;
 }
 
-#main-left h3 {
+#calendar-list h3 {
 	display: inline;
 }
 
@@ -111,12 +111,46 @@ body {
     margin-left: 10px;
 }
 
-.user li h3 {
-	margin: 0px;
+.navigation ul {
+	list-style: none;
+	padding: 0px;
 }
 
-/** Calendars **/
+.navigation ul a {
+	font-weight: bold;
+}
 
+/** Calendar **/
+
+#event-list ul {
+	list-style: none;
+	padding: 0px;
+}
+
+#event-list hr {
+	border: 0;
+	margin: 10px 10px;
+	color: #000;
+	align: center;
+	background-color: #000;
+	height: 2px;
+	style: dashed;
+}
+
+.event-header {
+	font-weight: bold;
+	font-size: 1.2em;
+	display: inline;
+}
+
+.event-metadata {
+	font-size: 0.8em;
+	display: inline;
+}
+
+.event-content {
+	margin-top: 10px;
+}
 
 /** Footer **/
 

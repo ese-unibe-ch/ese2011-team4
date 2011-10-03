@@ -23,30 +23,42 @@ Calendar(budCalendar):
     name:           Buds Schedule
     owner:          bud
 
+Event(e0):
+    name:           Collections
+    startDate:      1953-09-13 09:00:00 +1
+    endDate:        1953-09-13 12:00:00 +1
+    calendar:       firstJackCalendar
+    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
+    isPrivate:      true
+
 Event(e1):
     name:           Meet Lynn Bracken
-    startDate:      11.09.1953 13:00
-    endDate:        11.09.1953 15:00
+    startDate:      1953-09-11 13:00:00 +1
+    endDate:        1953-09-11 15:00:00 +1
     calendar:       firstJackCalendar
+    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      false
     
 Event(e2):
     name:           Hit Exley
-    startDate:      11.09.1953 17:00
-    endDate:        11.09.1953 18:00
+    startDate:      1953-09-11 17:00:00 +1
+    endDate:        1953-09-11 18:00:00 +1
     calendar:       firstJackCalendar
+    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true
     
 Event(e3):
     name:           Work
-    startDate:      12.09.1953 08:00
-    endDate:        12.09.1953 11:00
+    startDate:      1953-09-12 08:00:00 +1
+    endDate:        1953-09-12 11:00:00 +1
     calendar:       budCalendar
+    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      false
     
 Event(e4):
-    name:            Coffee (or much more Whiskey)
-    startDate:        12.09.1953 14:00
-    endDate:        12.09.1953 17:00
+    name:           Drinking whiskey
+    startDate:      1953-09-12 14:00:00 +1
+    endDate:        1953-09-12 17:00:00 +1
     calendar:       secondJackCalendar
+    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true

@@ -12,12 +12,21 @@ public class Application extends Controller {
     	String connectedUser = Security.connected();
     	List<Calendar> calendars = Calendar.find("owner.email", connectedUser).fetch();
     	List<User> users = User.all().fetch();
-        render(calendars, users);
+        render(calendars, connectedUser, users);
     }
     
-    public static void show(Long id) {
+    public static void showCalendar(Long id) {
     	Calendar calendar = Calendar.findById(id);
-    	List<Event> events = Event.find("byCalendar", calendar).fetch();
+    	
+    	List<Event> events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? order by x.startDate asc, x.endDate asc", id).fetch();
+    	
     	render(calendar, events);
+    }
+    
+    public static void displayCalendars(Long id) {
+    	User user = User.findById(id);
+    	List<Calendar> calendars = Calendar.find("owner", user).fetch();
+    	List<User> users = User.all().fetch();
+        render(calendars, user, users);
     }
 }

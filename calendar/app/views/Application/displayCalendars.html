@@ -1,8 +1,8 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title: user.fullname /}
 
 <div id="main-left">
-	#{calendar-list calendars:calendars, user:connectedUser /}
+	#{calendar-list calendars:calendars, user:user /}
 </div>
 
 <div id="main-right">

@@ -1,0 +1,27 @@
+<div id="calendar-list">
+	#{if _calendars.size() > 0}
+		<h2 class="title">Calendars</h2>
+		
+		<div id="calendar-list">
+		<ul>
+		#{list items:_calendars, as:'calendar'}
+			<li>
+			<h3><a href="@{Application.showCalendar(calendar.id)}">${calendar.name}</a></h3>
+			<div class="calendar-metadata">
+				<span class="calendar-events">
+				has ${calendar.events.size() ?: 'no'} 
+				event${calendar.events.size().pluralize()}
+				</span>
+			</div>
+			</li>
+		#{/list}
+		</ul>
+		</div>
+	#{/if}
+	
+	#{else}
+	    <div class="empty">
+	        There aren't any calendars to display.
+	    </div>
+	#{/else}
+</div>
