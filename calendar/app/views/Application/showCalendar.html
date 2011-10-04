@@ -1,4 +1,49 @@
 #{extends 'main.html' /}
 #{set title:calendar.name/}
 
-#{display-calendar calendar:calendar, events:events /}
+<div id="main-left">
+	#{if flash.success}
+	    <p class="success">${flash.success}</p>
+	#{/if}
+	<h2 class="title">Calendar: <span id="calendar-name">${calendar.name}</span></h2>
+	<h3>Upcoming events</h3>
+	#{if events.size() > 0}
+	<div id="event-list">
+		<ul>
+		<hr />
+		#{list items:events, as:'event'}
+			<li><div class="event-header"><a href="#">${event.name}</a></div>
+			<div class="event-metadata">
+				${event.startDate.format('dd. MM. yyyy HH:mm')} - ${event.endDate.format('dd. MM. yyyy HH:mm')}
+				#{if event.isPrivate}
+				- Private Event
+				#{/if}
+			</div>
+			<div class="event-content">
+			${event.description}
+			</div>
+			</li>
+			<hr />
+		#{/list}
+		</ul>
+	</div>
+	#{/if}
+	
+	#{else}
+	<div class="empty">
+        There are currently no events.
+    </div>
+    #{/else}
+</div>
+
+<div id="main-right">
+	<h2 class="title">Options</h2>
+	<div class="navigation">
+	<ul>
+		<li><a class="navigation" href="@{Application.index}">Go back</a></li>
+		#{if session.username == calendar.owner.email}
+		<li><a class="navigation" href="@{Application.addEvent(calendar.id)}">Add an event</a></li>
+		#{/if}
+	</ul>
+	</div>
+</div>

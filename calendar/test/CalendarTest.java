@@ -78,4 +78,25 @@ public class CalendarTest extends UnitTest {
 	    assertEquals(0, Calendar.count());
 	    assertEquals(0, Event.count());
 	}
+	
+	@Test
+	public void addEventWithDescription() throws InvalidEventException, ParseException {
+		// Create a new user and save it
+		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
+		
+		// Create a new Calendar and save it
+		Calendar jacksCalendar = new Calendar(jack, "Jacks Agenda").save();
+		
+		// Create new events
+		jacksCalendar.addEvent("Meet Lynn Bracken", dateFormat.parse("11.09.1953 13:00"), 
+				dateFormat.parse("11.09.1953 15:00"), false, "Who is this mysterious women?");
+		jacksCalendar.addEvent("Hit Exley", dateFormat.parse("11.09.1953 17:00"), 
+				dateFormat.parse("11.09.1953 18:00"), true, "That's gonna be fun!");
+		
+		Event firstEvent = jacksCalendar.events.get(0);
+		assertEquals("Who is this mysterious women?", firstEvent.description);
+		
+		Event secondEvent = jacksCalendar.events.get(0);
+		assertEquals("That's gonna be fun!", secondEvent.description);
+	}
 }

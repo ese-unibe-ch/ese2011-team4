@@ -32,6 +32,7 @@ body {
 }
 
 #tools {
+	color: #fff;
     list-style: none;
     font-weight: bold;
     margin: 0;
@@ -150,6 +151,59 @@ body {
 
 .event-content {
 	margin-top: 10px;
+}
+
+/** Add events **/
+
+form {
+    padding: 10px;
+    background: #A32947;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+form .error {
+    background: #c00;
+    color: #fff;
+    padding: 3px 5px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-box-shadow: 0 2px 0 #800;
+}
+
+form p {
+    margin: 5px 0 0 0;
+}
+
+form textarea {
+    width: 70%;
+    height: 150px;
+}
+
+form input, form textarea {
+    font-size: 14px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    font-size: 90%;
+    color: #aaa;
+    margin-bottom: 3px;
+}
+
+#captcha{
+    display: block;
+    height: 50px;  
+}
+
+.success {
+    background: #67AD10;
+    color: #fff;
+    padding: 10px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-box-shadow: 0 2px 0 #4E840B; 
 }
 
 /** Footer **/

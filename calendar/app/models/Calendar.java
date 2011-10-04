@@ -29,10 +29,20 @@ public class Calendar extends Model {
 	}
 	
 	public Event addEvent(String name, Date startDate, Date endDate, boolean isPrivate) throws InvalidEventException {
-		Event event = new Event(this, name, startDate, endDate, isPrivate).save();
-		events.add(event);
+		return addEvent(new Event(this, name, startDate, endDate, isPrivate));
+	}
+	
+	public Event addEvent(String name, Date startDate, Date endDate, boolean isPrivate, String description) throws InvalidEventException {
+		Event e = new Event(this, name, startDate, endDate, isPrivate);
+		e.description = description;
+		return addEvent(e);
+	}
+	
+	public Event addEvent(Event e) {
+		e.save();
+		events.add(e);
 		this.save();
-		return event;
+		return e;
 	}
 
 	public LinkedList<Event> getListForDate(User user, Date date) {
