@@ -192,6 +192,10 @@ form label {
     margin-bottom: 3px;
 }
 
+form #isPrivate {
+	display: inline;
+}
+
 #captcha{
     display: block;
     height: 50px;  

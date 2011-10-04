@@ -45,18 +45,20 @@ public class Application extends Controller {
     }
     
     public static void addEventToCalendar(Long calendarId, 
-    	@Required String name, @Required String startDate, @Required String endDate, @Required String description) {
+    	@Required String name, @Required String startDate, @Required String endDate, boolean isPrivate, @Required String description) {
     	Calendar calendar = Calendar.findById(calendarId);
-    	SimpleDateFormat format = new SimpleDateFormat("dd. MM. yyyy HH:mm");
+    	SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
     	
         if (validation.hasErrors()) {
             render("Application/addEvent.html", calendar);
         }
     	try {
-			calendar.addEvent(name, format.parse(startDate), format.parse(startDate), false, description);
+			calendar.addEvent(name, format.parse(startDate), format.parse(startDate), isPrivate, description);
 		} catch (InvalidEventException e) {
+			e.printStackTrace(System.out);
 			render("Application/addEvent.html", calendar);
 		} catch (ParseException e) {
+			e.printStackTrace(System.out);
 			render("Application/addEvent.html", calendar);
 		}
     	showCalendar(calendarId);	
