@@ -1,8 +1,7 @@
 package controllers;
 
-import play.*;
 import play.data.validation.Required;
-import play.mvc.*;
+import play.mvc.Controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,21 +21,23 @@ public class Application extends Controller {
     public static void showCalendar(Long id) {
     	List<Event> events;
     	Calendar calendar = Calendar.findById(id);
-    	if(calendar.owner.email.equals(Security.connected()))
+    	boolean isOwner = calendar.owner.email.equals(Security.connected());
+    	if(isOwner)
     		events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? " +
     				"order by x.startDate asc, x.endDate asc", id).fetch();
     	else
     		events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? " +
     				"AND x.isPrivate != true order by x.startDate asc, x.endDate asc", id).fetch();
     	
-    	render(calendar, events);
+    	render(calendar, events, isOwner);
     }
     
     public static void displayCalendars(Long id) {
     	User user = User.findById(id);
+    	boolean isOwner = user.email.equals(Security.connected());
     	List<Calendar> calendars = Calendar.find("owner", user).fetch();
     	List<User> users = User.all().fetch();
-        render(calendars, user, users);
+        render(calendars, user, users, isOwner);
     }
     
     public static void addEvent(Long id) {

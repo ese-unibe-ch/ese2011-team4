@@ -12,16 +12,19 @@
 		<ul>
 		<hr />
 		#{list items:events, as:'event'}
-			<li><div class="event-header"><a href="#">${event.name}</a></div>
-			<div class="event-metadata">
-				${event.startDate.format('dd. MM. yyyy HH:mm')} - ${event.endDate.format('dd. MM. yyyy HH:mm')}
-				#{if event.isPrivate}
-				- Private Event
-				#{/if}
-			</div>
-			<div class="event-content">
-			${event.description}
-			</div>
+			<li><div class="event-header">
+				#{if isOwner}<a href="#">${event.name}</a>#{/if}
+				#{else}${event.name}#{/else}
+				</div>
+				<div class="event-metadata">
+					${event.startDate.format('dd. MM. yyyy HH:mm')} - ${event.endDate.format('dd. MM. yyyy HH:mm')}
+					#{if event.isPrivate}
+					- Private Event
+					#{/if}
+				</div>
+				<div class="event-content">
+					${event.description}
+				</div>
 			</li>
 			<hr />
 		#{/list}

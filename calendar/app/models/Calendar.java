@@ -55,6 +55,14 @@ public class Calendar extends Model {
 		return list;
 	}
 	
+	public int visibleEvents(User user) {
+		int count = 0;
+		for(Event e : events)
+			if(owner == user || !e.isPrivate)
+				count++;
+		return count;
+	}
+	
 	public boolean isVisible(User user, Event event) {
 		return events.contains(event) && !event.isPrivate || user == owner;
 	}

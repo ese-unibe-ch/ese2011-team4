@@ -1,6 +1,11 @@
 <div id="calendar-list">
 	#{if _calendars.size() > 0}
-		<h2 class="title">Calendars</h2>
+		#{if _isOwner}
+		<h2 class="title">Your Calendars</h2>
+		#{/if}
+		#{else}
+		<h2 class="title">${_user.fullname}'s Calendars</h2>
+		#{/else}
 		<div id="calendar-list">
 		<ul>
 		#{list items:_calendars, as:'calendar'}
@@ -8,8 +13,9 @@
 			<h3><a href="@{Application.showCalendar(calendar.id)}">${calendar.name}</a></h3>
 			<div class="calendar-metadata">
 				<span class="calendar-events">
-				has ${calendar.events.size() ?: 'no'} 
-				event${calendar.events.size().pluralize()}
+				has ${calendar.visibleEvents(_user) ?: 'no'}  
+				event${calendar.visibleEvents(_user).pluralize()}
+				${session.username}
 				</span>
 			</div>
 			</li>
