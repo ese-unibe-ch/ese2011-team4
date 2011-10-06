@@ -1,0 +1,18 @@
+#{extends 'main.html' /}
+#{set title:calendar.name/}
+
+<div id="main-left">
+	#{calendar calendar:calendar, events:events /}
+</div>
+
+<div id="main-right">
+	<h2 class="title">Options</h2>
+	<div class="navigation">
+	<ul>
+		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
+		#{if session.username == calendar.owner.email}
+		<li><a class="navigation" href="@{Events.addEvent(calendar.id)}">Add an event</a></li>
+		#{/if}
+	</ul>
+	</div>
+</div>

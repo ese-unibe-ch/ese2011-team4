@@ -1,27 +1,46 @@
 <div id="calendar-list">
+	<h2 class="title">
+	#{if _user}
+		#{if _user.email.equals(session.username)}Your Calendars#{/if}
+		#{else}${_user.fullname}'s Calendars#{/else}
+	#{/if}
+	#{else}All calendars#{/else}
+	</h2>
 	#{if _calendars.size() > 0}
-		#{if _isOwner}
-		<h2 class="title">Your Calendars</h2>
+		#{if _user}
+			<ul>
+			#{list items:_calendars, as:'calendar'}
+				<li>
+					<h3 class="calendar-name">#{a @Calendars.show(calendar.id)}${calendar.name}#{/a}</h3>
+					<div class="calendar-metadata">
+					<span class="calendar-events">
+					has ${calendar.visibleEvents(_user) ?: 'no'}  
+					event${calendar.visibleEvents(_user).pluralize()}
+					</span>
+					#{if _user.email.equals(session.username)}
+					<span class="delete-button"> - #{a @Calendars.delete(calendar.id)}delete#{/a}</span>
+					#{/if}
+					</div>
+				</li>
+			#{/list}
+			</ul>
 		#{/if}
 		#{else}
-		<h2 class="title">${_user.fullname}'s Calendars</h2>
-		#{/else}
-		<div id="calendar-list">
-		<ul>
+		<table>
+			<tr>
+				<th class="calendar-name">Calendar name</th>
+				<th class="calendar-owner">Owner</th>
+				<th class="calendar-events">Events</th>
+			</tr>
 		#{list items:_calendars, as:'calendar'}
-			<li>
-			<h3><a href="@{Application.showCalendar(calendar.id)}">${calendar.name}</a></h3>
-			<div class="calendar-metadata">
-				<span class="calendar-events">
-				has ${calendar.visibleEvents(_user) ?: 'no'}  
-				event${calendar.visibleEvents(_user).pluralize()}
-				${session.username}
-				</span>
-			</div>
-			</li>
+			<tr>
+				<td class="calendar-name">#{a @Calendars.show(calendar.id)}${calendar.name}#{/a}</td>
+				<td class="calendar-owner">${calendar.owner.fullname}</td>
+				<td class="calendar-events">${calendar.events?.size()}</td>
+			</tr>
 		#{/list}
-		</ul>
-		</div>
+		</table>
+		#{/else}
 	#{/if}
 	
 	#{else}

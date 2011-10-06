@@ -1,11 +1,5 @@
-#{extends 'main.html' /}
-#{set title:calendar.name/}
-
-<div id="main">
-	<div id="main-left">
-		<h2 class="title">Add an event to ${calendar.name}</h2>
-		<div id="add-event-form">
-		#{form @Application.addEventToCalendar(calendar.id)}
+<div id="event-form">
+#{form @Application.addEventToCalendar(_calendar.id)}
 			#{ifErrors}
         		<p class="error">
            		All fields are required!
@@ -35,7 +29,5 @@
     		<p>
        		<input type="submit" value="Submit your event" />
     		</p>
-		#{/form}
-		</div>
-	</div>
+#{/form}
 </div>

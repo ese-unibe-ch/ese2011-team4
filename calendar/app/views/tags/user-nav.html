@@ -3,10 +3,10 @@
 	<h2 class="title">Users</h2>
 	<ul>
 		#{list items:_users, as:'user'}
-		<li><a href="@{Application.displayCalendars(user.id)}">${user.fullname}</a></li>
+		<li>#{a @Calendars.display(user.id)}${user.fullname}#{/a}</li>
 		#{/list}
 	</ul>
-		<h2 class"title>Actions</h2>
+		<h2 class"title">Actions</h2>
 	<ul>
 		<li><a href="#">Create a new calendar</a></li>
 	<ul>
