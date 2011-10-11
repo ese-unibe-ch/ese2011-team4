@@ -10,16 +10,20 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 @Entity
 public class Calendar extends Model {
+	@Required
 	public String name;
 	
 	@ManyToOne
+	@Required
 	public User owner;
 	
 	@OneToMany(mappedBy="calendar", cascade=CascadeType.ALL)
+	@Required
 	public List<Event> events;
 	
 	public Calendar(User owner, String name) {
@@ -28,31 +32,8 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
-	public Event addEvent(String name, Date startDate, Date endDate, boolean isPrivate) throws InvalidEventException {
-		return addEvent(new Event(this, name, startDate, endDate, isPrivate));
-	}
-	
-	public Event addEvent(String name, Date startDate, Date endDate, boolean isPrivate, String description) throws InvalidEventException {
-		Event e = new Event(this, name, startDate, endDate, isPrivate);
-		e.description = description;
-		return addEvent(e);
-	}
-	
-	public Event addEvent(Event e) {
-		e.save();
-		events.add(e);
-		this.save();
-		return e;
-	}
-
-	public LinkedList<Event> getListForDate(User user, Date date) {
-		LinkedList<Event> list = new LinkedList<Event>();
-		
-		for(Event e : events)
-			if(e.isThisDay(date) && (isVisible(user, e)))
-				list.add(e);
-		
-		return list;
+	public boolean isVisible(User user, Event event) {
+		return events.contains(event) && !event.isPrivate || user == owner;
 	}
 	
 	public int visibleEvents(User user) {
@@ -61,10 +42,6 @@ public class Calendar extends Model {
 			if(owner == user || !e.isPrivate)
 				count++;
 		return count;
-	}
-	
-	public boolean isVisible(User user, Event event) {
-		return events.contains(event) && !event.isPrivate || user == owner;
 	}
 
 	public Iterator<Event> getIteratorForUser(User user, Date date) {

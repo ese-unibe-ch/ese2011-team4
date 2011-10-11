@@ -6,12 +6,20 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
+import play.data.validation.Email;
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 @Entity
 public class User extends Model {
+	@Email
+	@Required
 	public String email;
+	
+	@Required
 	public String password;
+	
+	@Required
 	public String fullname;
 	public boolean isAdmin;
 
@@ -28,17 +36,9 @@ public class User extends Model {
 	public Calendar createCalendar(String name) {
 		return new Calendar(this,  name).save();
 	}
-	
-	public List<Event> getEventsForCalendar(Calendar cal, Date date) {
-		return cal.getListForDate(this, date);
-	}
-
-	public Iterator<Event> getIterator(Calendar cal, Date date) {
-		return cal.getIteratorForUser(this, date);
-	}
 
 	@Override
 	public String toString() {
-		return fullname+"("+email+")";
+		return email;
 	}
 }

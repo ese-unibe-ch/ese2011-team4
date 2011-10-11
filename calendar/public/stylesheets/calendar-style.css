@@ -16,6 +16,7 @@
 }
 
 /** Calendar table **/
+
 #calendar-list table {
 	width: 100%;
 	table-layout: fixed;
@@ -40,7 +41,6 @@ table a:hover {
 	background-color: none;
 }
 	
-
 /** List events **/
 
 #event-list ul {
@@ -76,27 +76,30 @@ table a:hover {
 /** Event form **/
 
 form {
-    padding: 10px;
-    background: #A32947;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+   padding: 10px;
+   background: #A32947;
+   -webkit-border-radius: 10px;
+   -moz-border-radius: 10px;
 }
 
-form .error {
-    background: #c00;
-    color: #fff;
-    padding: 3px 5px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-box-shadow: 0 2px 0 #800;
+span.error {
+	display: inline-block;
+   background: #c00;
+   color: #fff;
+   padding: 3px 5px;
+   margin: 2px;
+   -webkit-border-radius: 6px;
+   -moz-border-radius: 6px;
+   -webkit-box-shadow: 0 2px 0 #800;
 }
 
 form p {
     margin: 5px 0 0 0;
+    clear: left;
 }
 
 form textarea {
-    width: 70%;
+    width: 400px;
     height: 150px;
 }
 
@@ -105,11 +108,16 @@ form input, form textarea {
 }
 
 form label {
-    display: block;
-    font-weight: bold;
-    font-size: 90%;
-    color: #aaa;
-    margin-bottom: 3px;
+	display: inline-block;
+	width: 70px;
+   font-weight: bold;
+   font-size: 90%;
+   color: #aaa;
+   margin-bottom: 3px;
+}
+
+.description label {
+	display: block;
 }
 
 form #isPrivate {

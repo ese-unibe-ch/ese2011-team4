@@ -1,0 +1,23 @@
+#{extends 'main.html' /}
+#{set title:event.name/}
+
+<div id="main">
+	<div id="main-left">
+		<h2 class="title">Edit Event</h2>
+		#{ifErrors}
+   		<span class="error">
+   			Oops...
+   			<ul>
+   			#{errors}
+       		<li>${error}</li>
+   			#{/errors}
+   			</ul>
+		</span>
+		#{/ifErrors}
+		<div id="event-form">
+		#{form @Events.update(event.id)}
+			#{event-form event:event /}
+		#{/form}
+		</div>
+	</div>
+</div>

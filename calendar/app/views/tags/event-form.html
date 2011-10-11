@@ -1,33 +1,42 @@
-<div id="event-form">
-#{form @Application.addEventToCalendar(_calendar.id)}
-			#{ifErrors}
-        		<p class="error">
-           		All fields are required!
-        		</p>
-    		#{/ifErrors}
-			
-    		<p>
-        	<label for="name">Event title: </label>
-        	<input type="text" name="name" id="name">
-    		</p>
-	   		<p>
-    		<label for"startDate">Start Date (dd.mm.yyyy hh:mm): </label>
-    		<input type="text" name="startDate" id="startDate">
-    		</p>
-    		<p>
-    		<label for"endDate">End Date (dd.mm.yyyy hh:mm): </label>
-    		<input type="text" name="endDate" id="endDate">
-    		</p>
-    		<p>
-			<input type="checkbox" name="isPrivate"/>
-			<label for="isPrivate" id="isPrivate">Private event</label>
-			</p>
-    		<p>
-    		<label for"description">Description: </label>
-    		<textarea name="description" id="description"></textarea>
-    		</p>
-    		<p>
-       		<input type="submit" value="Submit your event" />
-    		</p>
-#{/form}
-</div>
+<p>
+#{field 'name'}
+   	<label for="name">Title</label>
+    <input type="text" name="${field.name}" id="name" value="${_event?.name}"/>
+    #{ifErrors}<span class="error">#{error 'name' /}</span>#{/ifErrors}
+#{/field}
+</p>
+<p>
+#{field 'startDate'}
+    <label for"startDate">Start</label>
+    <input type="text" name="${field.name}" id="startDate" value="${_event?.startDate?.format('dd.MM.yyyy')}"/>
+#{/field}
+#{field 'startTime'}
+	<label for"startTime">Time</label>
+    <input size=5px type="text" name="${field.name}" id="startTime" value="${_event?.startDate?.format('HH:mm')}"/>
+#{/field}
+</p>
+<p>
+#{field 'endDate'}
+	<label for"endDate">End</label>
+	<input type="text" name="${field.name}" id="endDate" value="${_event?.endDate?.format('dd.MM.yyyy')}"/>
+#{/field}
+#{field 'endTime'}
+	<label for"endTime">Time</label>
+    <input size=5px type="text" name="${field.name}" id="endTime" value="${_event?.endDate?.format('HH:mm')}"/>
+#{/field}
+</p>
+<p>
+#{field 'isPrivate'}
+	<input type="checkbox" name="${field.name}" id="isPrivate" #{if _event?.isPrivate}checked="checked"#{/if}/>
+	<label for="isPrivate" id="isPrivate">Private event</label>
+#{/field}
+</p>
+<p class="description">
+#{field 'description'}
+	<label for"description">Description</label>
+    <textarea name="${field.name}" id="description">${_event?.description}</textarea>
+#{/field}
+</p>
+<p>
+	<input type="submit" value="Submit your event" />
+</p>

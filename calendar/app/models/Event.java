@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import play.data.validation.Check;
+import play.data.validation.CheckWith;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -20,28 +22,22 @@ public class Event extends Model implements Comparable<Event> {
 	public Date startDate;
 	
 	@Required
+	@CheckWith(EndAfterBeginCheck.class)
 	public Date endDate;
+	
+	public Boolean isPrivate;
 	
 	@Lob
 	public String description;
 	
-	public Boolean isPrivate;
-	
 	@ManyToOne
 	public Calendar calendar;
 	
-	public Event(Calendar calendar, String name, Date startDate, Date endDate, boolean isPrivate) throws InvalidEventException {
-		if(startDate.after(endDate))
-			throw new InvalidEventException("End date before start date");
-		
+	public Event(Calendar calendar) {
 		this.calendar = calendar;
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.isPrivate = isPrivate;
 	}
 
-	public boolean isThisDay(Date date) {
+	protected boolean isThisDay(Date date) {
 		java.util.Calendar start = java.util.Calendar.getInstance();
 		start.setTime(startDate);
 		
@@ -60,5 +56,13 @@ public class Event extends Model implements Comparable<Event> {
 	@Override
 	public int compareTo(Event e) {
 		return startDate.compareTo(e.startDate);
+	}
+	
+	static class EndAfterBeginCheck extends Check {
+		public boolean isSatisfied(Object event_, Object end_) {
+			Event event = (Event) event_;
+			Date end = (Date) end_;
+			return event.startDate.before(end);
+		}
 	}
 }

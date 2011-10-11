@@ -11,11 +11,11 @@
 	#{list items:_events, as:'event'}
 		<li>
 		<div class="event-header">
-			#{if isOwner}<a href="#">${event.name}</a>#{/if}
+			#{if _isOwner}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
 			#{else}${event.name}#{/else}
 		</div>
 		<div class="event-metadata">
-			${event.startDate.format('dd. MM. yyyy HH:mm')} - ${event.endDate.format('dd. MM. yyyy HH:mm')}
+			${event.startDate.format('dd.MM.yyyy HH:mm')} - ${event.endDate.format('dd.MM.yyyy HH:mm')}
 			#{if event.isPrivate}
 			- Private Event
 			#{/if}

@@ -2,7 +2,7 @@
 #{set title:calendar.name/}
 
 <div id="main-left">
-	#{calendar calendar:calendar, events:events /}
+	#{calendar calendar:calendar, events:events, isOwner:isOwner /}
 </div>
 
 <div id="main-right">
@@ -10,8 +10,8 @@
 	<div class="navigation">
 	<ul>
 		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
-		#{if session.username == calendar.owner.email}
-		<li><a class="navigation" href="@{Events.addEvent(calendar.id)}">Add an event</a></li>
+		#{if isOwner}
+		<li><a class="navigation" href="@{Events.add(calendar.id)}">Add an event</a></li>
 		#{/if}
 	</ul>
 	</div>
