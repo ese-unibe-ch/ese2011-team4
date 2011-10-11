@@ -1,7 +1,6 @@
 package models;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,8 +31,12 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
-	public boolean isVisible(User user, Event event) {
-		return events.contains(event) && !event.isPrivate || user == owner;
+	public List<Event> eventsByMonth(java.util.Calendar month, User visitor) {
+		List<Event> list = new LinkedList<Event>();
+		for(Event e : events)
+			if(e.isVisible(visitor) && e.isThisMonth(month))
+				list.add(e);
+		return list;
 	}
 	
 	public int visibleEvents(User user) {
@@ -42,16 +45,6 @@ public class Calendar extends Model {
 			if(owner == user || !e.isPrivate)
 				count++;
 		return count;
-	}
-
-	public Iterator<Event> getIteratorForUser(User user, Date date) {
-		LinkedList<Event> list = new LinkedList<Event>();
-		
-		for(Event e : events)
-			if(e.endDate.after(date) && isVisible(user, e))
-				list.add(e);
-		
-		return list.iterator();
 	}
 	
 	@Override

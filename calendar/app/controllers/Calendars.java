@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import models.Calendar;
@@ -26,9 +27,18 @@ public class Calendars extends Controller {
         render(calendars, user, users, isOwner);
 	}
 
-    public static void show(Long id) {
-    	List<Event> events;
+    public static void show(Long id, Integer year, Integer month) {
     	Calendar calendar = Calendar.findById(id);
+    	assert calendar != null;
+    	
+    	java.util.Calendar shownMonth = java.util.Calendar.getInstance();
+    	if(year != null)
+    		shownMonth.set(java.util.Calendar.YEAR, year);
+    	if(month != null)
+    		shownMonth.set(java.util.Calendar.MONTH, month);
+    	
+    	List<Event> events;
+    	
     	boolean isOwner = calendar.owner.email.equals(Security.connected());
     	if(isOwner)
     		events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? " +

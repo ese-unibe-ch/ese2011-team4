@@ -47,7 +47,7 @@ public class UserTest extends UnitTest{
 	}
 	
 	@Test
-	public void createCalendar() throws InvalidEventException, ParseException {
+	public void createCalendar() {
 		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		jack.createCalendar("Jacks Agenda");
 		

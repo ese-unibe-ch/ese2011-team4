@@ -20,7 +20,7 @@ public class FullTest extends UnitTest {
 	}
 	
 	@Test
-	public void fullTest() throws InvalidEventException, ParseException {
+	public void fullTest() throws ParseException {
 	    Fixtures.loadModels("data.yml");
 	 
 	    // Count things
@@ -49,8 +49,14 @@ public class FullTest extends UnitTest {
 	    assertEquals(dateFormat.parse("11.09.1953 13:00"), nextEvent.startDate);
 	 
 	    // Add a new event
-	    jacksCalendars.get(0).addEvent("Cinema", dateFormat.parse("13.09.1953 21:00"), dateFormat.parse("13.09.1953 23:00"), false);
-	    assertEquals(3, jacksCalendars.get(0).events.size());
+	    Event e = new Event(jacksCalendars.get(0));
+	    e.name = "Cinema";
+	    e.startDate = dateFormat.parse("13.09.1953 21:00");
+	    e.endDate = dateFormat.parse("13.09.1953 23:00");
+	    
+	    assertTrue(e.validateAndSave());
+	    
+	    assertEquals(4, jacksCalendars.get(0).events.size());
 	    assertEquals(5, Event.count());
 	}
 }

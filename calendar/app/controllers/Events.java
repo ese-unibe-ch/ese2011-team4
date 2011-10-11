@@ -50,7 +50,7 @@ public class Events extends Controller {
     	event.description = description;
 
     	if(event.validateAndSave()) {
-    		Calendars.show(event.calendar.id);
+    		Calendars.show(event.calendar.id, null, null);
     	} else {
 			params.flash();
         	validation.keep();
@@ -86,7 +86,7 @@ public class Events extends Controller {
     	event.description = description;
     	
         if (event.validateAndSave())
-            Calendars.show(calendarId);
+            Calendars.show(calendarId, null, null);
         else {
         	params.flash();
         	validation.keep();

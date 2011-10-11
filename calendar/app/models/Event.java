@@ -35,17 +35,15 @@ public class Event extends Model implements Comparable<Event> {
 	
 	public Event(Calendar calendar) {
 		this.calendar = calendar;
+		calendar.events.add(this);
 	}
-
-	protected boolean isThisDay(Date date) {
+	
+	protected boolean isThisMonth(java.util.Calendar month) {
 		java.util.Calendar start = java.util.Calendar.getInstance();
 		start.setTime(startDate);
 		
-		java.util.Calendar day = java.util.Calendar.getInstance();
-		day.setTime(date);
-		
-		return	start.get(java.util.Calendar.YEAR) == day.get(java.util.Calendar.YEAR) &&
-				start.get(java.util.Calendar.DAY_OF_YEAR) == day.get(java.util.Calendar.DAY_OF_YEAR);
+		return	start.get(java.util.Calendar.YEAR) == month.get(java.util.Calendar.YEAR) &&
+				start.get(java.util.Calendar.MONTH) == month.get(java.util.Calendar.MONTH);
 	}
 	
 	@Override
@@ -64,5 +62,9 @@ public class Event extends Model implements Comparable<Event> {
 			Date end = (Date) end_;
 			return event.startDate.before(end);
 		}
+	}
+
+	public boolean isVisible(User visitor) {
+		return calendar.owner == visitor || !isPrivate;
 	}
 }
