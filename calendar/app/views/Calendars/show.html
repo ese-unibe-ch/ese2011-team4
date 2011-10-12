@@ -5,7 +5,7 @@
 	<h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
 	<div id="calendar-navigation">
 			<span id="previous-month">
-				#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear())}
+				#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear(), dt.minusMonths(1).getDayOfMonth())}
 				<< ${dt.minusMonths(1).monthOfYear().getAsText()}
 				#{/a}
 			</span>
@@ -13,12 +13,13 @@
 				- ${dt.monthOfYear().getAsText()}, ${dt.getYear()} -
 			</span>
 			<span id="next-month">
-				#{a @Calendars.show(calendar.id, dt.plusMonths(1).getYear(), dt.plusMonths(1).getMonthOfYear())}
+				#{a @Calendars.show(calendar.id, dt.plusMonths(1).getYear(), dt.plusMonths(1).getMonthOfYear(), dt.plusMonths(1).getDayOfMonth())}
 				${dt.plusMonths(1).monthOfYear().getAsText()} >>
 				#{/a}
 			</span>
 	</div>
-	#{calendar calendar:calendar, events:events, isOwner:isOwner /}
+	
+	#{calendar calendar:calendar, days:calendar.getDaysInMonth(dt), selected:dt, events:events, user:connectedUser /}
 </div>
 
 <div id="main-right">
@@ -26,7 +27,7 @@
 	<div class="navigation">
 	<ul>
 		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
-		#{if isOwner}
+		#{if connectedUser.email.equals(session.username)}
 		<li><a class="navigation" href="@{Events.add(calendar.id)}">Add an event</a></li>
 		#{/if}
 	</ul>

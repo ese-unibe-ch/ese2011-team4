@@ -1,9 +1,10 @@
 package controllers;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import models.Calendar;
 import models.Event;
@@ -31,26 +32,25 @@ public class Calendars extends Controller {
 	
 	public static void showCurrentMonth(Long id) {
 		DateTime dt = new DateTime();
-		
-		show(id, dt.getYear(), dt.getMonthOfYear());
+		show(id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	}
 
-    public static void show(Long id, Integer year, Integer month) {
+    public static void show(Long id, Integer year, Integer month, Integer day) {
     	// Get calendar
     	Calendar calendar = Calendar.findById(id);
     	assert calendar != null;
     	assert year != null;
     	assert month != null;
+    	assert day != null;
     	
     	// Get connected user
     	User connectedUser = User.find("byEmail", Security.connected()).first();
     	
-    	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month);
+    	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
-    	List<Event> events = calendar.eventsByMonth(dt, connectedUser);
-    	boolean isOwner = calendar.owner.equals(connectedUser);
+    	List<Event> events = calendar.eventsByDay(dt, connectedUser);
     	
-    	render(calendar, events, dt, isOwner);
+    	render(calendar, dt, events, connectedUser);
     }
     
     public static void delete(Long id) {

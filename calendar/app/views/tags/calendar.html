@@ -3,18 +3,32 @@
 		<p class="success">${flash.success}</p>
 	#{/if}
 	
+	<div id="calendar-month">
+	<ul>
+	#{list items:_days, as:'day'}
+		<li class="#{if _calendar.hasEvents(day, _user)}events#{/if} 
+			#{if day.getDayOfMonth() == _selected.getDayOfMonth()}selected#{/if}">
+			#{a @Calendars.show(_calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
+			${day.getDayOfMonth()}
+			#{/a}
+		</li>
+	#{/list}
+	</ul>
+	</div>
+	
 	#{if _events.size() > 0}
 		<div id="event-list">
+		<h3 class="title">Events on ${_selected.toString("dd.MM.yyyy")}</h2>
 		<ul>
 		<hr />
 		#{list items:_events, as:'event'}
 			<li>
 			<div class="event-header">
-				#{if _isOwner}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
+				#{if _user.email.equals(session.username)}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
 				#{else}${event.name}#{/else}
 			</div>
 			<div class="event-metadata">
-				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
+				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy hh:mm')}
 				#{if event.isPrivate}
 				- Private Event
 				#{/if}

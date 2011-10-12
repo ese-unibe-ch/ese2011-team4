@@ -68,6 +68,26 @@ table a:hover {
 #next-month {
 	text-align: right;
 }
+
+/** Calendar per month **/
+#calendar-month ul {
+	list-style: none;
+	padding: 5px 15px 5px 15px;
+}
+
+#calendar-month ul li {
+	display: inline-block;
+	width: 28px;
+	text-align: center;
+}
+
+#calendar-month ul li.events {
+	font-weight: bold;
+}
+
+#calendar-month ul li.selected {
+	background-color: #333;
+}
 	
 /** List events **/
 
