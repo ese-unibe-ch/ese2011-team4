@@ -7,7 +7,8 @@
 
 # Home page
 GET     /                                       Application.index
-GET     /calendar/{id}					        Calendars.show
+GET		/calendar/{id}							Calendars.showCurrentMonth
+GET     /calendar/{id}/{year}/{month}	        Calendars.show
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

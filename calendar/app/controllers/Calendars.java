@@ -28,36 +28,30 @@ public class Calendars extends Controller {
     	List<User> users = User.all().fetch();
         render(calendars, user, users, isOwner);
 	}
+	
+	public static void showCurrentMonth(Long id) {
+		DateTime dt = new DateTime();
+		
+		show(id, dt.getYear(), dt.getMonthOfYear());
+	}
 
-    public static void show(Long id, DateTime dt) {
+    public static void show(Long id, Integer year, Integer month) {
     	// Get calendar
     	Calendar calendar = Calendar.findById(id);
     	assert calendar != null;
+    	assert year != null;
+    	assert month != null;
     	
     	// Get connected user
     	User connectedUser = User.find("byEmail", Security.connected()).first();
     	
-    	DateTime month = new DateTime();
-    	if(dt != null)
-    		month = dt;
+    	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month);
     	
-    	List<Event> events = calendar.eventsByMonth(month, connectedUser);
+    	List<Event> events = calendar.eventsByMonth(dt, connectedUser);
     	boolean isOwner = calendar.owner.equals(connectedUser);
     	
-    	render(calendar, month, events, isOwner);
+    	render(calendar, events, dt, isOwner);
     }
-    
-    public static void previousMonth(Long id, DateTime currentMonth) {
-    	show(id, currentMonth.minusMonths(1));
-    }
-    
-    /*
-    public static void nextMonth(Long id, Integer year, Integer month) {
-    	DateTime dt = new DateTime();
-    	dt.withYear(year).withMonthOfYear(month).plusMonths(1);
-    	show(id, dt.getYear(), dt.getMonthOfYear());
-    }
-    */
     
     public static void delete(Long id) {
     	Calendar calendar = Calendar.findById(id);

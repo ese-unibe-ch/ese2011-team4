@@ -3,18 +3,18 @@
 
 <div id="main-left">
 	<h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
-	<div id="calendar-navigation>
-			<span class="previous month">
-				#{a @Calendars.show(calendar.id, month.minusMonths(1))}
-				${month.minusMonths(1).monthOfYear().getAsText()}
+	<div id="calendar-navigation">
+			<span id="previous-month">
+				#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear())}
+				<< ${dt.minusMonths(1).monthOfYear().getAsText()}
 				#{/a}
 			</span>
-			<span class="current month">
-				${month.monthOfYear().getAsText()}, ${month.getYear()}
+			<span id="current-month">
+				- ${dt.monthOfYear().getAsText()}, ${dt.getYear()} -
 			</span>
-			<span class="next month">
-				#{a @Calendars.show(calendar.id, month.plusMonths(1))}
-				${month.plusMonths(1).monthOfYear().getAsText()}
+			<span id="next-month">
+				#{a @Calendars.show(calendar.id, dt.plusMonths(1).getYear(), dt.plusMonths(1).getMonthOfYear())}
+				${dt.plusMonths(1).monthOfYear().getAsText()} >>
 				#{/a}
 			</span>
 	</div>

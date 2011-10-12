@@ -42,7 +42,7 @@ public class Events extends Controller {
     	event.description = description;
 
     	if(event.validateAndSave()) {
-    		Calendars.show(event.calendar.id, null);
+    		Calendars.show(event.calendar.id, event.startDate.getYear(), event.startDate.getMonthOfYear());
     	} else {
 			params.flash();
         	validation.keep();
@@ -70,7 +70,7 @@ public class Events extends Controller {
     	event.description = description;
     	
         if (event.validateAndSave())
-            Calendars.show(calendarId, null);
+            Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear());
         else {
         	params.flash();
         	validation.keep();

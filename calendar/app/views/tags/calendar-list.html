@@ -11,7 +11,7 @@
 			<ul>
 			#{list items:_calendars, as:'calendar'}
 				<li>
-					<h3 class="calendar-name">#{a @Calendars.show(calendar.id, null)}${calendar.name}#{/a}</h3>
+					<h3 class="calendar-name">#{a @Calendars.showCurrentMonth(calendar.id)}${calendar.name}#{/a}</h3>
 					<div class="calendar-metadata">
 					<span class="calendar-events">
 					has ${calendar.visibleEvents(_user) ?: 'no'}  
@@ -34,7 +34,7 @@
 			</tr>
 		#{list items:_calendars, as:'calendar'}
 			<tr>
-				<td class="calendar-name">#{a @Calendars.show(calendar.id, null)}${calendar.name}#{/a}</td>
+				<td class="calendar-name">#{a @Calendars.showCurrentMonth(calendar.id)}${calendar.name}#{/a}</td>
 				<td class="calendar-owner">${calendar.owner.fullname}</td>
 				<td class="calendar-events">${calendar.events?.size()}</td>
 			</tr>
