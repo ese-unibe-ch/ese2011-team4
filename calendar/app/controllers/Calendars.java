@@ -28,26 +28,16 @@ public class Calendars extends Controller {
 	}
 
     public static void show(Long id, Integer year, Integer month) {
+    	// Get calendar
     	Calendar calendar = Calendar.findById(id);
     	assert calendar != null;
     	
-    	java.util.Calendar shownMonth = java.util.Calendar.getInstance();
-    	if(year != null)
-    		shownMonth.set(java.util.Calendar.YEAR, year);
-    	if(month != null)
-    		shownMonth.set(java.util.Calendar.MONTH, month);
+    	// Get connected user
+    	User connectedUser = User.find("byEmail", Security.connected()).first();
     	
-    	List<Event> events;
+    	List<Event> events = calendar.eventsByMonth(year, month, connectedUser);
     	
-    	boolean isOwner = calendar.owner.email.equals(Security.connected());
-    	if(isOwner)
-    		events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? " +
-    				"order by x.startDate asc, x.endDate asc", id).fetch();
-    	else
-    		events = Event.find("SELECT x FROM Event x WHERE x.calendar.id = ? " +
-    				"AND x.isPrivate != true order by x.startDate asc, x.endDate asc", id).fetch();
-    	
-    	render(calendar, events, isOwner);
+    	render(calendar, events, calendar.owner == connectedUser);
     }
     
     public static void delete(Long id) {

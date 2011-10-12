@@ -24,9 +24,9 @@ public class FullTest extends UnitTest {
 	    Fixtures.loadModels("data.yml");
 	 
 	    // Count things
-	    assertEquals(2, User.count());
-	    assertEquals(3, Calendar.count());
-	    assertEquals(4, Event.count());
+	    assertEquals(3, User.count());
+	    assertEquals(4, Calendar.count());
+	    assertEquals(7, Event.count());
 	 
 	    // Try to connect as users
 	    assertNotNull(User.connect("jack.vincennes@lapd.com", "secret"));
@@ -40,7 +40,7 @@ public class FullTest extends UnitTest {
 	 
 	    // Find all of Jack's events
 	    List<Event> jackEvents = Event.find("calendar.owner.email", "jack.vincennes@lapd.com").fetch();
-	    assertEquals(3, jackEvents.size());
+	    assertEquals(4, jackEvents.size());
 	 
 	    // Find the next event
 	    Event nextEvent = Event.find("order by startDate asc").first();
@@ -50,13 +50,13 @@ public class FullTest extends UnitTest {
 	 
 	    // Add a new event
 	    Event e = new Event(jacksCalendars.get(0));
-	    e.name = "Cinema";
+	    e.name = "Date with Lynn";
 	    e.startDate = dateFormat.parse("13.09.1953 21:00");
 	    e.endDate = dateFormat.parse("13.09.1953 23:00");
 	    
 	    assertTrue(e.validateAndSave());
 	    
-	    assertEquals(4, jacksCalendars.get(0).events.size());
-	    assertEquals(5, Event.count());
+	    assertEquals(5, jacksCalendars.get(0).events.size());
+	    assertEquals(8, Event.count());
 	}
 }

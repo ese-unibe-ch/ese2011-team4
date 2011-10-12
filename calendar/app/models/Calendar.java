@@ -31,10 +31,10 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
-	public List<Event> eventsByMonth(java.util.Calendar month, User visitor) {
+	public List<Event> eventsByMonth(Integer year, Integer month, User visitor) {
 		List<Event> list = new LinkedList<Event>();
 		for(Event e : events)
-			if(e.isVisible(visitor) && e.isThisMonth(month))
+			if(e.isVisible(visitor) && e.isThisMonth(year, month))
 				list.add(e);
 		return list;
 	}

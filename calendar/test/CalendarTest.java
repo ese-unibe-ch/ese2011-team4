@@ -115,4 +115,24 @@ public class CalendarTest extends UnitTest {
 		assertEquals(1, Calendar.count());
 		assertEquals(0, Event.count());
 	}
+	
+	@Test
+	public void eventsPerMonth() {
+		Fixtures.loadModels("data.yml");
+		
+		// Get calendar
+		Calendar edsCalendar = Calendar.find("owner.email", "ed.exley@lapd.com").first();
+		
+		// Get events for September 1953
+		List<Event> events = edsCalendar.eventsByMonth(1953, 9, edsCalendar.owner);
+		assertTrue(events.isEmpty());
+		
+		// Get events for October 2011 as ed
+		events = edsCalendar.eventsByMonth(2011, 10, edsCalendar.owner);
+		assertEquals(2, events.size());
+		
+		// Get events for Octobre 2011 as not ed
+		events = edsCalendar.eventsByMonth(2011, 10, null);
+		assertEquals(1, events.size());
+	}
 }

@@ -38,12 +38,12 @@ public class Event extends Model implements Comparable<Event> {
 		calendar.events.add(this);
 	}
 	
-	protected boolean isThisMonth(java.util.Calendar month) {
+	protected boolean isThisMonth(Integer year, Integer month) {
 		java.util.Calendar start = java.util.Calendar.getInstance();
 		start.setTime(startDate);
 		
-		return	start.get(java.util.Calendar.YEAR) == month.get(java.util.Calendar.YEAR) &&
-				start.get(java.util.Calendar.MONTH) == month.get(java.util.Calendar.MONTH);
+		return	start.get(java.util.Calendar.YEAR) == year &&
+				start.get(java.util.Calendar.MONTH) == month-1;
 	}
 	
 	@Override
