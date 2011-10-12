@@ -1,8 +1,7 @@
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +11,7 @@ import play.test.Fixtures;
 import play.test.UnitTest;
 
 public class FullTest extends UnitTest {
-	DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm");
 	
 	@Before
 	public void setup() {
@@ -20,7 +19,7 @@ public class FullTest extends UnitTest {
 	}
 	
 	@Test
-	public void fullTest() throws ParseException {
+	public void fullTest() {
 	    Fixtures.loadModels("data.yml");
 	 
 	    // Count things
@@ -41,18 +40,12 @@ public class FullTest extends UnitTest {
 	    // Find all of Jack's events
 	    List<Event> jackEvents = Event.find("calendar.owner.email", "jack.vincennes@lapd.com").fetch();
 	    assertEquals(4, jackEvents.size());
-	 
-	    // Find the next event
-	    Event nextEvent = Event.find("order by startDate asc").first();
-	    assertNotNull(nextEvent);
-	    assertEquals("Meet Lynn Bracken", nextEvent.name);
-	    assertEquals(dateFormat.parse("11.09.1953 13:00"), nextEvent.startDate);
-	 
+	    
 	    // Add a new event
 	    Event e = new Event(jacksCalendars.get(0));
 	    e.name = "Date with Lynn";
-	    e.startDate = dateFormat.parse("13.09.1953 21:00");
-	    e.endDate = dateFormat.parse("13.09.1953 23:00");
+	    e.startDate = format.parseDateTime("13.09.1953 21:00");
+	    e.endDate = format.parseDateTime("13.09.1953 23:00");
 	    
 	    assertTrue(e.validateAndSave());
 	    

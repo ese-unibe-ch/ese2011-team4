@@ -7,6 +7,9 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Column;
+
+import org.joda.time.DateTime;
 
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
@@ -19,11 +22,13 @@ public class Event extends Model implements Comparable<Event> {
 	public String name;
 	
 	@Required
-	public Date startDate;
+	@Column(columnDefinition="TEXT")
+	public DateTime startDate;
 	
 	@Required
+	@Column(columnDefinition="TEXT")
 	@CheckWith(EndAfterBeginCheck.class)
-	public Date endDate;
+	public DateTime endDate;
 	
 	public Boolean isPrivate;
 	
@@ -39,11 +44,7 @@ public class Event extends Model implements Comparable<Event> {
 	}
 	
 	protected boolean isThisMonth(Integer year, Integer month) {
-		java.util.Calendar start = java.util.Calendar.getInstance();
-		start.setTime(startDate);
-		
-		return	start.get(java.util.Calendar.YEAR) == year &&
-				start.get(java.util.Calendar.MONTH) == month-1;
+		return startDate.getYear() == year && startDate.getMonthOfYear() == month;
 	}
 	
 	@Override
@@ -59,8 +60,8 @@ public class Event extends Model implements Comparable<Event> {
 	static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
-			Date end = (Date) end_;
-			return event.startDate.before(end);
+			DateTime end = (DateTime) end_;
+			return event.startDate.isBefore(end);
 		}
 	}
 

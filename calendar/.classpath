@@ -3,9 +3,8 @@
 	<classpathentry excluding="views/**" kind="src" path="app"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="secure"/>
-	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/play-1.2.3.jar" sourcepath="/usr/lib/play/play-1.2.3/framework/src" />
+	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/play-1.2.3.jar" sourcepath="/usr/lib/play/play-1.2.3/framework/src"/>
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/jj-simplecaptcha.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/org.eclipse.jdt.core-3.6.0.jar"/>
@@ -80,6 +79,8 @@
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/oval-1.50.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/groovy-all-1.7.7.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/play/play-1.2.3/framework/lib/commons-fileupload-1.2.2.jar"/>
-	
+	<classpathentry kind="lib" path="lib/joda-time-2.0/joda-time-2.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.0/joda-time-2.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.0/joda-time-2.0.jar"/>
 	<classpathentry kind="output" path="eclipse/classes"/>
 </classpath>

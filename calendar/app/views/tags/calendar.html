@@ -15,7 +15,7 @@
 			#{else}${event.name}#{/else}
 		</div>
 		<div class="event-metadata">
-			${event.startDate.format('dd.MM.yyyy HH:mm')} - ${event.endDate.format('dd.MM.yyyy HH:mm')}
+			${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
 			#{if event.isPrivate}
 			- Private Event
 			#{/if}

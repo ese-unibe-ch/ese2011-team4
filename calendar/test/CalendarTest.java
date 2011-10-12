@@ -2,15 +2,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import models.*;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +16,7 @@ import play.test.Fixtures;
 import play.test.UnitTest;
 
 public class CalendarTest extends UnitTest {
-	DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+	DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm");
 	
 	@Before
 	public void setup() {
@@ -37,7 +35,7 @@ public class CalendarTest extends UnitTest {
 	}
 	
 	@Test
-	public void addAndDeleteEvents() throws ParseException {
+	public void addAndDeleteEvents() {
 		// Create a new user and save it
 		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		
@@ -47,8 +45,8 @@ public class CalendarTest extends UnitTest {
 		// Create new events
 		Event e1 = new Event(jacksCalendar);
 		e1.name = "Meet Lynn Bracken";
-		e1.startDate = dateFormat.parse("11.09.1953 13:00");
-		e1.endDate = dateFormat.parse("11.09.1953 15:00");
+		e1.startDate = format.parseDateTime("11.09.1953 13:00");
+		e1.endDate = format.parseDateTime("11.09.1953 15:00");
 		e1.isPrivate = false;
 		e1.description = "Who is this mysterious women?";
 		
@@ -56,8 +54,8 @@ public class CalendarTest extends UnitTest {
 		
 		Event e2 = new Event(jacksCalendar);
 		e2.name = "Hit Exley";
-		e2.startDate = dateFormat.parse("11.09.1953 17:00");
-		e2.endDate = dateFormat.parse("11.09.1953 18:00");
+		e2.startDate = format.parseDateTime("11.09.1953 17:00");
+		e2.endDate = format.parseDateTime("11.09.1953 18:00");
 		e2.isPrivate = true;
 		e2.description = "That's gonna be fun!";
 		
@@ -77,15 +75,15 @@ public class CalendarTest extends UnitTest {
 		
 		Event firstEvent = jacksCalendar.events.get(0);
 	    assertNotNull(firstEvent);
-	    assertEquals(dateFormat.parse("11.09.1953 13:00"), firstEvent.startDate);
-	    assertEquals(dateFormat.parse("11.09.1953 15:00"), firstEvent.endDate);
+	    assertEquals(format.parseDateTime("11.09.1953 13:00"), firstEvent.startDate);
+	    assertEquals(format.parseDateTime("11.09.1953 15:00"), firstEvent.endDate);
 	    assertFalse(firstEvent.isPrivate);
 	    assertEquals("Who is this mysterious women?", firstEvent.description);
 	 
 	    Event secondEvent = jacksCalendar.events.get(1);
 	    assertNotNull(secondEvent);
-	    assertEquals(dateFormat.parse("11.09.1953 17:00"), secondEvent.startDate);
-	    assertEquals(dateFormat.parse("11.09.1953 18:00"), secondEvent.endDate);
+	    assertEquals(format.parseDateTime("11.09.1953 17:00"), secondEvent.startDate);
+	    assertEquals(format.parseDateTime("11.09.1953 18:00"), secondEvent.endDate);
 	    assertTrue(secondEvent.isPrivate);
 	    assertEquals("That's gonna be fun!", secondEvent.description);
 	    
@@ -97,7 +95,7 @@ public class CalendarTest extends UnitTest {
 	}
 	
 	@Test
-	public void validationError() throws ParseException {
+	public void validationError() {
 		// Create a new user and save it
 		User jack = new User("jack.vincennes@lapd.com", "secret", "Jack Vincennes").save();
 		
@@ -107,8 +105,8 @@ public class CalendarTest extends UnitTest {
 		// Create invalid event
 		Event e = new Event(jacksCalendar);
 		e.name = "";
-		e.startDate = dateFormat.parse("11.09.1953 13:00");
-		e.endDate = dateFormat.parse("11.09.1953 15:00");
+		e.startDate = format.parseDateTime("11.09.1953 13:00");
+		e.endDate = format.parseDateTime("11.09.1953 15:00");
 		
 		assertFalse(e.validateAndSave());
 		assertEquals(1, User.count());
@@ -127,11 +125,11 @@ public class CalendarTest extends UnitTest {
 		List<Event> events = edsCalendar.eventsByMonth(1953, 9, edsCalendar.owner);
 		assertTrue(events.isEmpty());
 		
-		// Get events for October 2011 as ed
+		// Get events for October 2011 as Ed
 		events = edsCalendar.eventsByMonth(2011, 10, edsCalendar.owner);
 		assertEquals(2, events.size());
 		
-		// Get events for Octobre 2011 as not ed
+		// Get events for October 2011 as not Ed
 		events = edsCalendar.eventsByMonth(2011, 10, null);
 		assertEquals(1, events.size());
 	}

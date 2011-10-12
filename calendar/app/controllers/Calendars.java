@@ -3,6 +3,8 @@ package controllers;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import models.Calendar;
 import models.Event;
 import models.User;
@@ -35,7 +37,14 @@ public class Calendars extends Controller {
     	// Get connected user
     	User connectedUser = User.find("byEmail", Security.connected()).first();
     	
-    	List<Event> events = calendar.eventsByMonth(year, month, connectedUser);
+    	// Check range
+    	List<Event> events;
+    	if(year != null && month != null)
+    		events = calendar.eventsByMonth(year, month, connectedUser);
+    	else {
+    		DateTime dt = new DateTime();
+    		events = calendar.eventsByMonth(dt.getYear(), dt.getMonthOfYear(), connectedUser);
+    	}
     	
     	render(calendar, events, calendar.owner == connectedUser);
     }
