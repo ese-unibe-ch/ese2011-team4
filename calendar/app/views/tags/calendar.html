@@ -1,37 +1,37 @@
-#{if flash.success}
-	<p class="success">${flash.success}</p>
-#{/if}
-
-<h2 class="title">Calendar: <span id="calendar-name">${_calendar.name}</span></h2>
-<h3>Upcoming events</h3>
-#{if _events.size() > 0}
-	<div id="event-list">
-	<ul>
-	<hr />
-	#{list items:_events, as:'event'}
-		<li>
-		<div class="event-header">
-			#{if _isOwner}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
-			#{else}${event.name}#{/else}
-		</div>
-		<div class="event-metadata">
-			${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
-			#{if event.isPrivate}
-			- Private Event
-			#{/if}
-		</div>
-		<div class="event-content">
-			${event.description}
-		</div>
-		</li>
-		<hr />
-	#{/list}
-	</ul>
-	</div>
-#{/if}
+<div id="shown-calendar">
+	#{if flash.success}
+		<p class="success">${flash.success}</p>
+	#{/if}
 	
-#{else}
-	<div class="empty">
-        There are currently no events.
-    </div>
-#{/else}
+	#{if _events.size() > 0}
+		<div id="event-list">
+		<ul>
+		<hr />
+		#{list items:_events, as:'event'}
+			<li>
+			<div class="event-header">
+				#{if _isOwner}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
+				#{else}${event.name}#{/else}
+			</div>
+			<div class="event-metadata">
+				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
+				#{if event.isPrivate}
+				- Private Event
+				#{/if}
+			</div>
+			<div class="event-content">
+				${event.description}
+			</div>
+			</li>
+			<hr />
+		#{/list}
+		</ul>
+		</div>
+	#{/if}
+		
+	#{else}
+		<div class="empty">
+	        There are currently no events.
+	    </div>
+	#{/else}
+</div>

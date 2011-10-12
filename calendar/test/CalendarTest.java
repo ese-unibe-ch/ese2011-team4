@@ -7,6 +7,7 @@ import java.util.List;
 
 import models.*;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
@@ -121,16 +122,23 @@ public class CalendarTest extends UnitTest {
 		// Get calendar
 		Calendar edsCalendar = Calendar.find("owner.email", "ed.exley@lapd.com").first();
 		
+		DateTime dt = new DateTime();
 		// Get events for September 1953
-		List<Event> events = edsCalendar.eventsByMonth(1953, 9, edsCalendar.owner);
+		dt = dt.withYear(1953);
+		dt = dt.withMonthOfYear(9);
+		List<Event> events = edsCalendar.eventsByMonth(dt, edsCalendar.owner);
 		assertTrue(events.isEmpty());
 		
 		// Get events for October 2011 as Ed
-		events = edsCalendar.eventsByMonth(2011, 10, edsCalendar.owner);
+		dt = dt.withYear(2011);
+		dt = dt.withMonthOfYear(10);
+		events = edsCalendar.eventsByMonth(dt, edsCalendar.owner);
 		assertEquals(2, events.size());
 		
 		// Get events for October 2011 as not Ed
-		events = edsCalendar.eventsByMonth(2011, 10, null);
+		dt = dt.withYear(2011);
+		dt = dt.withMonthOfYear(10);
+		events = edsCalendar.eventsByMonth(dt, null);
 		assertEquals(1, events.size());
 	}
 }

@@ -29,7 +29,7 @@ public class Calendars extends Controller {
         render(calendars, user, users, isOwner);
 	}
 
-    public static void show(Long id, Integer year, Integer month) {
+    public static void show(Long id, DateTime dt) {
     	// Get calendar
     	Calendar calendar = Calendar.findById(id);
     	assert calendar != null;
@@ -37,17 +37,27 @@ public class Calendars extends Controller {
     	// Get connected user
     	User connectedUser = User.find("byEmail", Security.connected()).first();
     	
-    	// Check range
-    	List<Event> events;
-    	if(year != null && month != null)
-    		events = calendar.eventsByMonth(year, month, connectedUser);
-    	else {
-    		DateTime dt = new DateTime();
-    		events = calendar.eventsByMonth(dt.getYear(), dt.getMonthOfYear(), connectedUser);
-    	}
+    	DateTime month = new DateTime();
+    	if(dt != null)
+    		month = dt;
     	
-    	render(calendar, events, calendar.owner == connectedUser);
+    	List<Event> events = calendar.eventsByMonth(month, connectedUser);
+    	boolean isOwner = calendar.owner.equals(connectedUser);
+    	
+    	render(calendar, month, events, isOwner);
     }
+    
+    public static void previousMonth(Long id, DateTime currentMonth) {
+    	show(id, currentMonth.minusMonths(1));
+    }
+    
+    /*
+    public static void nextMonth(Long id, Integer year, Integer month) {
+    	DateTime dt = new DateTime();
+    	dt.withYear(year).withMonthOfYear(month).plusMonths(1);
+    	show(id, dt.getYear(), dt.getMonthOfYear());
+    }
+    */
     
     public static void delete(Long id) {
     	Calendar calendar = Calendar.findById(id);

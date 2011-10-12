@@ -43,8 +43,8 @@ public class Event extends Model implements Comparable<Event> {
 		calendar.events.add(this);
 	}
 	
-	protected boolean isThisMonth(Integer year, Integer month) {
-		return startDate.getYear() == year && startDate.getMonthOfYear() == month;
+	protected boolean isThisMonth(DateTime month) {
+		return startDate.getYear() == month.getYear() && startDate.getMonthOfYear() == month.getMonthOfYear();
 	}
 	
 	@Override

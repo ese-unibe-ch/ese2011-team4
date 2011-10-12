@@ -2,6 +2,22 @@
 #{set title:calendar.name/}
 
 <div id="main-left">
+	<h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
+	<div id="calendar-navigation>
+			<span class="previous month">
+				#{a @Calendars.show(calendar.id, month.minusMonths(1))}
+				${month.minusMonths(1).monthOfYear().getAsText()}
+				#{/a}
+			</span>
+			<span class="current month">
+				${month.monthOfYear().getAsText()}, ${month.getYear()}
+			</span>
+			<span class="next month">
+				#{a @Calendars.show(calendar.id, month.plusMonths(1))}
+				${month.plusMonths(1).monthOfYear().getAsText()}
+				#{/a}
+			</span>
+	</div>
 	#{calendar calendar:calendar, events:events, isOwner:isOwner /}
 </div>
 
