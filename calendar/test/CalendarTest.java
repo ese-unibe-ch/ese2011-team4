@@ -115,6 +115,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(0, Event.count());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void eventsPerMonth() {
 		Fixtures.loadModels("data.yml");

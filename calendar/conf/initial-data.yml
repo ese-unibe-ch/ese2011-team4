@@ -34,48 +34,48 @@ Calendar(edCalendar):
 
 Event(e0):
     name:           Collections
-    startDate:      1953-09-13/09:00
-    endDate:        1953-09-13/12:00
+    startDate:      2011-09-13/09:00
+    endDate:        2011-09-13/12:00
     calendar:       firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      true
 
 Event(e1):
     name:           Meet Lynn Bracken
-    startDate:      1953-09-11/13:00:00
-    endDate:        1953-09-11/15:00:00
+    startDate:      2011-10-20/13:00
+    endDate:        2011-10-20/15:00
     calendar:       firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      false
     
 Event(e2):
     name:           Hit Exley
-    startDate:      1953-09-11/17:00:00
-    endDate:        1953-09-11/18:00:00
+    startDate:      2011-10-20/17:00
+    endDate:        2011-10-20/18:00
     calendar:       firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true
     
 Event(e3):
     name:           Work
-    startDate:      1953-09-12/08:00
-    endDate:        1953-09-12/11:00
+    startDate:      2011-10-21/08:00
+    endDate:        2011-10-21/11:00
     calendar:       budCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      false
     
 Event(e4):
     name:           Drinking whiskey
-    startDate:      1953-09-12/14:00
-    endDate:        1953-09-12/17:00
+    startDate:      2011-10-21/14:00
+    endDate:        2011-10-21/17:00
     calendar:       secondJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true
 
 Event(e5):
     name:           Cinema
-    startDate:      2011-10-12/21:00
-    endDate:        2011-10-12/23:00
+    startDate:      2011-10-21/21:00
+    endDate:        2011-10-21/23:00
     calendar:       edCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      false
