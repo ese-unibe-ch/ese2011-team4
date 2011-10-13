@@ -1,13 +1,43 @@
+# Java compiled code
 *.class
-.settings
+*.war
+*.ear
+
+# eclipse and setting files
+*/eclipse
+*/bin
+*.launch
+.settings/
 .metadata
+.classpath
+.project
+
+# Play framework
+*/db
+*/precompiled
+*/tmp
+*/test-result
+*/test-results
+*/modules
+*/logs
+*.log
+
+server.pid
+
+# Hidden files
+.*
+!.gitignore
+
+# Temporary files
+*/tmp
+*~
 *.tmp
 *.bak
-!.gitignore
-*~
-*.log
 .orig
-*/tmp
-*/modules
-*/test-result
-*/logs
+._*
+
+# OS specifc files
+Thumbs.db
+Desktrop.ini
+.DS_Store
+.directory
