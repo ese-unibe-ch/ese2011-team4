@@ -20,8 +20,8 @@
             <div id="tools">
             <ol>
 				#{if session.username}
-					<li>${session.username}
-            	<li><a href="@{Secure.logout()}">Log out</a>
+					<li><span id="username">${session.username}</span></li>
+            		<li><a href="@{Secure.logout()}">Log out</a>
 				#{/if}
 				#{else}
 					<li><a href="@{Secure.login()}">Log in</a>

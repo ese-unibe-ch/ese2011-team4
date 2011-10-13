@@ -1,7 +1,9 @@
 /** Main layout **/
 
 html, body {
-	background: #A32947 !important;
+	background-image: url(../images/background.png);
+	background-repeat: repeat-x;
+	background-color: #EBEBFF;
 	font-family: Helvetica, Arial, Sans !important;
 }
 
@@ -11,10 +13,10 @@ body {
 	margin: auto;
 }
 
-/** Application header **/
+/** Application header **/	
 
 header {
-    padding: 10px 0;
+    margin-bottom: 10px;
 }
 
 hgroup {
@@ -22,7 +24,7 @@ hgroup {
 }
 
 #logo a {
-    height: 49px;
+    height: 50px;
     margin-left: 20px;
     margin-bottom: 20px;
     color: #fff;
@@ -37,6 +39,7 @@ hgroup {
 	margin-left: 5px;
 	color: #fff;
 	font-size: 16px;
+	font-weight: bold;
 }
 
 #tools {
@@ -47,26 +50,30 @@ hgroup {
 	padding: 0;
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: -10px;
 }
 
 #tools ol {
 	list-style: none;
 }
 
+#tools #username {
+	color: #333;
+	padding: 2px 2px 2px 10px;
+}
+
 #tools a {
 	display: block;
-	color: #fff;
+	color: #333;
 	text-decoration: none;
-	padding: 2px;
-	padding-right: 20px;
+	padding: 2px 2px 2px 10px;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
 }
 
 #tools a:hover {
-	background-color: #fff;
-	color: #A32947;
+	background-color: #333;
+	color: #fff;
 }
 
 /** Navigation **/
@@ -74,7 +81,7 @@ hgroup {
 header nav {
 	width: 100%;
 	height: 47px;
-	background-color: #C47078;	
+	background-color: #93B4FA;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
 }
@@ -92,9 +99,10 @@ header nav li {
 
 header nav li a {
 	color: #333;
+	font-weight: bold;
 	text-decoration: none;
 	display: block;
-	padding: 0.5em;
+	padding: .5em;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
 }
@@ -102,29 +110,14 @@ header nav li a {
 header nav li a:hover {
 	background-color: #333;
 	color: #fff;
-	text-decoration: none;
-}
-
-header nav li ol {
-	display: none;
-	position: absolute;
-	padding: 0;
-}
-
-header nav li:hover ol {
-	display: block;
-}
-
-header nav li li {
-	float: none;
 }
 
 /** Main content **/
 
 #main {
 	display: inline-block;
+	width: 100%;
 	color: #333;
-	width: 920px;
 }
 
 #main a {
@@ -139,7 +132,7 @@ header nav li li {
 #main-left {
 	float: left;
 	width: 560px;
-	background: #C47078;
+	background: #93B4FA;
 	-webkit-border-radius: 16px;
    -moz-border-radius: 16px;
    padding: 20px;
@@ -149,7 +142,7 @@ header nav li li {
 #main-right {
 	float: left;
 	width: 260px;
-	background: #C47078;
+	background: #93B4FA;
    -webkit-border-radius: 16px;
    -moz-border-radius: 16px;
    padding: 20px;
@@ -165,23 +158,18 @@ header nav li li {
 	font-weight: bold;
 }
 
-#main-right .navigation ul a:hover {
-	color: #A32947;
-	background-color: #FFF;
-}
-
 /** Footer **/
 
 #footer {
 	margin-top: 20px;
-   border-top: 1px solid #FF0000;
+   border-top: 2px solid #0051FF;
    font-size: 70%;
 	padding: 10px 30px;
    text-align: center;
-   color: #FFFFFF;
+   color: #333;
 }
 
 #footer a {
-   color: #FFF;
+   color: #333;
    font-weight: bold;
 }
