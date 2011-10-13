@@ -24,14 +24,30 @@
 		#{list items:_events, as:'event'}
 			<li>
 			<div class="event-header">
-				#{if _user.email.equals(session.username)}#{a @Events.edit(event.id)}${event.name}#{/a}#{/if}
-				#{else}${event.name}#{/else}
-			</div>
-			<div class="event-metadata">
-				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy hh:mm')}
-				#{if event.isPrivate}
-				- Private Event
-				#{/if}
+				<div class="event-title">
+					${event.name}
+				</div>
+				<div class="event-metadata">
+					${event.startDate.toString('dd.MM.yyyy hh:mm')} - ${event.endDate.toString('dd.MM.yyyy hh:mm')}
+					#{if event.isPrivate}
+					<span class="private">Private Event</span>
+					#{/if}
+				</div>
+				<div class="event-menu">
+					<ol>
+					<li>Actions
+					<ol>
+						#{if _user.email.equals(session.username)}
+						<li>#{a @Events.edit(event.id)}Edit#{/a}</li>
+						<li>#{a @Events.delete(event.id)}Delete#{/a}</li>
+						#{/if}
+						#{else}
+						<li><a href="#">Join</a></li>
+						#{/else}
+					</ol>
+					</li>
+					</ol>
+				</div>
 			</div>
 			<div class="event-content">
 				${event.description}

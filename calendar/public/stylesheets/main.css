@@ -15,7 +15,10 @@ body {
 
 header {
     padding: 10px 0;
-    position: relative;
+}
+
+hgroup {
+	position: relative;
 }
 
 #logo a {
@@ -43,8 +46,8 @@ header {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	right: 0px;
-	top: 5px;
+	right: 0;
+	top: 0;
 }
 
 #tools ol {
@@ -119,14 +122,13 @@ header nav li li {
 /** Main content **/
 
 #main {
+	display: inline-block;
 	color: #333;
-	float: left;
 	width: 920px;
-	margin-bottom: 20px;
 }
 
 #main a {
-	color: #FFF;
+	color: #fff;
 	text-decoration: none;
 }
 
@@ -171,12 +173,12 @@ header nav li li {
 /** Footer **/
 
 #footer {
+	margin-top: 20px;
    border-top: 1px solid #FF0000;
    font-size: 70%;
 	padding: 10px 30px;
    text-align: center;
    color: #FFFFFF;
-   clear: left;
 }
 
 #footer a {

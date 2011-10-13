@@ -77,4 +77,13 @@ public class Events extends Controller {
         	Events.add(calendarId);
         }
     }
+    
+    public static void delete(Long id) {
+    	Event event = Event.findById(id);
+    	assert event != null;
+    	
+    	event.delete();
+    	
+    	Calendars.show(event.calendar.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    }
 }

@@ -89,7 +89,76 @@ table a:hover {
 	background-color: #333;
 }
 	
-/** List events **/
+/** Event header **/
+
+.event-header {
+	position: relative;
+}
+
+.event-title {
+	font-weight: bold;
+	font-size: 1.2em;
+	display: inline;
+}
+
+.event-metadata {
+	font-size: 0.8em;
+	display: inline;
+}
+
+/** Event menu **/
+
+.event-menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100px;
+	text-align: right;
+	background-color: #fff;
+}
+
+.event-menu:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+.event-menu ol {
+	list-style: none;
+	padding: 0;
+	width: 100px;
+}
+
+.event-menu li {
+	padding: 2px;
+}
+
+.event-menu li ol {
+	display: none;
+	position: absolute;
+}
+
+.event-menu:hover li ol {
+	display: block;
+	background-color: #fff;
+	color: #333;
+}
+
+.event-menu li li:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+#main .event-menu li a {
+	display: block;
+	color: #333;
+}
+
+#main .event-menu li a:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+/** Event content **/
 
 #event-list ul {
 	list-style: none;
@@ -104,17 +173,6 @@ table a:hover {
 	background-color: #000;
 	height: 2px;
 	style: dashed;
-}
-
-.event-header {
-	font-weight: bold;
-	font-size: 1.2em;
-	display: inline;
-}
-
-.event-metadata {
-	font-size: 0.8em;
-	display: inline;
 }
 
 .event-content {
