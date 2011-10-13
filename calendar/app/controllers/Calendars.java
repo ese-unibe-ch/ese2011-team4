@@ -23,11 +23,12 @@ public class Calendars extends Controller {
     }
 	
 	public static void display(Long userId) {
+		User connectedUser = User.find("email", Security.connected()).first();
     	User user = User.findById(userId);
     	boolean isOwner = user.email.equals(Security.connected());
     	List<Calendar> calendars = Calendar.find("owner", user).fetch();
     	List<User> users = User.all().fetch();
-        render(calendars, user, users, isOwner);
+        render(calendars, connectedUser, user, users, isOwner);
 	}
 	
 	public static void showCurrentMonth(Long id) {

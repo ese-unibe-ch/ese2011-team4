@@ -14,8 +14,8 @@
 					<h3 class="calendar-name">#{a @Calendars.showCurrentMonth(calendar.id)}${calendar.name}#{/a}</h3>
 					<div class="calendar-metadata">
 					<span class="calendar-events">
-					has ${calendar.visibleEvents(_user) ?: 'no'}  
-					event${calendar.visibleEvents(_user).pluralize()}
+					has ${calendar.visibleEvents(_connectedUser) ?: 'no'}  
+					event${calendar.visibleEvents(_connectedUser).pluralize()}
 					</span>
 					#{if _user.email.equals(session.username)}
 					<span class="delete-button"> - #{a @Calendars.delete(calendar.id)}delete#{/a}</span>
@@ -36,7 +36,7 @@
 			<tr>
 				<td class="calendar-name">#{a @Calendars.showCurrentMonth(calendar.id)}${calendar.name}#{/a}</td>
 				<td class="calendar-owner">${calendar.owner.fullname}</td>
-				<td class="calendar-events">${calendar.events?.size()}</td>
+				<td class="calendar-events">${calendar.visibleEvents(_connectedUser)}</td>
 			</tr>
 		#{/list}
 		</table>
