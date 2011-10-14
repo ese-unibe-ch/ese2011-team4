@@ -1,6 +1,8 @@
-*{ You can use plain selenium command using the selenium tag }*
+#{fixture delete:'all', load:'initial-data.yml' /}
 
 #{selenium}
+	clearSession()
+
     // Open the home page, and check that no error occured
     open('/')
     assertNotTitle('Application error')

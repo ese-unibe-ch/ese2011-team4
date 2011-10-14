@@ -26,7 +26,6 @@ public class Calendar extends Model {
 	public User owner;
 	
 	@OneToMany(mappedBy="calendar", cascade=CascadeType.ALL)
-	@Required
 	public List<Event> events;
 	
 	public Calendar(User owner, String name) {
@@ -35,15 +34,7 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
-	@Deprecated
-	public List<Event> eventsByMonth(DateTime month, User visitor) {
-		List<Event> list = new LinkedList<Event>();
-		for(Event e : events)
-			if(e.isVisible(visitor) && e.isThisMonth(month))
-				list.add(e);
-		return list;
-	}
-	
+	// TODO This can be done faster and more elegant with JPA Query
 	public List<Event> eventsByDay(DateTime day, User visitor) {
 		List<Event> list = new LinkedList<Event>();
 		for(Event e : events)
@@ -52,19 +43,13 @@ public class Calendar extends Model {
 		return list;
 	}
 	
+	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
 	public int visibleEvents(User user) {
 		int count = 0;
 		for(Event e : events)
 			if(owner == user || !e.isPrivate)
 				count++;
 		return count;
-	}
-	
-	public boolean hasEvents(DateTime day, User visitor) {
-		for(Event e : events)
-			if(e.isVisible(visitor) && e.isThisDay(day))
-				return true;
-		return false;
 	}
 	
     // Helper method to get a list of all days of a month

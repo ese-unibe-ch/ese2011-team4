@@ -4,8 +4,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
+import org.joda.time.DateTime;
+
+import play.data.validation.Check;
+import play.data.validation.CheckWith;
 import play.data.validation.Email;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -13,7 +20,9 @@ import play.db.jpa.Model;
 @Entity
 public class User extends Model {
 	@Email
+	@CheckWith(uniqueMailCheck.class)
 	@Required
+	@Column(unique=true)
 	public String email;
 	
 	@Required
@@ -21,6 +30,10 @@ public class User extends Model {
 	
 	@Required
 	public String fullname;
+	
+	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
+	public List<Calendar> calendars;
+	
 	public boolean isAdmin;
 
 	public User(String email, String password, String fullname) {
@@ -33,12 +46,16 @@ public class User extends Model {
 		return find("byEmailAndPassword", email, password).first();
 	}
 
-	public Calendar createCalendar(String name) {
-		return new Calendar(this,  name).save();
-	}
-
 	@Override
 	public String toString() {
 		return email;
+	}
+	
+	static class uniqueMailCheck extends Check {
+		public boolean isSatisfied(Object user_, Object mail_) {
+			String mail = (String) mail_;
+			setMessage("validation.uniqueMailCheck");
+			return User.find("byEmail", mail).fetch().size() == 0;
+		}
 	}
 }

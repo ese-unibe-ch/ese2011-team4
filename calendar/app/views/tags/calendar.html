@@ -6,7 +6,7 @@
 	<div id="calendar-month">
 	<ul>
 	#{list items:_days, as:'day'}
-		<li class="#{if _calendar.hasEvents(day, _user)}events#{/if} 
+		<li class="#{if _calendar.eventsByDay(day, _user).size() > 0}events#{/if} 
 			#{if day.getDayOfMonth() == _selected.getDayOfMonth()}selected#{/if}">
 			#{a @Calendars.show(_calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
 			${day.getDayOfMonth()}
@@ -28,7 +28,7 @@
 				</div>
 				<div class="event-metadata">
 					<span class="date">
-					${event.startDate.toString('dd.MM.yyyy hh:mm')} - ${event.endDate.toString('dd.MM.yyyy hh:mm')}
+					${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
 					</span>
 					#{if event.isPrivate}
 					<span class="private">Private Event</span>
