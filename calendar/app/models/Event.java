@@ -3,11 +3,15 @@ package models;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Column;
+import javax.persistence.OneToMany;
 
 import org.joda.time.DateTime;
 
@@ -19,7 +23,15 @@ import play.db.jpa.Model;
 @Entity
 public class Event extends Model implements Comparable<Event> {
 	@Required
+	@ManyToOne
+	public User creator;
+	
+	@Required
 	public String name;
+	
+	@Required
+	@ManyToMany
+	public List<Calendar> calendars;
 	
 	@Required
 	@Column(columnDefinition="TEXT")
@@ -35,11 +47,10 @@ public class Event extends Model implements Comparable<Event> {
 	@Lob
 	public String description;
 	
-	@ManyToOne
-	public Calendar calendar;
-	
 	public Event(Calendar calendar) {
-		this.calendar = calendar;
+		creator = calendar.owner;
+		this.calendars = new LinkedList<Calendar>();
+		this.calendars.add(calendar);
 		calendar.events.add(this);
 	}
 	
@@ -68,6 +79,6 @@ public class Event extends Model implements Comparable<Event> {
 	}
 
 	public boolean isVisible(User visitor) {
-		return calendar.owner == visitor || !isPrivate;
+		return visitor.equals(creator) || !isPrivate;
 	}
 }

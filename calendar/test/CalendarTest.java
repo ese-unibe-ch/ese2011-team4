@@ -68,6 +68,9 @@ public class CalendarTest extends UnitTest {
 		Calendar calendar = Calendar.find("byName", "Jacks Secret Agenda").first();
 		Long id = calendar.id;
 		
+		// Count events
+		assertEquals(7, Event.count());
+		
 		// Delete it
 		calendar.delete();
 		

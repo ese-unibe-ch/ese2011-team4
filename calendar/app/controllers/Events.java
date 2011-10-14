@@ -3,6 +3,7 @@ package controllers;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import play.Logger;
 import play.data.validation.Check;
 import play.data.validation.Match;
 import play.data.validation.Required;
@@ -18,12 +19,14 @@ public class Events extends Controller {
     	render(calendar);
     }
     
-    public static void edit(Long eventId) {
+    public static void edit(Long calendarId, Long eventId) {
+    	Calendar calendar = Calendar.findById(calendarId);
     	Event event = Event.findById(eventId);
-    	render(event);
+    	render(calendar, event);
     }
     
-    public static void update(	Long eventId, 
+    public static void update(	Long currendCalendarId,
+    							Long eventId, 
 								@Required String name, 
 								@Required String startDate,
 								@Required String startTime,
@@ -35,28 +38,25 @@ public class Events extends Controller {
     	Event event = Event.findById(eventId);
     	assert event != null;
     	
+    	event.name = name;
     	try {
-    		format.parseDateTime(startDate+startTime);
-    		format.parseDateTime(endDate+endTime);
+    		event.startDate = format.parseDateTime(startDate+startTime);
+    		event.endDate = format.parseDateTime(endDate+endTime);
     	} catch(IllegalArgumentException e) {
     		validation.addError("Start.InvalidDate", "Invalid Date");
 			params.flash();
         	validation.keep();
-        	Events.edit(eventId);
+        	Events.edit(currendCalendarId, eventId);
     	}
-    	
-    	event.name = name;
-		event.startDate = format.parseDateTime(startDate+startTime);
-		event.endDate = format.parseDateTime(endDate+endTime);
     	event.isPrivate = isPrivate;
     	event.description = description;
 
     	if(event.validateAndSave()) {
-    		Calendars.show(event.calendar.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    		Calendars.show(currendCalendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     	} else {
 			params.flash();
         	validation.keep();
-        	Events.edit(eventId);
+        	Events.edit(currendCalendarId, eventId);
     	}
     }
     
@@ -98,12 +98,12 @@ public class Events extends Controller {
         }
     }
     
-    public static void delete(Long id) {
-    	Event event = Event.findById(id);
+    public static void delete(Long calendarId, Long eventId) {
+    	Event event = Event.findById(eventId);
     	assert event != null;
     	
     	event.delete();
     	
-    	Calendars.show(event.calendar.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     }
 }

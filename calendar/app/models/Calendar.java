@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -25,13 +25,23 @@ public class Calendar extends Model {
 	@Required
 	public User owner;
 	
-	@OneToMany(mappedBy="calendar", cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
 	
 	public Calendar(User owner, String name) {
 		this.owner = owner;
 		this.name = name;
 		this.events = new LinkedList<Event>();
+	}
+	
+	@Override
+	public Calendar delete() {
+		// First delete all events that were initially created in this calendar
+		for(Event e : events)
+			if(e.creator.equals(owner))
+				e.delete();
+		
+		return super.delete();
 	}
 	
 	// TODO This can be done faster and more elegant with JPA Query

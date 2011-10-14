@@ -31,7 +31,7 @@ public class User extends Model {
 	@Required
 	public String fullname;
 	
-	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="owner")
 	public List<Calendar> calendars;
 	
 	public boolean isAdmin;
@@ -44,6 +44,14 @@ public class User extends Model {
 	
 	public static User connect(String email, String password) {
 		return find("byEmailAndPassword", email, password).first();
+	}
+	
+	@Override
+	public User delete() {
+		for(Calendar c : calendars)
+			c.delete();
+		
+		return super.delete();
 	}
 
 	@Override
