@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
+import javax.persistence.Query;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ import org.joda.time.DateTime;
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
 import play.data.validation.Required;
+import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
 @Entity
@@ -52,12 +54,45 @@ public class Event extends Model implements Comparable<Event> {
 		this.origin = calendar;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
+	}
+	
+	public void joinCalendar(Calendar calendar) {
+		calendars.add(calendar);
 		calendar.events.add(this);
+		calendar.save();
+		this.save();
+	}
+	
+
+/**
+ *
+ * Returns a list of all calendars available for joining the event given for a certain user
+ * 
+ * @param	User 	The user which requests the join 
+ * @return	List<Calendar> List of possible calendars for a join	
+ * @see		models.Event#joinCalendar(Calendar calendar)
+ * @since	Beta-v1.2
+ */
+	
+	public List<Calendar> availableJoins(User user) {
+		if(!isPrivate) {
+			Query query = JPA.em().createQuery("SELECT c FROM Calendar c "+
+					"WHERE c.owner = ?1 "+
+					"AND ?2 NOT MEMBER OF c.events");
+			query.setParameter(1, user);
+			query.setParameter(2, this);
+			return query.getResultList();
+		} else
+			return new LinkedList<Calendar>();
 	}
 	
 	public boolean isThisDay(DateTime day) {
 		return startDate.getYear() == day.getYear() 
 			&& startDate.getDayOfYear() == day.getDayOfYear();
+	}
+	
+	public boolean isVisible(User visitor) {
+		return origin.owner.equals(visitor) || !isPrivate;
 	}
 	
 	@Override
@@ -77,9 +112,5 @@ public class Event extends Model implements Comparable<Event> {
 			setMessage("validation.EndAfterBeginCheck");
 			return event.startDate.isBefore(end);
 		}
-	}
-
-	public boolean isVisible(User visitor) {
-		return origin.owner.equals(visitor) || !isPrivate;
 	}
 }

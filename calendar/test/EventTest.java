@@ -1,3 +1,5 @@
+import javax.persistence.Query;
+
 import models.*;
 
 import org.joda.time.DateTime;
@@ -9,6 +11,7 @@ import org.junit.Test;
 
 import play.Logger;
 import play.data.validation.Validation;
+import play.db.jpa.JPA;
 import play.test.Fixtures;
 import play.test.UnitTest;
 
@@ -88,6 +91,61 @@ public class EventTest extends UnitTest {
 	}
 	
 	@Test
+	public void visibility() {
+		// Get user
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		// Get visible event
+		Event visibleEvent = Event.find("byName", "Work").first();
+		assertTrue(visibleEvent.isVisible(jack));
+		
+		// Get invisible event
+		Event invisibleEvent = Event.find("byName", "Meeting with the mayor").first();
+		assertFalse(invisibleEvent.isVisible(jack));
+		
+		// Get own private event
+		Event ownEvent = Event.find("byName", "Collections").first();
+		assertTrue(ownEvent.isVisible(jack));
+	}
+	
+	@Test
+	public void availableJoins() {
+		// Get some users
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		// Get some events
+		Event e3 = Event.find("byName", "Work").first();
+		Event e0 = Event.find("byName", "Collections").first();
+		
+		assertEquals(2, e3.availableJoins(jack).size());
+		assertEquals(0, e3.availableJoins(bud).size());
+		
+		// Private event can't join
+		assertEquals(0, e0.availableJoins(jack).size());
+	}
+	
+	@Test
+	public void joinCalendar() {
+		// Get a calendar
+		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
+		assertEquals(1, budCalendar.events.size());
+		
+		// Get a event
+		Event event = Event.find("byName", "Cinema").first();
+		assertFalse(event.calendars.contains(budCalendar));
+		
+		// Join the calendar
+		event.joinCalendar(budCalendar);
+		assertEquals(2, budCalendar.events.size());
+		assertTrue(event.calendars.contains(budCalendar));
+				
+		// Make sure there weren't created any objects
+		assertEquals(7, Event.count());
+		assertEquals(4, Calendar.count());
+	}
+	
+	@Test
 	public void validDateCheck() {
 		// Get a calendar
 		Calendar calendar = Calendar.all().first();
@@ -110,23 +168,5 @@ public class EventTest extends UnitTest {
 		Event event = Event.find("byName", "Cinema").first();
 		
 		assertTrue(event.isThisDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011)));
-	}
-	
-	@Test
-	public void visibility() {
-		// Get user
-		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
-		
-		// Get visible event
-		Event visibleEvent = Event.find("byName", "Work").first();
-		assertTrue(visibleEvent.isVisible(jack));
-		
-		// Get invisible event
-		Event invisibleEvent = Event.find("byName", "Meeting with the mayor").first();
-		assertFalse(invisibleEvent.isVisible(jack));
-		
-		// Get own private event
-		Event ownEvent = Event.find("byName", "Collections").first();
-		assertTrue(ownEvent.isVisible(jack));
 	}
 }

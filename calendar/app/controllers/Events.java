@@ -44,16 +44,33 @@ public class Events extends Controller {
     		forbidden("Not your event!");
     }
     
-    public static void delete(Long CalendarId, Long eventId) {
+    public static void delete(Long calendarId, Long eventId) {
+    	Calendar calendar = Calendar.findById(calendarId);
     	Event event = Event.findById(eventId);
-    	if(Security.check(event)) {
-	    	
-	    	event.delete();
-	    	
-	    	Calendars.show(CalendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    	if(Security.check(calendar)) {
+    		if(Security.check(event)) {
+    			event.delete();
+    			Calendars.showCurrentMonth(calendarId);
+    		} else {
+    			assert calendar.events.contains(event);
+    			
+    			calendar.events.remove(event);
+    			event.calendars.remove(calendar);
+    			calendar.save();
+    			event.save();
+    			Calendars.showCurrentMonth(calendarId);
+    		}
     	} else
-    		forbidden("Not your event!");
+    		forbidden("Not your calendar!");
+    	
     }
+    
+    public static void joinCalendar(Long calendarId, Long eventId) {
+    	Calendar calendar = Calendar.findById(calendarId);
+    	Event event = Event.findById(eventId);
+    	event.joinCalendar(calendar);
+    	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+	}
     
     public static void update(	Long calendarId,
     							Long eventId, 

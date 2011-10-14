@@ -52,11 +52,12 @@ public class Calendar extends Model {
 	public List<Event> eventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
+		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE ?1 MEMBER OF e.calendars "+
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
-				"AND e.startDate > ?3 " +
-				"AND e.endDate < ?4");
+				"AND e.endDate >= ?3 " +
+				"AND e.startDate < ?4");
 		query.setParameter(1, this);
 		query.setParameter(2, visitor);
 		query.setParameter(3, start);

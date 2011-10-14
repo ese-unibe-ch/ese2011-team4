@@ -84,19 +84,21 @@ public class CalendarTest extends UnitTest {
 	
 	@Test
 	public void eventsPerDay() {
-		// Get a calendar
-		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		// Get some calendars
+		Calendar jacks = Calendar.find("byName", "Jacks Agenda").first();
+		Calendar buds = Calendar.find("byName", "Ed's Future Calandar").first();
 		
 		// Get two users
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Test method
-		assertEquals(2, calendar.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(1, calendar.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), bud).size());
+		assertEquals(2, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(1, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), bud).size());
+		assertEquals(1, buds.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
 		
-		assertEquals(0, calendar.eventsByDay(new DateTime().withDayOfMonth(14).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(0, calendar.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(14).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
 	}
 	
 	@Test

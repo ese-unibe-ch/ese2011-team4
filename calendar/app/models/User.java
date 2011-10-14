@@ -53,11 +53,6 @@ public class User extends Model {
 		
 		return super.delete();
 	}
-
-	@Override
-	public String toString() {
-		return email;
-	}
 	
 	static class uniqueMailCheck extends Check {
 		public boolean isSatisfied(Object user_, Object mail_) {

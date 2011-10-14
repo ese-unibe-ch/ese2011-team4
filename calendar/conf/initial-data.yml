@@ -79,8 +79,8 @@ Event(e4):
 
 Event(e5):
     name:           Cinema
-    startDate:      2011-10-21 21:00:00 +1
-    endDate:        2011-10-21 23:00:00 +1
+    startDate:      2011-10-21 22:00:00 +1
+    endDate:        2011-10-22 08:00:00 +1
     calendars:      edCalendar
     origin:         edCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.

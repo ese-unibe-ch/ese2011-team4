@@ -3,6 +3,7 @@
 
 <div id="main-left">
 	<h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
+	<div id="calendar">
 	<div id="calendar-navigation">
 			<span id="previous-month">
 				#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear(), dt.minusMonths(1).getDayOfMonth())}
@@ -19,7 +20,39 @@
 			</span>
 	</div>
 	
-	#{calendar calendar:calendar, days:calendar.getDaysInMonth(dt), selected:dt, events:events, connectedUser:connectedUser, calendarOwner:calendarOwner /}
+	#{if flash.success}
+		<p class="success">${flash.success}</p>
+	#{/if}
+	
+	<div id="month">
+	<ul>
+	#{list items:calendar.getDaysInMonth(dt), as:'day'}
+		<li class="#{if calendar.eventsByDay(day, connectedUser).size() > 0}events#{/if} 
+			#{if day.getDayOfMonth() == dt.getDayOfMonth()}selected#{/if}">
+			#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
+			${day.getDayOfMonth()}
+			#{/a}
+		</li>
+	#{/list}
+	</ul>
+	</div>
+	<div id="events">
+	#{if events.size() > 0}
+		<ul>
+		<hr />
+		#{list items:events, as:'event'}
+			#{event calendar:calendar, event:event, connectedUser:connectedUser /}
+		#{/list}
+		</ul>
+	#{/if}
+		
+	#{else}
+		<div class="empty">
+	        There are no events for the selected date.
+	    </div>
+	#{/else}
+	</div>
+</div>
 </div>
 
 <div id="main-right">
