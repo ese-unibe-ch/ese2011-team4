@@ -17,7 +17,7 @@ import models.*;
 public class Events extends Controller {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 	
-	public static void add(Long calendarId) {
+	private static void add(Long calendarId) {
 		DateTime dt = new DateTime();
 		add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	}

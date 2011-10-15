@@ -6,15 +6,15 @@
 	<div id="calendar-navigation">
 			<span id="previous-month">
 				#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear(), dt.minusMonths(1).getDayOfMonth())}
-				<< ${dt.minusMonths(1).monthOfYear().getAsText()}
+				<< ${dt.minusMonths(1).monthOfYear().getAsText(new Locale("en","US"))}
 				#{/a}
 			</span>
 			<span id="current-month">
-				- ${dt.monthOfYear().getAsText()}, ${dt.getYear()} -
+				- ${dt.monthOfYear().getAsText(new Locale("en","US"))}, ${dt.getYear()} -
 			</span>
 			<span id="next-month">
 				#{a @Calendars.show(calendar.id, dt.plusMonths(1).getYear(), dt.plusMonths(1).getMonthOfYear(), dt.plusMonths(1).getDayOfMonth())}
-				${dt.plusMonths(1).monthOfYear().getAsText()} >>
+				${dt.plusMonths(1).monthOfYear().getAsText(new Locale("en","US"))} >>
 				#{/a}
 			</span>
 	</div>
@@ -27,8 +27,9 @@
 	<div class="navigation">
 	<ul>
 		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
+		<li><a class="navigation" href="@{Calendars.showCurrentMonth(calendar.id)}">Today</a></li>
 		#{secure.check calendar}
-		<li><a class="navigation" href="@{Events.add(calendar.id)}">Add an event</a></li>
+		<li><a class="navigation" href="@{Events.add(calendar.id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth())}">Add an event</a></li>
 		#{/secure.check}
 	</ul>
 	</div>

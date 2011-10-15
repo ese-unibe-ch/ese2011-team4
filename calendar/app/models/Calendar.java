@@ -7,11 +7,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+
+import controllers.Events;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
