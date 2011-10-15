@@ -6,7 +6,7 @@
 	<div id="calendar-month">
 	<ul>
 	#{list items:_days, as:'day'}
-		<li class="#{if _calendar.eventsByDay(day, _user).size() > 0}events#{/if} 
+		<li class="#{if _calendar.eventsByDay(day, _connectedUser).size() > 0}events#{/if} 
 			#{if day.getDayOfMonth() == _selected.getDayOfMonth()}selected#{/if}">
 			#{a @Calendars.show(_calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
 			${day.getDayOfMonth()}
@@ -34,11 +34,13 @@
 					<span class="private">Private Event</span>
 					#{/if}
 				</div>
+				#{if _connectedUser != null}
 				<div class="event-menu">
 					<ol>
 					<li><span class="actions">Actions</span>
 					<ol>
-						#{if _user.email.equals(session.username)}
+					${}
+						#{if _connectedUser.equals(_calendarOwner)}
 						<li>#{a @Events.edit(_calendar.id, event.id)}Edit#{/a}</li>
 						<li>#{a @Events.delete(_calendar.id, event.id)}Delete#{/a}</li>
 						#{/if}
@@ -49,6 +51,7 @@
 					</li>
 					</ol>
 				</div>
+				#{/if}
 			</div>
 			<div class="event-content">
 				${event.description}

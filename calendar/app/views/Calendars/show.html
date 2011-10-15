@@ -19,7 +19,7 @@
 			</span>
 	</div>
 	
-	#{calendar calendar:calendar, days:calendar.getDaysInMonth(dt), selected:dt, events:events, user:connectedUser /}
+	#{calendar calendar:calendar, days:calendar.getDaysInMonth(dt), selected:dt, events:events, connectedUser:connectedUser, calendarOwner:calendarOwner /}
 </div>
 
 <div id="main-right">
@@ -27,7 +27,7 @@
 	<div class="navigation">
 	<ul>
 		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
-		#{if connectedUser != null && connectedUser.email.equals(session.username)}
+		#{if connectedUser != null && connectedUser.equals(calendarOwner)}
 		<li><a class="navigation" href="@{Events.add(calendar.id)}">Add an event</a></li>
 		#{/if}
 	</ul>

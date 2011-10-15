@@ -52,8 +52,9 @@ public class Calendars extends Controller {
     	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
     	List<Event> events = calendar.eventsByDay(dt, connectedUser);
+    	User calendarOwner = calendar.owner;
     	
-    	render(calendar, dt, events, connectedUser);
+    	render(calendar, dt, events, connectedUser, calendarOwner);
     }
     
     public static void delete(Long id) {

@@ -48,7 +48,7 @@ public class Event extends Model implements Comparable<Event> {
 	public String description;
 	
 	public Event(Calendar calendar) {
-		creator = calendar.owner;
+		this.creator = calendar.owner;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
 		calendar.events.add(this);
@@ -79,6 +79,6 @@ public class Event extends Model implements Comparable<Event> {
 	}
 
 	public boolean isVisible(User visitor) {
-		return visitor.equals(creator) || !isPrivate;
+		return creator.equals(visitor) || !isPrivate;
 	}
 }
