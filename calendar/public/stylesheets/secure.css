@@ -1,10 +1,5 @@
 @import url(main.css);
 
-html, body {
-    background: #F0F0F0;
-    font-family: 'Lucida grande', verdana, sans-serif;
-}
-
 #login {
     width: 500px;
     margin: 50px auto;

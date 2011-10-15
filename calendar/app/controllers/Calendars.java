@@ -10,7 +10,9 @@ import models.Calendar;
 import models.Event;
 import models.User;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
 public class Calendars extends Controller {
     public static void index() {
     	User connectedUser = User.find("email", Security.connected()).first();
@@ -55,8 +57,11 @@ public class Calendars extends Controller {
     }
     
     public static void delete(Long id) {
-    	Calendar calendar = Calendar.findById(id);
-    	calendar.delete();
-    	Calendars.index();
+    	if(Security.check("owner"+id)) {
+	    	Calendar calendar = Calendar.findById(id);
+	    	calendar.delete();
+	    	Calendars.index();
+    	} else
+    		forbidden("Not your calendar!");
     }
 }

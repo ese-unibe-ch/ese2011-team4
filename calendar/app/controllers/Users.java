@@ -5,7 +5,9 @@ import java.util.List;
 import models.Calendar;
 import models.User;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
 public class Users extends Controller {
 	public static void index() {
 		User connectedUser = User.find("email", Security.connected()).first();

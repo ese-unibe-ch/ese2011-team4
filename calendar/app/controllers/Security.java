@@ -7,6 +7,14 @@ public class Security extends Secure.Security {
 	    return User.connect(username, password) != null;
 	}
 	
+	static boolean check(String profile) {
+		if("owner".equals(profile.substring(0, 6))) {
+			Calendar calendar = Calendar.findById(Long.valueOf(profile.substring(6)));
+			return User.find("byEmail", connected()).first().equals(calendar.owner);
+		}
+		return false;
+	}
+	
 	static void onDisconnected() {
 		Application.index();
 	}

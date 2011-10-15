@@ -9,20 +9,41 @@ import play.data.validation.Match;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
+import play.mvc.With;
 import models.*;
 
+@With(Secure.class)
 public class Events extends Controller {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 	
-    public static void add(Long calendarId) {
-    	Calendar calendar = Calendar.findById(calendarId);
-    	render(calendar);
+	
+    public static void add(Long id) {
+    	if(Security.check("owner"+id)) {
+	    	Calendar calendar = Calendar.findById(id);
+	    	render(calendar);
+    	} else
+    		forbidden("Not your calendar!");
     }
     
-    public static void edit(Long calendarId, Long eventId) {
-    	Calendar calendar = Calendar.findById(calendarId);
-    	Event event = Event.findById(eventId);
-    	render(calendar, event);
+    public static void edit(Long id, Long eventId) {
+    	if(Security.check("owner"+id)) {
+	    	Calendar calendar = Calendar.findById(id);
+	    	Event event = Event.findById(eventId);
+	    	render(calendar, event);
+    	} else
+    		forbidden("Not your calendar!");
+    }
+    
+    public static void delete(Long id, Long eventId) {
+    	if(Security.check("owner"+id)) {
+	    	Event event = Event.findById(eventId);
+	    	assert event != null;
+	    	
+	    	event.delete();
+	    	
+	    	Calendars.show(id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    	} else
+    		forbidden("Not your calendar!");
     }
     
     public static void update(	Long currendCalendarId,
@@ -96,14 +117,5 @@ public class Events extends Controller {
         	validation.keep();
         	Events.add(calendarId);
         }
-    }
-    
-    public static void delete(Long calendarId, Long eventId) {
-    	Event event = Event.findById(eventId);
-    	assert event != null;
-    	
-    	event.delete();
-    	
-    	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     }
 }
