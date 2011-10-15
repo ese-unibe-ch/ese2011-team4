@@ -23,6 +23,11 @@ public class Calendars extends Controller {
 	    	render(calendars);
     	}
     }
+    
+    public static void add() {
+    	User connectedUser = User.find("email", Security.connected()).first();
+	    render(connectedUser);
+    }
 	
 	public static void display(Long userId) {
 		User connectedUser = User.find("email", Security.connected()).first();
@@ -64,5 +69,18 @@ public class Calendars extends Controller {
 	    	Calendars.index();
     	} else
     		forbidden("Not your calendar!");
+    }
+    
+    public static void addCalendar(String name) {
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	
+    	Calendar calendar = new Calendar(connectedUser, name);
+    	if (calendar.validateAndSave())
+    		Calendars.display(connectedUser.id);
+    	else {
+    		params.flash();
+    		validation.keep();
+    		Calendars.add();
+    	}
     }
 }
