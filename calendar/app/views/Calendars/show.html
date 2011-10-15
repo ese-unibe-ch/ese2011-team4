@@ -28,7 +28,7 @@
 	<ul>
 		<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
 		#{if connectedUser != null && connectedUser.equals(calendarOwner)}
-		<li><a class="navigation" href="@{Events.add(calendar.id)}">Add an event</a></li>
+		<li><a class="navigation" href="@{Events.add(calendar.id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth())}">Add an event</a></li>
 		#{/if}
 	</ul>
 	</div>

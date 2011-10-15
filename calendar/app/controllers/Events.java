@@ -1,5 +1,6 @@
 package controllers;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -16,11 +17,19 @@ import models.*;
 public class Events extends Controller {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 	
+	public static void add(Long calendarId) {
+		DateTime dt = new DateTime();
+		add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+	}
 	
-    public static void add(Long calendarId) {
+    public static void add(Long calendarId, Integer year, Integer month, Integer day) {
+    	DateTime dt = new DateTime();
+    	if(year != null && month != null && day != null)
+    		dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
+    	
     	Calendar calendar = Calendar.findById(calendarId);
     	if(Security.check(calendar)) {
-	    	render(calendar);
+	    	render(calendar, dt);
     	} else
     		forbidden("Not your calendar!");
     }
