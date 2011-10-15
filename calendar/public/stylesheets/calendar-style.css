@@ -1,3 +1,25 @@
+/** User table**/
+
+#user-list table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+table .user-name{
+	width: 30%;
+	text-align: left;
+}
+
+table .user-calendars{
+	width: 60%;
+	text-align: left;
+}	
+
+table a:hover {
+	background-color: none;
+}
+
+
 /** List calendars **/
 
 #calendar-list ul {

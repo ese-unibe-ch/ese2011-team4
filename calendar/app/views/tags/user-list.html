@@ -1,0 +1,18 @@
+<div id="user-list">
+	<h2 class="title">
+		Currently registered users
+	</h2>
+	<table>
+			<tr>
+				<th class="user-name">User name</th>
+				<th class="user-calendars">Calendars</th>
+			</tr>
+		#{list items:_users, as:'user'}
+			<tr>
+				<td class="user-name">${user.fullname}</td>
+				<td class="user-calendars">#{a @Calendars.display(user.id)}${user.fullname}'s calendars#{/a}</td>
+			</tr>
+		#{/list}
+		</table>
+</div>
+
