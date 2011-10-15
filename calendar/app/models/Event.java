@@ -67,6 +67,7 @@ public class Event extends Model implements Comparable<Event> {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
 			DateTime end = (DateTime) end_;
+			setMessage("validation.EndAfterBeginCheck");
 			return event.startDate.isBefore(end);
 		}
 	}

@@ -35,6 +35,16 @@ public class Events extends Controller {
     	Event event = Event.findById(eventId);
     	assert event != null;
     	
+    	try {
+    		format.parseDateTime(startDate+startTime);
+    		format.parseDateTime(endDate+endTime);
+    	} catch(IllegalArgumentException e) {
+    		validation.addError("Start.InvalidDate", "Invalid Date");
+			params.flash();
+        	validation.keep();
+        	Events.edit(eventId);
+    	}
+    	
     	event.name = name;
 		event.startDate = format.parseDateTime(startDate+startTime);
 		event.endDate = format.parseDateTime(endDate+endTime);
@@ -61,6 +71,16 @@ public class Events extends Controller {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
+    	
+    	try {
+    		format.parseDateTime(startDate+startTime);
+    		format.parseDateTime(endDate+endTime);
+    	} catch(IllegalArgumentException e) {
+    		validation.addError("Start.InvalidDate", "Invalid Date");
+			params.flash();
+        	validation.keep();
+        	Events.add(calendarId);
+    	}
     	
     	Event event = new Event(calendar);
     	event.name = name;

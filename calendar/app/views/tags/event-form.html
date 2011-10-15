@@ -1,40 +1,42 @@
 <p>
 #{field 'name'}
    	<label for="name">Title</label>
-    <input type="text" name="${field.name}" id="name" value="${_event?.name}"/>
-    #{ifErrors}<span class="error">#{error 'name' /}</span>#{/ifErrors}
+    <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
+    <!--#{ifErrors}<span class="error">#{error 'name' /}</span>#{/ifErrors}-->
 #{/field}
 </p>
 <p>
 #{field 'startDate'}
     <label for"startDate">Start</label>
-    <input type="text" name="${field.name}" id="startDate" value="${_event?.startDate?.toString('dd.MM.yyyy')}"/>
+    <input type="text" name="${field.name}" id="startDate" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}${_event?.startDate?.toString('dd.MM.yyyy')}#{/else}"/>
+    <!--#{ifErrors}<span class="error">#{error 'event.startDate' /}</span>#{/ifErrors}-->
 #{/field}
 #{field 'startTime'}
 	<label for"startTime">Time</label>
-    <input size=5px type="text" name="${field.name}" id="startTime" value="${_event?.startDate?.toString('hh:mm')}"/>
+    <input size=5px type="text" name="${field.name}" id="startTime" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}${_event?.startDate?.toString('HH:mm')}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'endDate'}
 	<label for"endDate">End</label>
-	<input type="text" name="${field.name}" id="endDate" value="${_event?.endDate?.toString('dd.MM.yyyy')}"/>
+	<input type="text" name="${field.name}" id="endDate" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}${_event?.endDate?.toString('dd.MM.yyyy')}#{/else}"/>
+    <!--#{ifErrors}<span class="error">#{error 'event.endDate' /}</span>#{/ifErrors}-->
 #{/field}
 #{field 'endTime'}
 	<label for"endTime">Time</label>
-    <input size=5px type="text" name="${field.name}" id="endTime" value="${_event?.endDate?.toString('hh:mm')}"/>
+    <input size=5px type="text" name="${field.name}" id="endTime" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}${_event?.endDate?.toString('HH:mm')}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'isPrivate'}
-	<input type="checkbox" name="${field.name}" id="isPrivate" #{if _event?.isPrivate}checked="checked"#{/if}/>
+	<input type="checkbox" name="${field.name}" id="isPrivate" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
 	<label for="isPrivate" id="isPrivate">Private event</label>
 #{/field}
 </p>
 <p class="description">
 #{field 'description'}
 	<label for"description">Description</label>
-    <textarea name="${field.name}" id="description">${_event?.description}</textarea>
+    <textarea name="${field.name}" id="description">#{ifErrors}${flash.description}#{/ifErrors}#{else}${_event?.description}${flash.description}#{/else}</textarea>
 #{/field}
 </p>
 <p class="button">

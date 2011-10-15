@@ -5,3 +5,4 @@ secure.username=Your email:
 secure.password=Your password:
 secure.signin=Log in now
 validation.required=%s is required
+validation.EndAfterBeginCheck=End must be after start
