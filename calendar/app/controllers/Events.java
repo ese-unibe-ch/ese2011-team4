@@ -17,38 +17,35 @@ public class Events extends Controller {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 	
 	
-    public static void add(Long id) {
-    	User connectedUser = User.find("email", Security.connected()).first();
-    	Calendar calendar = Calendar.findById(id);
-    	if(calendar != null && calendar.owner.equals(connectedUser)) {//if(Security.check("owner"+id)) {
+    public static void add(Long calendarId) {
+    	Calendar calendar = Calendar.findById(calendarId);
+    	if(Security.check(calendar)) {
 	    	render(calendar);
     	} else
     		forbidden("Not your calendar!");
     }
     
-    public static void edit(Long id, Long eventId) {
-    	User connectedUser = User.find("email", Security.connected()).first();
+    public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
-    	if(event != null && event.creator.equals(connectedUser)) {//if(Security.check("owner"+id)) {
-	    	Calendar calendar = Calendar.findById(id);
+    	if(Security.check(event)) {
+    		Calendar calendar = Calendar.findById(calendarId);
 	    	render(calendar, event);
     	} else
     		forbidden("Not your calendar!");
     }
     
-    public static void delete(Long id, Long eventId) {
-    	User connectedUser = User.find("email", Security.connected()).first();
+    public static void delete(Long CalendarId, Long eventId) {
     	Event event = Event.findById(eventId);
-    	if(event != null && event.creator.equals(connectedUser)) {//if(Security.check("owner"+id)) {
+    	if(Security.check(event)) {
 	    	
 	    	event.delete();
 	    	
-	    	Calendars.show(id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+	    	Calendars.show(CalendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     	} else
     		forbidden("Not your calendar!");
     }
     
-    public static void update(	Long currendCalendarId,
+    public static void update(	Long calendarId,
     							Long eventId, 
 								@Required String name, 
 								@Required String startDate,
@@ -69,17 +66,17 @@ public class Events extends Controller {
     		validation.addError("Start.InvalidDate", "Invalid Date");
 			params.flash();
         	validation.keep();
-        	Events.edit(currendCalendarId, eventId);
+        	Events.edit(calendarId, eventId);
     	}
     	event.isPrivate = isPrivate;
     	event.description = description;
 
     	if(event.validateAndSave()) {
-    		Calendars.show(currendCalendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    		Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     	} else {
 			params.flash();
         	validation.keep();
-        	Events.edit(currendCalendarId, eventId);
+        	Events.edit(calendarId, eventId);
     	}
     }
     

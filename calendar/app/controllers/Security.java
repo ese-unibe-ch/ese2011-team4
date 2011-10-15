@@ -7,9 +7,15 @@ public class Security extends Secure.Security {
 	    return User.connect(username, password) != null;
 	}
 	
-	static boolean check(String profile) {
-		if("owner".equals(profile.substring(0, 5))) {
-			Calendar calendar = Calendar.findById(Long.valueOf(profile.substring(5)));
+	static boolean check(Event event) {
+		if(event != null) {
+			return User.find("byEmail", connected()).first().equals(event.creator);
+		}
+		return false;
+	}
+	
+	static boolean check(Calendar calendar) {
+		if(calendar != null) {
 			return User.find("byEmail", connected()).first().equals(calendar.owner);
 		}
 		return false;
@@ -22,4 +28,5 @@ public class Security extends Secure.Security {
 	static void onAuthenticated() {
 	    Application.index();
 	}
+
 }
