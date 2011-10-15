@@ -34,13 +34,14 @@ public class Events extends Controller {
     		forbidden("Not your calendar!");
     }
     
+
     public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
     	if(Security.check(event)) {
     		Calendar calendar = Calendar.findById(calendarId);
 	    	render(calendar, event);
     	} else
-    		forbidden("Not your calendar!");
+    		forbidden("Not your event!");
     }
     
     public static void delete(Long CalendarId, Long eventId) {
@@ -51,7 +52,7 @@ public class Events extends Controller {
 	    	
 	    	Calendars.show(CalendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     	} else
-    		forbidden("Not your calendar!");
+    		forbidden("Not your event!");
     }
     
     public static void update(	Long calendarId,

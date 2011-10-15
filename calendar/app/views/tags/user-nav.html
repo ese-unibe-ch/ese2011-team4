@@ -1,6 +1,5 @@
 <div class="navigation">
-	#{if session.username}
-	<h2 class="title">Users</h2>
+	<h2 class="title">Favorite Contacts</h2>
 	<ul>
 		#{list items:_users, as:'user'}
 		<li>#{a @Calendars.display(user.id)}${user.fullname}#{/a}</li>
@@ -10,8 +9,4 @@
 	<ul>
 		<li><a href="@{Calendars.add}">Create a new calendar</a></li>
 	<ul>
-	#{/if}
-	#{else}
-		Please <a href="@{Secure.login()}">log in</a> to see other users and create calendars.
-	#{/else}
 </div>

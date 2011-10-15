@@ -63,8 +63,8 @@ public class Calendars extends Controller {
     }
     
     public static void delete(Long id) {
-    	if(Security.check("owner"+id)) {
-	    	Calendar calendar = Calendar.findById(id);
+    	Calendar calendar = Calendar.findById(id);
+    	if(Security.check(calendar)) {
 	    	calendar.delete();
 	    	Calendars.index();
     	} else

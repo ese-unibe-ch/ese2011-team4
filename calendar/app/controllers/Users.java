@@ -10,13 +10,8 @@ import play.mvc.With;
 @With(Secure.class)
 public class Users extends Controller {
 	public static void index() {
-		User connectedUser = User.find("email", Security.connected()).first();
-		if(connectedUser != null){
-			Users.display(connectedUser.id);
-		}
-		else {
-	    	render();
-		}
+		List<User> users = User.all().fetch();
+	    render(users);
 	}
 	
 	public static void display(Long userId){
