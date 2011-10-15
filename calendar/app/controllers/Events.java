@@ -18,26 +18,28 @@ public class Events extends Controller {
 	
 	
     public static void add(Long id) {
-    	if(Security.check("owner"+id)) {
-	    	Calendar calendar = Calendar.findById(id);
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	Calendar calendar = Calendar.findById(id);
+    	if(calendar != null && calendar.owner.equals(connectedUser)) {//if(Security.check("owner"+id)) {
 	    	render(calendar);
     	} else
     		forbidden("Not your calendar!");
     }
     
     public static void edit(Long id, Long eventId) {
-    	if(Security.check("owner"+id)) {
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	Event event = Event.findById(eventId);
+    	if(event != null && event.creator.equals(connectedUser)) {//if(Security.check("owner"+id)) {
 	    	Calendar calendar = Calendar.findById(id);
-	    	Event event = Event.findById(eventId);
 	    	render(calendar, event);
     	} else
     		forbidden("Not your calendar!");
     }
     
     public static void delete(Long id, Long eventId) {
-    	if(Security.check("owner"+id)) {
-	    	Event event = Event.findById(eventId);
-	    	assert event != null;
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	Event event = Event.findById(eventId);
+    	if(event != null && event.creator.equals(connectedUser)) {//if(Security.check("owner"+id)) {
 	    	
 	    	event.delete();
 	    	

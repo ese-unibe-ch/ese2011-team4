@@ -8,8 +8,8 @@ public class Security extends Secure.Security {
 	}
 	
 	static boolean check(String profile) {
-		if("owner".equals(profile.substring(0, 6))) {
-			Calendar calendar = Calendar.findById(Long.valueOf(profile.substring(6)));
+		if("owner".equals(profile.substring(0, 5))) {
+			Calendar calendar = Calendar.findById(Long.valueOf(profile.substring(5)));
 			return User.find("byEmail", connected()).first().equals(calendar.owner);
 		}
 		return false;
