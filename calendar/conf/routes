@@ -3,19 +3,19 @@
 # ~~~~
 
 # Import Secure routes
-*       /                                       module:secure
+*       /                                       		module:secure
 
 # Home page
-GET     /                                       Application.index
-GET		/calendar/{id}							Calendars.showCurrentMonth
-GET     /calendar/{id}/{year}-{month}-{day}     Calendars.show
-GET     /events/add/{id}/{year}-{month}-{day}   Events.add
+GET     /                                       		Application.index
+GET		/calendar/{id}									Calendars.showCurrentMonth
+GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
+GET     /events/add/{calendarId}/{year}-{month}-{day}   Events.add
 
 # Ignore favicon requests
-GET     /favicon.ico                            404
+GET     /favicon.ico                            		404
 
 # Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
+GET     /public/                                		staticDir:public
 
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+*       /{controller}/{action}                  		{controller}.{action}
