@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import controllers.Events;
 
+import play.db.jpa.JPA;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -49,11 +51,16 @@ public class Calendar extends Model {
 	
 	// TODO This can be done faster and more elegant with JPA Query
 	public List<Event> eventsByDay(DateTime day, User visitor) {
-		List<Event> list = new LinkedList<Event>();
-		for(Event e : events)
-			if(e.isVisible(visitor) && e.isThisDay(day))
-				list.add(e);
-		return list;
+		DateTime start = day.withTime(0, 0, 0, 0);
+		DateTime end = start.plusDays(1);
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
+				"AND e.startDate > ?2 " +
+				"AND e.endDate < ?3");
+		query.setParameter(1, visitor);
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return query.getResultList();
 	}
 	
 	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
