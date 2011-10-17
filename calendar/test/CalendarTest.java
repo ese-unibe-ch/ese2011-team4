@@ -94,6 +94,9 @@ public class CalendarTest extends UnitTest {
 		// Test method
 		assertEquals(2, calendar.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), jack).size());
 		assertEquals(1, calendar.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), bud).size());
+		
+		assertEquals(0, calendar.eventsByDay(new DateTime().withDayOfMonth(14).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(0, calendar.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
 	}
 	
 	@Test

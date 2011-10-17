@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import play.data.validation.Check;
@@ -24,7 +25,7 @@ import play.db.jpa.Model;
 public class Event extends Model implements Comparable<Event> {
 	@Required
 	@ManyToOne
-	public User creator;
+	public Calendar origin;
 	
 	@Required
 	public String name;
@@ -34,11 +35,11 @@ public class Event extends Model implements Comparable<Event> {
 	public List<Calendar> calendars;
 	
 	@Required
-	@Column(columnDefinition="TEXT")
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	public DateTime startDate;
 	
 	@Required
-	@Column(columnDefinition="TEXT")
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	@CheckWith(EndAfterBeginCheck.class)
 	public DateTime endDate;
 	
@@ -48,7 +49,7 @@ public class Event extends Model implements Comparable<Event> {
 	public String description;
 	
 	public Event(Calendar calendar) {
-		this.creator = calendar.owner;
+		this.origin = calendar;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
 		calendar.events.add(this);
@@ -79,6 +80,6 @@ public class Event extends Model implements Comparable<Event> {
 	}
 
 	public boolean isVisible(User visitor) {
-		return creator.equals(visitor) || !isPrivate;
+		return origin.owner.equals(visitor) || !isPrivate;
 	}
 }

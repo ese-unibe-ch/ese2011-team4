@@ -37,7 +37,7 @@ Event(e0):
     startDate:      2011-09-13 09:00:00 +1
     endDate:        2011-09-13 12:00:00 +1
     calendars:      firstJackCalendar
-    creator:        jack
+    origin:         firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      true
 
@@ -46,7 +46,7 @@ Event(e1):
     startDate:      2011-10-20 13:00:00 +1
     endDate:        2011-10-20 15:00:00 +1
     calendars:      firstJackCalendar
-    creator:        jack
+    origin:         firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      false
     
@@ -55,7 +55,7 @@ Event(e2):
     startDate:      2011-10-20 17:00:00 +1
     endDate:        2011-10-20 18:00:00 +1
     calendars:      firstJackCalendar
-    creator:        jack
+    origin:         firstJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true
     
@@ -64,7 +64,7 @@ Event(e3):
     startDate:      2011-10-21 08:00:00 +1
     endDate:        2011-10-21 11:00:00 +1
     calendars:      budCalendar
-    creator:        bud
+    origin:         budCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      false
     
@@ -73,7 +73,7 @@ Event(e4):
     startDate:      2011-10-21 14:00:00 +1
     endDate:        2011-10-21 17:00:00 +1
     calendars:      secondJackCalendar
-    creator:        jack
+    origin:         secondJackCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true
 
@@ -82,7 +82,7 @@ Event(e5):
     startDate:      2011-10-21 21:00:00 +1
     endDate:        2011-10-21 23:00:00 +1
     calendars:      edCalendar
-    creator:        ed
+    origin:         edCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      false
     
@@ -91,6 +91,6 @@ Event(e6):
     startDate:      2011-10-15 11:00:00 +1
     endDate:        2011-10-15 13:00:00 +1
     calendars:      edCalendar
-    creator:        ed
+    origin:         edCalendar
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
     isPrivate:      true

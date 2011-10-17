@@ -43,23 +43,24 @@ public class Calendar extends Model {
 	public Calendar delete() {
 		// First delete all events that were initially created in this calendar
 		for(Event e : events)
-			if(e.creator.equals(owner))
+			if(e.origin.equals(this))
 				e.delete();
 		
 		return super.delete();
 	}
 	
-	// TODO This can be done faster and more elegant with JPA Query
 	public List<Event> eventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.startDate > ?2 " +
-				"AND e.endDate < ?3");
-		query.setParameter(1, visitor);
-		query.setParameter(2, start);
-		query.setParameter(3, end);
+				"WHERE ?1 MEMBER OF e.calendars "+
+				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
+				"AND e.startDate > ?3 " +
+				"AND e.endDate < ?4");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, start);
+		query.setParameter(4, end);
 		return query.getResultList();
 	}
 	
