@@ -32,6 +32,13 @@ Calendar(edCalendar):
     name:           Ed's Future Calandar
     owner:          ed
 
+Location(loc1):
+    street:         Bernstrasse
+    num:            1
+    city:           Bern
+    country:        Switzerland
+    pincode:        3000
+
 Event(e0):
     name:           Collections
     startDate:      2011-09-13 09:00:00 +1
@@ -47,6 +54,8 @@ Event(e1):
     endDate:        2011-10-20 15:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
+    creator:        jack
+    location:       loc1
     description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
     isPrivate:      false
     

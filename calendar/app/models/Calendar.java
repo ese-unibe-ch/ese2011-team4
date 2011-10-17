@@ -91,4 +91,25 @@ public class Calendar extends Model {
 	public String toString() {
 		return name;
 	}
+	public List<Event> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
+		DateTime start = day.withTime(0, 0, 0, 0);
+		DateTime end = start.plusDays(1);
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
+				"AND e.startDate > ?2 " +
+				"AND e.endDate < ?3" +
+				"AND e.location.getLocation().contains(loc.getLocation())");
+		query.setParameter(1, visitor);
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return query.getResultList();
+	}
+	public List<Event> eventsByLocation(User visitor,Location loc) {
+		
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
+				"AND e.location.getLocation().contains(loc.getLocation())");
+		query.setParameter(1, visitor);
+		return query.getResultList();
+	}
 }

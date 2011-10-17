@@ -80,7 +80,12 @@ public class Events extends Controller {
 								@Required String endDate, 
 								@Required String endTime,
 								boolean isPrivate, 
-								String description) {
+								String description,
+								String street,
+								String num,
+								String city,
+								String country,
+								String pincode) {
     	
     	Event event = Event.findById(eventId);
     	assert event != null;
@@ -97,13 +102,25 @@ public class Events extends Controller {
     	}
     	event.isPrivate = isPrivate;
     	event.description = description;
-
-    	if(event.validateAndSave()) {
-    		Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+    	
+    	if(event.location == null)
+    		event.location = new Location();
+    	event.location.street = street;
+    	event.location.num = num;
+    	event.location.city = city;
+    	event.location.country = country;
+    	event.location.pincode = pincode;
+    	
+    	if(event.validateAndSave() && event.location.validateAndSave()) {
+        	Calendars.show(calendarId, event.startDate.getYear(), 
+        							   event.startDate.getMonthOfYear(), 
+       								   event.startDate.getDayOfMonth());
     	} else {
-			params.flash();
-        	validation.keep();
-        	Events.edit(calendarId, eventId);
+     		for(play.data.validation.Error e : Validation.errors())
+    			Logger.error(e.message());
+    		params.flash();
+            validation.keep();
+            Events.edit(calendarId, eventId);
     	}
     }
     
@@ -114,7 +131,12 @@ public class Events extends Controller {
     								String endDate, 
     								String endTime,
     								boolean isPrivate, 
-    								String description) {
+    								String description,
+    								String street,
+    								String num,
+    								String city,
+    								String country,
+    								String pincode) {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
@@ -135,10 +157,18 @@ public class Events extends Controller {
 		event.endDate = format.parseDateTime(endDate+endTime);
     	event.isPrivate = isPrivate;
     	event.description = description;
+    	event.location = new Location();
+    	event.location.street = street;
+    	event.location.num = num;
+    	event.location.city = city;
+    	event.location.country = country;
+    	event.location.pincode = pincode;
     	
-        if (event.validateAndSave())
+        if (event.validateAndSave() && event.location.validateAndSave())
             Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
         else {
+        	for(play.data.validation.Error e : Validation.errors())
+    			Logger.error(e.message());
         	params.flash();
         	validation.keep();
         	Events.add(calendarId);

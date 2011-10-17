@@ -21,6 +21,7 @@
 */modules
 */logs
 *.log
+*.ser
 
 server.pid
 

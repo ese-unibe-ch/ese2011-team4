@@ -33,12 +33,39 @@
 	<label for="isPrivate" id="isPrivate">Private event</label>
 #{/field}
 </p>
+<p>
+#{field 'street'}
+	<label for"street">Street</label>
+    <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_event?.location?.street}#{/else}"/>
+#{/field}
+#{field 'num'}
+	<label for"num">Number</label>
+    <input type="text" name="${field.name}" id="num" value="#{ifErrors}${flash.num}#{/ifErrors}#{else}${_event?.location?.num}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'city'}
+	<label for"city">City</label>
+    <input type="text" name="${field.name}" id="city"/ value="#{ifErrors}${flash.city}#{/ifErrors}#{else}${_event?.location?.city}#{/else}"/>
+#{/field}
+#{field 'country'}
+	<label for"CountryLocation">Country</label>
+    <input type="text" name="${field.name}" id="country" value="#{ifErrors}${flash.country}#{/ifErrors}#{else}${_event?.location?.country}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'pincode'}
+	<label for"pincode">Pincode</label>
+    <input type="text" name="${field.name}" id="pincode" value="#{ifErrors}${flash.pincode}#{/ifErrors}#{else}${_event?.location?.pincode}#{/else}"/>
+#{/field}
+</p>
 <p class="description">
 #{field 'description'}
 	<label for"description">Description</label>
-    <textarea name="${field.name}" id="description">#{ifErrors}${flash.description}#{/ifErrors}#{else}${_event?.description}${flash.description}#{/else}</textarea>
+    <textarea name="${field.name}" id="description">#{ifErrors}${flash.description}#{/ifErrors}#{else}${_event?.description}#{/else}</textarea>
 #{/field}
 </p>
+
 <p class="button">
 	<input type="submit" value="Submit your event" />
 </p>

@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
 
 import org.hibernate.annotations.Type;
@@ -47,6 +48,9 @@ public class Event extends Model implements Comparable<Event> {
 	
 	public Boolean isPrivate;
 	
+	@OneToOne
+	public Location location;
+	
 	@Lob
 	public String description;
 	
@@ -63,7 +67,6 @@ public class Event extends Model implements Comparable<Event> {
 		this.save();
 	}
 	
-
 /**
  *
  * Returns a list of all calendars available for joining the event given for a certain user
@@ -95,6 +98,12 @@ public class Event extends Model implements Comparable<Event> {
 		return origin.owner.equals(visitor) || !isPrivate;
 	}
 	
+	public boolean isThisDayandLocation(DateTime day, Location loc) {
+		return startDate.getYear() == day.getYear() 
+			&& startDate.getDayOfYear() == day.getDayOfYear()
+			&& location.toString().contains(loc.toString());
+	}
+
 	@Override
 	public String toString() {
 		return name;

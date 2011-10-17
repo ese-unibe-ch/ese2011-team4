@@ -15,7 +15,9 @@
 			${_event.origin.owner.fullname}
 			#{/a}</span>
 		#{/if}
-		
+		#{if _event.location }
+			<span class="location">${_event.location.toString()}</span>
+		#{/if}
 		</div>
 		<div class="event-menu">
 			<ol>
