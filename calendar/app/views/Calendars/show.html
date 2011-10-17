@@ -24,18 +24,44 @@
 		<p class="success">${flash.success}</p>
 	#{/if}
 	
-	<div id="month">
-	<ul>
-	#{list items:calendar.getDaysInMonth(dt), as:'day'}
-		<li class="#{if calendar.eventsByDay(day, connectedUser).size() > 0}events#{/if} 
-			#{if day.getDayOfMonth() == dt.getDayOfMonth()}selected#{/if}">
-			#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
-			${day.getDayOfMonth()}
-			#{/a}
-		</li>
-	#{/list}
-	</ul>
-	</div>
+	<table id="month">
+		<tr>
+			<td class="title">Mon</td>
+			<td class="title">Tue</td>
+			<td class="title">Wed</td>
+			<td class="title">Thu</td>
+			<td class="title">Fri</td>
+			<td class="title">Sat</td>
+			<td class="title">Sun</td>
+		</tr>
+		<tr>
+		#{if (calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7 > 0}
+			#{list items:1..(calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7, as:'i'}
+				<td></td>
+			#{/list}
+		#{/if}
+					
+		#{list items:calendar.getDaysInMonth(dt), as:'day'}
+			<td class="#{if calendar.eventsByDay(day, connectedUser).size() > 0}events#{/if}
+				#{if day.getDayOfMonth() == dt.getDayOfMonth()}selected#{/if}">
+				#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
+					${day.getDayOfMonth()}
+				#{/a}
+			</td>
+		
+			#{if day.getDayOfWeek()==7}
+				</tr><tr>
+			#{/if}
+		#{/list}
+	
+		#{if calendar.getDaysInMonth(dt)[calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 > 0}
+			#{list items:calendar.getDaysInMonth(dt)[calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 .. 6, as:'i'}
+				<td></td>
+			#{/list}
+		#{/if}		
+		</tr>
+	</table>
+
 	<div id="events">
 	#{if events.size() > 0}
 		<ul>

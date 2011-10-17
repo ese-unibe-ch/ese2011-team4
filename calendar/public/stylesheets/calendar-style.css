@@ -99,33 +99,42 @@ table a:hover {
 }
 
 /** Calendar per month **/
-#month ul {
-	list-style: none;
+#month {
+	width: 100%;
 	padding: 5px 15px 5px 15px;
-}
-
-#month ul li {
-	display: inline-block;
-	width: 28px;
 	text-align: center;
+	table-layout: fixed;
 }
 
-#month ul li.events {
+#month td {
+	border: solid 1px #000;
+}
+
+#month td.events {
 	font-weight: bold;
 	padding: 1px;
 }
 
-#month ul li.selected {
+#month td.selected {
 	background-color: #333;
 	-webkit-border-radius: 10px;
-   -moz-border-radius: 10px;
+	-moz-border-radius: 10px;
 }
 
-#month ul li.events a {
+#month td a {
+	display: block;
+}
+
+table#month td.title {
+	background-color: #819edb;
+	font-weight: bold;
+}
+
+#month td.events a {
 	color: #0051FF;
 }
 
-#month ul li.selected a {
+#month td.selected a {
 	color: #fff;
 }
 	
