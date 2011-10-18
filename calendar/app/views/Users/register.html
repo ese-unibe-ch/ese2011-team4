@@ -1,0 +1,47 @@
+#{extends 'main.html' /}
+#{set title:'Register' /}
+
+<div id="main">
+<div id="register">
+	<h2 class="title">Register for calpal.</h2>
+	#{ifErrors}
+	<span class="error">
+	Oops...
+	<ul>
+	#{errors}
+		<li>${error}</li>
+	#{/errors}
+	</ul>
+	</span>
+	#{/ifErrors}
+	
+	<div id="user-registration">
+	#{form @Users.newUser()}
+		<p>
+		#{field 'email'}
+   			<label for="email">Email</label>
+    		<input type="text" name="${field.name}" id="email" value="#{ifErrors}${flash.email}#{/ifErrors}"/>
+		#{/field}
+		</p>
+		<p>
+		#{field 'fullname'}
+	   		<label for="fullname">Full Name</label>
+	    	<input type="text" name="${field.name}" id="fullname" value="#{ifErrors}${flash.fullname}#{/ifErrors}"/>
+		#{/field}
+		</p>
+		<p>
+		#{field 'password'}
+	   		<label for="password">Password</label>
+	    	<input type="password" name="${field.name}" id="password" value="#{ifErrors}${flash.password}#{/ifErrors}"/>
+		#{/field}
+		</p>
+		<p class="button">
+			<input type="submit" value="Submit" />
+		</p>
+		<p class="button">
+			<input type="reset" value="Reset" />
+		</p>
+	#{/form}
+	</div>
+</div>
+</div>

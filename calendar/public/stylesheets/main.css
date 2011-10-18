@@ -112,6 +112,22 @@ header nav li a:hover {
 	color: #fff;
 }
 
+/** Register form **/
+#register {
+	background-color: #93B4FA;
+	border-radius: 16px 16px 16px 16px;
+	width: 500px;
+	margin: 50px auto;
+}
+
+#register .title {
+	text-align: center;
+}
+
+#register form label {
+	width: 50px;
+}
+
 /** Main content **/
 
 #main {
