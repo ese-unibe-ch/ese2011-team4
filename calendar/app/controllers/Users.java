@@ -17,29 +17,15 @@ public class Users extends Controller {
 	public static void index() {
 		List<User> users = User.all().fetch();
 		User connectedUser = User.find("email", Security.connected()).first();
-		List<Favorite> allFavs = Favorite.find("followerId", connectedUser.id).fetch();
-		List<Favorite> favs = connectedUser.favorites(allFavs);
-	    render(users,favs, connectedUser);
-	}
-	
-	public static void display(Long userId){
-		User connectedUser = User.find("email", Security.connected()).first();
-		User user = User.findById(userId);
-		List<User> users = User.all().fetch();
-		List<Calendar> calendars = Calendar.find("owner", user).fetch();
-		List<Favorite> allFavs = Favorite.find("followerId", connectedUser.id).fetch();
-		List<Favorite> favs = connectedUser.favorites(allFavs);
-		render(users, connectedUser, favs, calendars);
+	    render(users, connectedUser);
 	}
 	
 	public static void addContact(Long userId){
 		List<User> users = User.all().fetch();
 		User connectedUser = User.find("email", Security.connected()).first();
 		User favorite = User.findById(userId);
-		new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
-		List<Favorite> allFavs = Favorite.find("followerId", connectedUser.id).fetch();
-		List<Favorite> favs = connectedUser.favorites(allFavs);
-		render(connectedUser,favs,users);
+		Favorite newFav = new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
+		render(connectedUser, newFav, users);
 	}
 	
 	public static void deleteContact(Long userId){
@@ -47,9 +33,7 @@ public class Users extends Controller {
 		User connectedUser = User.find("email", Security.connected()).first();
 		Favorite deleted = Favorite.find("favoriteId", userId).first();
 		Favorite.delete("favoriteId", userId);
-		List<Favorite> allFavs = Favorite.find("followerId", connectedUser.id).fetch();
-		List<Favorite> favs = connectedUser.favorites(allFavs);
-		render(connectedUser,favs,users,deleted);
+		render(connectedUser, users, deleted);
 	}
 	
 	public static void register() {

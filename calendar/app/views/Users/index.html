@@ -1,10 +1,4 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title: Users /}
 
-<div id="main-left">
-	#{user-list users:users, connectedUser:connectedUser, favs:favs /}
-</div>
-
-<div id="main-right">
-	#{user-nav users:users, favs:favs /}
-</div>
+#{user-list users:users, connectedUser:connectedUser, favs:favs /}

@@ -66,14 +66,8 @@ public class User extends Model {
 		return found;
 	}
 	
-	public List<Favorite> favorites(List<Favorite> favs){
-		Iterator<Favorite> it = favs.iterator();
-		while(it.hasNext()){
-			Favorite fav = it.next();
-			if(fav.followerId == id)
-				favorites.add(fav);
-		}
-		return favorites;
+	public List<Favorite> favorites() {
+		return Favorite.find("followerId", id).fetch();
 	}
 	
 	@Override

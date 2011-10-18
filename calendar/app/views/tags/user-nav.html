@@ -1,19 +1,13 @@
-<div class="navigation">
-	<h2 class="title">Favorite Contacts</h2>
-	<table>
-		<tr>
-			<th class ="fav-name"></th>
-			<th class ="delete"></th>
-		</tr>
-		#{list items:_favs, as:'fav'}
-		<tr>
-			<td class = "fav-name"> #{a @Calendars.display(fav.favoriteId)}${fav.fullname}#{/a}</td>
-			<td class ="delete">#{a @Users.deleteContact(fav.favoriteId)}Delete#{/a}</td>
-		</tr>
-		#{/list}
-	</table>
-		<h2 class"title">Actions</h2>
-	<ul>
-		<li><a href="@{Calendars.add}">Create a new calendar</a></li>
-	<ul>
-</div>
+<h2 class="title">Favorite Contacts</h2>
+<table>
+	<tr>
+		<th class ="fav-name"></th>
+		<th class ="delete"></th>
+	</tr>
+	#{list items:_connectedUser.favorites(), as:'fav'}
+	<tr>
+		<td class = "fav-name"> #{a @Calendars.display(fav.favoriteId)}${fav.fullname}#{/a}</td>
+		<td class ="delete">#{a @Users.deleteContact(fav.favoriteId)}Delete#{/a}</td>
+	</tr>
+	#{/list}
+</table>

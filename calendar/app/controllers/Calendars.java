@@ -14,14 +14,10 @@ import play.mvc.With;
 
 @With(Secure.class)
 public class Calendars extends Controller {
+	
     public static void index() {
     	User connectedUser = User.find("email", Security.connected()).first();
-    	if(connectedUser != null)
-    		Calendars.display(connectedUser.id);
-    	else {
-	    	List<Calendar> calendars = Calendar.all().fetch(50);
-	    	render(calendars);
-    	}
+    	Calendars.display(connectedUser.id);
     }
     
     public static void add() {
@@ -29,13 +25,12 @@ public class Calendars extends Controller {
 	    render(connectedUser);
     }
 	
+    // TODO isn't necessary anymore
 	public static void display(Long userId) {
 		User connectedUser = User.find("email", Security.connected()).first();
     	User user = User.findById(userId);
-    	boolean isOwner = user.email.equals(Security.connected());
     	List<Calendar> calendars = Calendar.find("owner", user).fetch();
-    	List<User> users = User.all().fetch();
-        render(calendars, connectedUser, user, users, isOwner);
+        render(calendars, connectedUser, user);
 	}
 	
 	public static void showCurrentMonth(Long id) {

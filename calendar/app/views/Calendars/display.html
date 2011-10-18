@@ -1,10 +1,4 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title: user.fullname /}
 
-<div id="main-left">
-	#{calendar-list calendars:calendars, connectedUser:connectedUser, user:user, isOwner:isOwner /}
-</div>
-
-<div id="main-right">
-	#{user-nav users:users /}
-</div>
+#{calendar-list calendars:calendars, connectedUser:connectedUser, user:user, isOwner:isOwner /}

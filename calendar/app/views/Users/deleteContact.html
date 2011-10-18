@@ -1,11 +1,5 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title: Users /}
 You deleted ${deleted.fullname} from your favorite contacts!
 
-<div id="main-left">
-	#{user-list connectedUser:connectedUser, users:users /}
-</div>
-
-<div id="main-right">
-	#{user-nav users:users, favs:favs /}
-</div>
+#{user-list connectedUser:connectedUser, users:users /}

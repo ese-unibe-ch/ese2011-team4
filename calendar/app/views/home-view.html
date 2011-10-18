@@ -1,0 +1,14 @@
+#{extends 'main.html' /}
+
+<div id="main-left">
+	#{doLayout /} 
+</div>
+<div id="main-right">
+<div class="navigation">
+	#{user-nav users:users, connectedUser:connectedUser /}
+	<h2 class"title">Actions</h2>
+	<ul>
+		<li><a href="@{Calendars.add}">Create a new calendar</a></li>
+	<ul>
+</div>
+</div>
