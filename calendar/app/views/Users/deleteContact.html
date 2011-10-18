@@ -1,8 +1,9 @@
 #{extends 'main.html' /}
 #{set title: Users /}
+You deleted ${deleted.fullname} from your favorite contacts!
 
 <div id="main-left">
-	#{user-list users:users, connectedUser:connectedUser, favs:favs /}
+	#{user-list connectedUser:connectedUser, users:users /}
 </div>
 
 <div id="main-right">

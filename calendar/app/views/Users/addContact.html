@@ -1,8 +1,9 @@
 #{extends 'main.html' /}
 #{set title: Users /}
+You added ${favs.get(favs.size()-1).fullname} to your favorite contacts!
 
 <div id="main-left">
-	#{user-list users:users, connectedUser:connectedUser, favs:favs /}
+	#{user-list connectedUser:connectedUser, users:users /}
 </div>
 
 <div id="main-right">

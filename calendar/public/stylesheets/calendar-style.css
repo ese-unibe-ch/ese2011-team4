@@ -11,9 +11,29 @@ table .user-name{
 }
 
 table .user-calendars{
-	width: 60%;
+	width: 40%;
 	text-align: left;
 }	
+
+table .add{
+	width: 35%;
+	text-align: left;
+}	
+
+#user-nav table{
+	width: 100%;
+	table-layout: fixed;
+}
+
+table .fav-name{
+	width: 75%
+	text-algin: left
+}
+
+table .delete{
+	width: 30%
+	text-algin: left
+}
 
 table a:hover {
 	background-color: none;
