@@ -111,7 +111,7 @@ public class Events extends Controller {
     	event.location.country = country;
     	event.location.pincode = pincode;
     	
-    	if(event.validateAndSave() && event.location.validateAndSave()) {
+    	if(event.location.validateAndSave() && event.validateAndSave()) {
         	Calendars.show(calendarId, event.startDate.getYear(), 
         							   event.startDate.getMonthOfYear(), 
        								   event.startDate.getDayOfMonth());

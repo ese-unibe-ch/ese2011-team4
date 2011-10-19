@@ -163,14 +163,6 @@ public class EventTest extends UnitTest {
 	}
 	
 	@Test
-	public void eventWithLocation() {
-		// Get an event
-		Event e1 = Event.find("byName", "Meet Lynn Bracken").first();
-		
-		assertEquals("Bernstrasse", e1.location.street);
-	}
-	
-	@Test
 	public void isThisDay() {
 		// Get an event
 		Event event = Event.find("byName", "Cinema").first();

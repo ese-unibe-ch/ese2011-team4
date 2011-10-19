@@ -119,6 +119,7 @@ table a:hover {
 }
 
 /** Calendar per month **/
+
 #month {
 	width: 100%;
 	padding: 5px 15px 5px 15px;
@@ -128,11 +129,11 @@ table a:hover {
 
 #month td {
 	border: solid 1px #000;
+	padding: 1px;
 }
 
 #month td.events {
 	font-weight: bold;
-	padding: 1px;
 }
 
 #month td.selected {
@@ -145,7 +146,8 @@ table a:hover {
 	display: block;
 }
 
-table#month td.title {
+table#month th.title {
+	border: solid 1px #000;
 	background-color: #819edb;
 	font-weight: bold;
 }
@@ -177,6 +179,10 @@ table#month td.title {
 
 .private {
 	margin-left: 10px;
+}
+
+.location {
+	display: block;
 }
 
 /** Event menu **/
