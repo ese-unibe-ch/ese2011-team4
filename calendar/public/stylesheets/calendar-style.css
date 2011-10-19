@@ -234,6 +234,7 @@ table#month th.title {
 
 .event-menu li:hover ol {
 	display: block;
+	z-index: 100;
 }
 
 .event-menu li ol li ul {
