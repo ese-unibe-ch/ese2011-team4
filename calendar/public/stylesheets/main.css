@@ -1,6 +1,7 @@
 /** Main layout **/
 
 html, body {
+	height: 100%;
     background-image: url(../images/background.png);
     background-repeat: repeat-x;
     background-color: #EBEBFF;
@@ -13,10 +14,16 @@ body {
     margin: auto;
 }
 
+/** Wrapper **/
+
+#wrap {
+	min-height: 100%
+}
+
 /** Application header **/	
 
 header {
-    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 hgroup {
@@ -25,8 +32,8 @@ hgroup {
 
 #logo a {
     height: 50px;
-    margin-left: 20px;
-    margin-bottom: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
     color: #fff;
     font-size: 48px;
     font-weight: bold;
@@ -131,6 +138,8 @@ header nav li a:hover {
 /** Main content **/
 
 #main {
+	overflow: auto;
+	padding-bottom: 32px;
 	display: inline-block;
 	width: 100%;
 	color: #333;
@@ -191,15 +200,26 @@ header nav li a:hover {
 /** Footer **/
 
 #footer {
-   margin-top: 20px;
+   margin-top: -32px;
+	height: 30px;
    border-top: 2px solid #0051FF;
    font-size: 70%;
-   padding: 10px 30px;
+   padding-right: 30px;
    text-align: center;
    color: #333;
+	clear: both;
 }
 
 #footer a {
    color: #333;
    font-weight: bold;
+}
+
+/*Opera Fix*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/
 }
