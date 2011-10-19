@@ -16,7 +16,7 @@ public class Application extends Controller {
     }
     
     public static void register() {
-		render();
+		render("/Users/register.html");
 	}
 	
 	public static void newUser(String email, String password, String fullname) {
