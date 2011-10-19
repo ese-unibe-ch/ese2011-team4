@@ -156,13 +156,14 @@ header nav li a:hover {
 }
 
 #main-right {
+	position: fixed;
 	float: left;
 	width: 260px;
 	background: #93B4FA;
    -webkit-border-radius: 16px;
    -moz-border-radius: 16px;
    padding: 20px;
-   margin-left: 10px;
+   margin-left: 620px;
 }
 
 .navigation ul {
