@@ -13,6 +13,7 @@ import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
 
+@With(Secure.class)
 public class Users extends Controller {
 	public static void index() {
 		List<User> users = User.all().fetch();
@@ -39,19 +40,5 @@ public class Users extends Controller {
 		render(connectedUser, users, deleted);
 	}
 	
-	public static void register() {
-		render();
-	}
 	
-	public static void newUser(String email, String password, String fullname) {
-		User user = new User(email, password, fullname);
-		if(user.validateAndSave()) {
-			Security.authenticate(email, password);
-			Calendars.index();
-		} else {
-			params.flash();
-	        validation.keep();
-	        Users.register();
-		}
-	}
 }
