@@ -1,0 +1,52 @@
+#{extends 'main.html' /}
+#{set title: 'Comments' /}
+
+<div id="main">
+
+	<div id="main-left">
+	
+		<div class="event-header">
+			<div class="event-title">
+				${event.name}
+			</div>
+		</div>
+		
+		<div class="event-metadata">
+			<span class="date">
+				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
+			</span>
+			#{if event.isPrivate}
+				<span class="private">Private Event</span>
+			#{/if}
+			#{if !event.origin.equals(calendar)}
+				<span class="owner">owned by #{a @Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}
+				${event.origin.owner.fullname}
+			#{/a}</span>
+			#{/if}
+			#{if event.location }
+				<span class="location">${event.location.toString()}</span>
+			#{/if}
+		</div>
+		
+		<div id="event.content">
+			${event.description}
+		</div>
+		
+		<div id="event-comments">
+			<ul>
+				<hr />
+				#{list items:event.comments, as:'comment'}
+					${comment.content}
+					<hr>
+				#{/list}
+			</ul>
+		</div>		
+		
+	</div>
+	
+	<div id="main-right">
+	
+	
+	</div>
+	
+</div>

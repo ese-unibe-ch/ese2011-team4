@@ -45,6 +45,10 @@
 	</div>
 	<div class="event-content">
 		${_event.description}
+		#{if _event.comments.size() != 0}
+			<br \> <br \>
+			#{a @Events.showComments(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
+		#{/if}  
 	</div>
 </div>
 <hr>

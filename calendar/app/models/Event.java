@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -54,7 +55,11 @@ public class Event extends Model implements Comparable<Event> {
 	@Lob
 	public String description;
 	
+	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	public List<Comment> comments;
+	
 	public Event(Calendar calendar) {
+		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
@@ -121,5 +126,14 @@ public class Event extends Model implements Comparable<Event> {
 			setMessage("validation.EndAfterBeginCheck");
 			return event.startDate.isBefore(end);
 		}
+	}
+	
+	public Event addComment(String author, String content) {
+	    Comment newComment = new Comment(this).save();
+	    newComment.author = author;
+	    newComment.content = content;
+	    this.comments.add(newComment);
+	    this.save();
+	    return this;
 	}
 }

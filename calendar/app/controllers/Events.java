@@ -163,4 +163,9 @@ public class Events extends Controller {
         	Events.add(calendarId);
         }
     }
+    
+    public static void showComments(Long eventId){
+    	Event event = Event.findById(eventId);
+    	render(event);
+    }
 }
