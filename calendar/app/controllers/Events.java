@@ -30,8 +30,9 @@ public class Events extends Controller {
     		dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
     	Calendar calendar = Calendar.findById(calendarId);
+    	List<Location> locations = Location.all().fetch();
     	if(Security.check(calendar)) {
-	    	render(calendar, dt);
+	    	render(calendar, dt, locations);
     	} else
     		forbidden("Not your calendar!");
     }
