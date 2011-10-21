@@ -34,4 +34,33 @@
 			</div>
 		</div>
 	</div>
+	
+	<h3>Post a comment</h3>
+ 
+	#{form @Events.addComment(event.id)}
+   		<p>
+    	    <label for="author">Your name: </label>
+    	    <input type="text" name="author" id="author" />
+    	</p>
+    	<p>
+    	    <label for="content">Your message: </label>
+    	    <textarea name="content" id="content"></textarea>
+    	</p>
+    	<p>
+    	    <input type="submit" value="Submit your comment" />
+    	</p>
+	#{/form}
 </div>
+
+<div id="main-right">
+	<h2 class="title">Options</h2>
+	<div class="navigation">
+		<ul>
+			<li><a class="navigation" href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">Go back</a></li>
+			#{secure.check event}
+				<li><a class="navigation" href="@{Events.addComment(event.id)}">Add a comment</a></li>
+			#{/secure.check}
+		</ul>
+	</div>
+</div>
+	

@@ -168,4 +168,10 @@ public class Events extends Controller {
     	Event event = Event.findById(eventId);
     	render(event);
     }
+    
+    public static void addComment(Long eventId, String author, String content){
+    	Event event = Event.findById(eventId);
+        event.addComment(author, content);
+        showComments(eventId);
+    }
 }
