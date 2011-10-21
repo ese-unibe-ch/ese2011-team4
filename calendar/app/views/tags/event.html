@@ -1,54 +1,55 @@
 <div class="event">
 	<div class="event-header">
-	<div class="event-title">
-		${_event.name}
-	</div>
-	<div class="event-metadata">
-		<span class="date">
-			${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}
-		</span>
-		#{if _event.isPrivate}
-			<span class="private">Private Event</span>
-		#{/if}
-		#{if !_event.origin.equals(_calendar)}
-			<span class="owner">owned by #{a @Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}
-			${_event.origin.owner.fullname}
-			#{/a}</span>
-		#{/if}
-		#{if _event.location }
-			<span class="location">${_event.location.toString()}</span>
-		#{/if}
+		<div class="event-title">
+			${_event.name}
+		</div>
+		<div class="event-metadata">
+			<span class="date">
+				${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}
+			</span>
+			#{if _event.isPrivate}
+				<span class="private">Private Event</span>
+			#{/if}
+			#{if !_event.origin.equals(_calendar)}
+				<span class="owner">owned by #{a @Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}
+				${_event.origin.owner.fullname}
+				#{/a}</span>
+			#{/if}
+			#{if _event.location }
+				<span class="location">${_event.location.toString()}</span>
+			#{/if}
 		</div>
 		<div class="event-menu">
 			<ol>
-			<li><span class="actions">Actions</span>
-				<ol>
-				#{if _connectedUser.equals(_event.origin.owner)}
-					<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
-				#{/if}
-				#{if _connectedUser.equals(_calendar.owner)}
-					<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
-				#{/if}
-				#{if _event.availableJoins(_connectedUser).size() > 0}
-					<li class="more"><span class="actions">Join</span>
-						<ul	>
-						#{list items:_event.availableJoins(_connectedUser), as:'availableCalendar'}
-							<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
-						#{/list}
-						</ul>
-					</li>
-				#{/if}
-				</ol>
-			</li>
+				<li><span class="actions">Actions</span>
+					<ol>
+						#{if _connectedUser.equals(_event.origin.owner)}
+							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
+						#{/if}
+						#{if _connectedUser.equals(_calendar.owner)}
+							<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
+						#{/if}
+						#{if _event.availableJoins(_connectedUser).size() > 0}
+							<li class="more"><span class="actions">Join</span>
+								<ul	>
+									#{list items:_event.availableJoins(_connectedUser), as:'availableCalendar'}
+										<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
+									#{/list}
+								</ul>
+							</li>
+						#{/if}
+					</ol>
+				</li>
 			</ol>
 		</div>
 	</div>
 	<div class="event-content">
 		${_event.description}
-		#{if _event.comments.size() != 0}
-			<br \> <br \>
-			#{a @Events.showComments(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
-		#{/if}  
+		<div class="comment">
+			#{if _event.comments.size() != 0}
+				#{a @Events.showComments(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
+			#{/if}
+		</div>  
 	</div>
 </div>
 <hr>

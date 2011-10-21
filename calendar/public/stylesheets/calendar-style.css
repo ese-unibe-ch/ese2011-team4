@@ -284,6 +284,15 @@ table#month th.title {
 	margin-top: 10px;
 }
 
+.comment{
+	padding-top: 10px;
+}
+
+.comment a:hover{
+	background-color: #333;
+	color: #fff;
+}
+
 /** Event form **/
 
 form {
@@ -347,4 +356,59 @@ form p.button {
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-box-shadow: 0 2px 0 #4E840B; 
+}
+
+/** Comment **/
+
+#event-content {
+	margin-top: 10px;
+}
+
+#event-comments ul {
+	list-style: none;
+	padding: 0px;
+}
+
+#event-comments hr {
+	border: 0;
+	margin: 0px 10px 10px 0px;
+	color: #0051FF;
+	background-color: #0051FF;
+	height: 1px;
+	width: 100%;
+}
+
+.event-comment {
+	padding: 0px 0px 10px 10px;
+	width: 75%;
+	clear: both;	
+}
+
+.event-comment .comment-metadata {
+    color: #000033;
+    display: block;
+    font-size: 50%;
+    display: block;
+    float: left;
+    width: 80px;
+    text-align: right;
+}
+
+.event-comment .comment-author {
+    font-size: 150%;
+    font-weight: bold;
+    display: block;
+}
+
+.event-comment .comment-content {
+    position: relative;
+    background: #E4EAFF;
+    color: #242C58;
+    font-size: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 100px;
+    padding: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
 }

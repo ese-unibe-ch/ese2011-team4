@@ -1,16 +1,9 @@
 #{extends 'main.html' /}
 #{set title: 'Comments' /}
 
-<div id="main">
-
-	<div id="main-left">
-	
-		<div class="event-header">
-			<div class="event-title">
-				${event.name}
-			</div>
-		</div>
-		
+<div id="main-left">
+	<h2 class="title"><span id="event-title">${event.name}</span></h2>
+	<div id="event">
 		<div class="event-metadata">
 			<span class="date">
 				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
@@ -28,25 +21,17 @@
 			#{/if}
 		</div>
 		
-		<div id="event.content">
+		<div id="event-content">
 			${event.description}
-		</div>
-		
-		<div id="event-comments">
-			<ul>
-				<hr />
-				#{list items:event.comments, as:'comment'}
-					${comment.content}
+			<div id="event-comments">
+				<ul>
 					<hr>
-				#{/list}
-			</ul>
-		</div>		
-		
+					<h3>${event.comments.size()} comment${event.comments.size().pluralize()}</h3>
+					#{list items:event.comments, as:'comment'}
+						#{comment comment:comment /}
+					#{/list}
+				</ul>
+			</div>
+		</div>
 	</div>
-	
-	<div id="main-right">
-	
-	
-	</div>
-	
 </div>
