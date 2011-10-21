@@ -9,7 +9,7 @@
 			</tr>
 		#{list items:_locations, as:'location'}
 			<tr>
-				<td class="location" >${location.toString()}</td>
+				<td class="location"><a href="@{Locations.show(location.id)}">${location.toString()}</a></td>
 				<td><a href="@{Locations.edit(location.id)}">Edit</a></td>
 			</tr>
 		#{/list}
