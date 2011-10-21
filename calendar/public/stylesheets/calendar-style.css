@@ -203,7 +203,7 @@ table#month th.title {
 .event-menu .actions {
 	display: block;
 	padding: 5px;	
-	width: 60px;
+	width: 65px;
 	background-color: #fff;
 }
 
@@ -222,7 +222,7 @@ table#month th.title {
 	background-color: #fff;
 	color: #333;
 	padding: 5px;
-	width: 60px;
+	width: 65px;
 }
 
 #main .event-menu ul a {

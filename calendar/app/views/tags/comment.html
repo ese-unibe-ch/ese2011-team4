@@ -51,7 +51,7 @@
 			<h3>Post a comment</h3>
 			#{ifErrors}
    				<span class="error">
-   					All fields are required!
+   					${_errors[0]}
 				</span>
 			#{/ifErrors}
  			#{form @Events.updateComment(_event.id)}
@@ -67,8 +67,8 @@
     				<label for="code">Please type the code below: </label>
     				<img src="@{Events.captcha(randomID)}" />
     				<br />
-    				<input type="text" name="code" id="code" size="18" value="" />
-    				<input type="hidden" name="randomID" value="${randomID}" />
+    				<input type="text" name="code" id="code" size="20" value="" />
+    				<input type="hidden" name="randomID" value="${_randomID}" />
 				</p>
     			<p>
     		    	<input type="submit" value="Submit your comment" />

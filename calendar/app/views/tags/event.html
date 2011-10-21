@@ -23,6 +23,7 @@
 			<ol>
 				<li><span class="actions">Actions</span>
 					<ol>
+						<li>#{a @Events.addComment(_event.id)}Comment#{/a}</li>
 						#{if _connectedUser.equals(_event.origin.owner)}
 							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
 						#{/if}
