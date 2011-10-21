@@ -1,0 +1,17 @@
+<div id="location-list">
+	<h2 class="title">
+		Locations
+	</h2>
+	<table id="locations">
+			<tr>
+				<th>Location</th>
+				<th>Action</th>
+			</tr>
+		#{list items:_locations, as:'location'}
+			<tr>
+				<td class="location" >${location.toString()}</td>
+				<td><a href="@{Locations.edit(location.id)}">Edit</a></td>
+			</tr>
+		#{/list}
+	</table>
+</div>

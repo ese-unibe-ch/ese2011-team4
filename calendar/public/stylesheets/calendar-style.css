@@ -39,6 +39,13 @@ table a:hover {
 	background-color: none;
 }
 
+/** Location table**/
+
+table#locations{
+	width: 100%;
+	text-align: left;
+}
+
 
 /** List calendars **/
 

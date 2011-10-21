@@ -1,0 +1,26 @@
+#{extends 'main.html' /}
+#{set title:'Locations'/}
+
+<div id="main-left">
+	<h2 class="title">Infos about this Location</h2>
+
+	<div id="location">
+		<p>
+			<ul style="list-style-type: none;">
+				<li>${location.street} ${location.num}</li>
+				<li>${location.pincode} ${location.city}</li>
+				<li>${location.country}</li>
+			</ul>
+		</p>
+		Google Maps here...
+	</div>
+</div>
+
+<div id="main-right">
+	<h2 class="title">Actions</h2>
+	<ul>
+		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
+		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
+	</ul>
+
+</div>

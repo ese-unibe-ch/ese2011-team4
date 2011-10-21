@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -37,9 +39,11 @@ public class Events extends Controller {
 
     public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
+    	List<Location> locations = Location.all().fetch();
+    	
     	if(Security.check(event)) {
     		Calendar calendar = Calendar.findById(calendarId);
-	    	render(calendar, event);
+	    	render(calendar, event, locations);
     	} else
     		forbidden("Not your event!");
     }
@@ -81,11 +85,7 @@ public class Events extends Controller {
 								@Required String endTime,
 								boolean isPrivate, 
 								String description,
-								String street,
-								String num,
-								String city,
-								String country,
-								String pincode) {
+								Long locationId) {
     	
     	Event event = Event.findById(eventId);
     	assert event != null;
@@ -103,15 +103,10 @@ public class Events extends Controller {
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
-    	if(event.location == null)
-    		event.location = new Location();
-    	event.location.street = street;
-    	event.location.num = num;
-    	event.location.city = city;
-    	event.location.country = country;
-    	event.location.pincode = pincode;
+    	Location location = Location.findById(locationId);
+    	event.location = location;
     	
-    	if(event.location.validateAndSave() && event.validateAndSave()) {
+    	if(event.validateAndSave()) {
         	Calendars.show(calendarId, event.startDate.getYear(), 
         							   event.startDate.getMonthOfYear(), 
        								   event.startDate.getDayOfMonth());
@@ -132,11 +127,7 @@ public class Events extends Controller {
     								String endTime,
     								boolean isPrivate, 
     								String description,
-    								String street,
-    								String num,
-    								String city,
-    								String country,
-    								String pincode) {
+    								Long locationId) {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
@@ -157,14 +148,11 @@ public class Events extends Controller {
 		event.endDate = format.parseDateTime(endDate+endTime);
     	event.isPrivate = isPrivate;
     	event.description = description;
-    	event.location = new Location();
-    	event.location.street = street;
-    	event.location.num = num;
-    	event.location.city = city;
-    	event.location.country = country;
-    	event.location.pincode = pincode;
     	
-        if (event.location.validateAndSave() && event.validateAndSave())
+    	Location location = Location.findById(locationId);
+    	event.location = location;
+    	
+        if (event.validateAndSave())
             Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
         else {
         	for(play.data.validation.Error e : Validation.errors())

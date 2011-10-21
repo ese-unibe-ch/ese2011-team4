@@ -33,7 +33,20 @@
 	<label for="isPrivate" id="isPrivate">Private event</label>
 #{/field}
 </p>
+
 <p>
+#{field 'locationId'}
+	<label for="locationId" id="locationId">Location</label>
+	<select name="${field.name}" id="locationId">
+		<option value="-1">No location</option>
+		#{list items:_locations, as:'location'}
+			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _event?.location?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
+		#{/list}
+	</select>
+#{/field}
+</p>
+
+<!--<p>
 #{field 'street'}
 	<label for"street">Street</label>
     <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_event?.location?.street}#{/else}"/>
@@ -58,7 +71,7 @@
 	<label for"pincode">Pincode</label>
     <input type="text" name="${field.name}" id="pincode" value="#{ifErrors}${flash.pincode}#{/ifErrors}#{else}${_event?.location?.pincode}#{/else}"/>
 #{/field}
-</p>
+</p>-->
 <p class="description">
 #{field 'description'}
 	<label for"description">Description</label>

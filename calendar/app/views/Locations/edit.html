@@ -1,9 +1,9 @@
 #{extends 'main.html' /}
-#{set title:event.name/}
+#{set title:'Edit location'/}
 
 <div id="main">
 	<div id="main-left">
-		<h2 class="title">Edit Event</h2>
+		<h2 class="title">Edit Location</h2>
 		#{ifErrors}
    		<span class="error">
    			Oops...
@@ -14,9 +14,9 @@
    			</ul>
 		</span>
 		#{/ifErrors}
-		<div id="event-form">
-		#{form @Events.update(calendar.id, event.id)}
-			#{event-form event:event, locations:locations /}
+		<div id="location-form">
+		#{form @Locations.update(location.id)}
+			#{location-form location:location /}
 		#{/form}
 		</div>
 	</div>
