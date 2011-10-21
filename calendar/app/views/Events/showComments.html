@@ -1,66 +1,8 @@
 #{extends 'main.html' /}
-#{set title: 'Comments' /}
+#{set title: event.name /}
 
-<div id="main-left">
-	<h2 class="title"><span id="event-title">${event.name}</span></h2>
-	<div id="event">
-		<div class="event-metadata">
-			<span class="date">
-				${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}
-			</span>
-			#{if event.isPrivate}
-				<span class="private">Private Event</span>
-			#{/if}
-			#{if !event.origin.equals(calendar)}
-				<span class="owner">owned by #{a @Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}
-				${event.origin.owner.fullname}
-			#{/a}</span>
-			#{/if}
-			#{if event.location }
-				<span class="location">${event.location.toString()}</span>
-			#{/if}
-		</div>
-		
-		<div id="event-content">
-			${event.description}
-			<div id="event-comments">
-				<ul>
-					<hr>
-					<h3>${event.comments.size()} comment${event.comments.size().pluralize()}</h3>
-					#{list items:event.comments, as:'comment'}
-						#{comment comment:comment /}
-					#{/list}
-				</ul>
-			</div>
-		</div>
-	</div>
-	
-	<h3>Post a comment</h3>
- 
-	#{form @Events.addComment(event.id)}
-   		<p>
-    	    <label for="author">Your name: </label>
-    	    <input type="text" name="author" id="author" />
-    	</p>
-    	<p>
-    	    <label for="content">Your message: </label>
-    	    <textarea name="content" id="content"></textarea>
-    	</p>
-    	<p>
-    	    <input type="submit" value="Submit your comment" />
-    	</p>
-	#{/form}
-</div>
-
-<div id="main-right">
-	<h2 class="title">Options</h2>
-	<div class="navigation">
-		<ul>
-			<li><a class="navigation" href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">Go back</a></li>
-			#{secure.check event}
-				<li><a class="navigation" href="@{Events.addComment(event.id)}">Add a comment</a></li>
-			#{/secure.check}
-		</ul>
-	</div>
-</div>
+#{if flash.success}
+    <p class="success">${flash.success}</p>
+#{/if}
+#{comment event:event, as:'show'/}
 	

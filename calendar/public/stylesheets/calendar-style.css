@@ -271,7 +271,7 @@ table#month th.title {
 	padding: 0px;
 }
 
-#events hr {
+#add-comment hr {
 	border: 0;
 	margin: 0px 10px 10px 0px;
 	color: #0051FF;
@@ -384,31 +384,81 @@ form p.button {
 	clear: both;	
 }
 
+#event hr {
+	border: 0;
+	margin: 0px 10px 10px 0px;
+	color: #0051FF;
+	background-color: #0051FF;
+	height: 1px;
+	width: 100%;
+}
+
 .event-comment .comment-metadata {
-    color: #000033;
-    display: block;
-    font-size: 50%;
-    display: block;
-    float: left;
-    width: 80px;
-    text-align: right;
+    	display: block;
+    	font-size: 55%;
+    	display: block;
+    	float: left;
+    	width: 80px;
+    	text-align: right;
 }
 
 .event-comment .comment-author {
-    font-size: 150%;
-    font-weight: bold;
-    display: block;
+	font-size: 150%;
+	font-weight: bold;
+	display: block;
 }
 
 .event-comment .comment-content {
-    position: relative;
-    background: #E4EAFF;
-    color: #242C58;
-    font-size: 80%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 100px;
-    padding: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+   	position: relative;
+   	background: #E4EAFF;
+
+    	font-size: 80%;
+    	margin-top: 10px;
+    	margin-bottom: 10px;
+    	margin-left: 100px;
+    	padding: 10px;
+    	-webkit-border-radius: 10px;
+    	-moz-border-radius: 10px;
 }
+
+/** Comment-Form **/
+
+
+#add-comment form .error {
+    	background: #c00;
+    	color: #fff;
+    	font-size: 90%;
+    	padding: 3px 5px;
+    	-webkit-border-radius: 6px;
+    	-moz-border-radius: 6px;
+    	-webkit-box-shadow: 0 2px 0 #800;
+}
+
+
+#add-comment form textarea {
+    	width: 75%;
+    	height: 150px;
+    	font-size: 100%;
+    	margin-bottom: 10px;
+    	padding: 10px;
+	resize: none;
+
+}
+
+#add-comment form input, form textarea {
+
+	padding-left: 5px;
+	margin-bottom: 10px;
+	-webkit-border-radius: 10px;
+    	-moz-border-radius: 10px;
+    	background: #E4EAFF;
+}
+
+#add-comment form label {
+	width: 50%;
+   	display: block;
+    	font-weight: bold;
+    	color: #333333;  
+}
+
+ 

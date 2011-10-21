@@ -1,13 +1,92 @@
 
-<div class="event-comment">
- 	<div class="comment-metadata">
- 		<span class="comment-author">by ${_comment.author},</span>
-    	<span class="comment-date">
-    		${_comment.postedAt.toString('dd.MM.yyyy HH:mm')	}
-		</span>
-	</div>
+<div id="main-left">
+	<h2 class="title"><span id="event-title">${_event.name}</span></h2>
+	<div id="event">
+		<div class="event-metadata">
+			<span class="date">
+				${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}
+			</span>
+			#{if _event.isPrivate}
+				<span class="private">Private Event</span>
+			#{/if}
+			#{if !_event.origin.equals(calendar)}
+				<span class="owner">owned by #{a @Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}
+				${_event.origin.owner.fullname}
+			#{/a}</span>
+			#{/if}
+			#{if _event.location }
+				<span class="location">${_event.location.toString()}</span>
+			#{/if}
+		</div>
+		
+		<div id="event-content">
+			${_event.description}
+			<div id="event-comments">
+				<ul>
+					<hr>
+					<h3>${_event.comments.size()} comment${_event.comments.size().pluralize()}</h3>
+					#{list items:_event.comments, as:'comment'}
+						<div class="event-comment">
+ 							<div class="comment-metadata">
+ 								<span class="comment-author">by ${comment.author},</span>
+    							<span class="comment-date">
+    								${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}
+								</span>
+							</div>
 
-	<div class="comment-content">
-	    	${_comment.content}
+							<div class="comment-content">
+	    						${comment.content}
+							</div>
+						</div>
+					#{/list}
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	#{if _as == 'add'}
+	<body onload="window.scrollTo(0,document['body'].offsetHeight);">
+		<div id="add-comment">
+			<hr>
+			<h3>Post a comment</h3>
+			#{ifErrors}
+   				<span class="error">
+   					All fields are required!
+				</span>
+			#{/ifErrors}
+ 			#{form @Events.updateComment(_event.id)}
+   				<p>
+    			    <label for="author">Your name: </label>
+    			    <input type="text" name="author" id="author"/>
+    			</p>
+    			<p>
+    			    <label for="content">Your message: </label>
+    			    <textarea name="content" id="content" placeholder="Remember, be nice!"></textarea>
+    			</p>
+    			<p>
+    				<label for="code">Please type the code below: </label>
+    				<img src="@{Events.captcha(randomID)}" />
+    				<br />
+    				<input type="text" name="code" id="code" size="18" value="" />
+    				<input type="hidden" name="randomID" value="${randomID}" />
+				</p>
+    			<p>
+    		    	<input type="submit" value="Submit your comment" />
+    			</p>
+			#{/form}
+		</div>
+		</body>
+	#{/if}
+</div>
+
+<div id="main-right">
+	<h2 class="title">Options</h2>
+	<div class="navigation">
+		<ul>
+			<li><a class="navigation" href="@{Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}">Go back</a></li>
+			#{secure.check _event}
+				<li><a class="navigation" href="@{Events.addComment(_event.id)}">Add a comment</a></li>
+			#{/secure.check}
+		</ul>
 	</div>
 </div>

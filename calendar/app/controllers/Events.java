@@ -7,10 +7,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import play.Logger;
+import play.cache.Cache;
 import play.data.validation.Check;
 import play.data.validation.Match;
 import play.data.validation.Required;
 import play.data.validation.Validation;
+import play.libs.Codec;
+import play.libs.Images;
 import play.mvc.Controller;
 import play.mvc.With;
 import models.*;
@@ -164,14 +167,48 @@ public class Events extends Controller {
         }
     }
     
-    public static void showComments(Long eventId){
-    	Event event = Event.findById(eventId);
+    public static void showComments(Long id){
+    	Event event = Event.findById(id);
     	render(event);
     }
     
-    public static void addComment(Long eventId, String author, String content){
-    	Event event = Event.findById(eventId);
-        event.addComment(author, content);
-        showComments(eventId);
+    public static void addComment(Long id){
+    	Event event = Event.findById(id);
+    	String randomID = Codec.UUID();
+        render(event, randomID);
+    }
+    
+    public static void updateComment(	Long id, 
+    									String author, 
+    									String content,
+    									@Required(message="Please type the code") String code, 
+    							        String randomID){
+    	
+    	Event event = Event.findById(id);
+    	assert event != null;
+    	Comment comment = new Comment(event);
+    	comment.author = author;
+    	comment.content = content;
+    	
+    	validation.equals(code, Cache.get(randomID)).message("Invalid code. Please type it again");
+ 
+    	if(!validation.hasErrors() && comment.validateAndSave()){
+    		flash.success("Thanks for posting %s", author);
+    		Cache.delete(randomID);
+    		showComments(event.id);
+    	} 
+    	
+    	else{
+    		params.flash();
+    		validation.keep();
+			addComment(event.id);
+    	}
+    }
+    
+    public static void captcha(String id) {
+    	Images.Captcha captcha = Images.captcha();
+        String code = captcha.getText("#E4EAFD");
+        Cache.set(id, code, "10mn");
+        renderBinary(captcha);
     }
 }
