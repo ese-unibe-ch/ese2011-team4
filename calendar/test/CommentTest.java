@@ -101,7 +101,7 @@ public class CommentTest extends UnitTest {
 	    assertEquals(2, bobEvent.comments.size());
 	    assertEquals("Jeff", bobEvent.comments.get(0).author);
 	    
-	    // Delete the post
+	    // Delete the event
 	    bobEvent.delete();
 	    
 	    // Check that all comments have been deleted
