@@ -285,7 +285,9 @@ table#month th.title {
 }
 
 .comment{
+	display: inline-block;
 	padding-top: 10px;
+	width: 60%;
 }
 
 .comment a:hover{

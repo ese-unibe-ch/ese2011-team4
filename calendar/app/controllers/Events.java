@@ -184,19 +184,19 @@ public class Events extends Controller {
     									@Required(message="Please type the code") String code, 
     							        @Required String randomID){
     	
+    	validation.equals(code, Cache.get(randomID)).message("Invalid code. Please type it again");
+    	
     	Event event = Event.findById(id);
     	assert event != null;
     	Comment comment = new Comment(event);
     	comment.author = author;
     	comment.content = content;
-    	
-    	validation.equals(code, Cache.get(randomID)).message("Invalid code. Please type it again");
  
-    	if(comment.validateAndSave() && !validation.hasErrors()){
+    	if(!validation.hasErrors() && comment.validateAndSave()){
     		flash.success("Thanks for posting %s", author);
     		Cache.delete(randomID);
     		showComments(event.id);
-    	} 
+    	}
     	
     	else{
     		params.flash();
