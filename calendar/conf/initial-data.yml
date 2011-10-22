@@ -119,6 +119,6 @@ Comment(c2):
 Comment(c3):
     author:         Jack
     postedAt:       2011-10-21 11:00:00 +1
-    content:        first post
+    content:        Jack is the owner of this event so he can add comments even it the event is private
     event:          e2
     
