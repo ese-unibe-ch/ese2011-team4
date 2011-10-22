@@ -13,6 +13,7 @@ GET		/register										Users.register
 GET     /captcha                              			Events.captcha
 GET     /event/{id}  		                   			Events.showComments
 GET     /comment/{id}  		                   			Events.addComment
+POST	/comment/{id}/update							Events.updateComment
 
 # Ignore favicon requests
 GET     /favicon.ico                            		404

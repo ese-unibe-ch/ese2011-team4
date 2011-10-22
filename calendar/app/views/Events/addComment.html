@@ -1,6 +1,41 @@
 #{extends 'main.html' /}
 #{set title: 'Add Comment' /}
 
+<body onload="window.scrollTo(0,document['body'].offsetHeight);">
+	<div id="main-left">
+		#{comment event:event /}
+		<div id="add-comment">
+			<hr>
+			<h3>Post a comment</h3>
+			#{ifErrors}
+   				<span class="error">
+   					${errors[0]}
+				</span>
+			#{/ifErrors}
+ 			#{form @Events.updateComment(event.id)}
+   				<p>
+    			    <label for="author">Your name: </label>
+    			    <input type="text" name="author" id="author"/>
+    			</p>
+    			<p>
+    			    <label for="content">Your message: </label>
+    			    <textarea name="content" id="content" placeholder="Remember, be nice!"></textarea>
+    			</p>
+    			<p>
+    				<label for="code">Please type the code below: </label>
+    				<img src="@{Events.captcha(randomID)}" />
+    				<br />
+    				<input type="text" name="code" id="code" size="20" value="" />
+    				<input type="hidden" name="randomID" value="${randomID}" />
+				</p>
+    			<p>
+    		    	<input type="submit" value="Submit your comment" />
+    			</p>
+			#{/form}
+		</div>
+	</div>
 
-#{comment event:event, randomID:randomID, errors:errors, as:'add'/}
-
+	<div id="main-right">
+		#{comment-nav event:event /}
+	</div>
+</body>

@@ -192,7 +192,7 @@ public class Events extends Controller {
     	
     	validation.equals(code, Cache.get(randomID)).message("Invalid code. Please type it again");
  
-    	if(/*!validation.hasErrors() &&*/ comment.validateAndSave()){
+    	if(!validation.hasErrors() && comment.validateAndSave()){
     		flash.success("Thanks for posting %s", author);
     		Cache.delete(randomID);
     		showComments(event.id);
