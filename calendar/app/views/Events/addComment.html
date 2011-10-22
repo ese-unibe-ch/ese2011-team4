@@ -1,31 +1,28 @@
 #{extends 'main.html' /}
 #{set title: 'Add Comment' /}
 
-<body onload="window.scrollTo(0,document['body'].offsetHeight);">
+<body onload="window.scrollTo(0,document['body']);">
 	<div id="main-left">
 		#{comment event:event /}
 		<div id="add-comment">
 			<hr>
 			<h3>Post a comment</h3>
-			#{ifErrors}
-   				<span class="error">
-   					${errors[0]}
-				</span>
-			#{/ifErrors}
  			#{form @Events.updateComment(event.id)}
    				<p>
     			    <label for="author">Your name: </label>
-    			    <input type="text" name="author" id="author"/>
+    			    <input type="text" name="author" id="author" value="${flash.author}"/>
+    			    #{ifErrors}<span class="error">#{error 'comment.author' /}</span>#{/ifErrors}
     			</p>
     			<p>
     			    <label for="content">Your message: </label>
-    			    <textarea name="content" id="content" placeholder="Remember, be nice!"></textarea>
+    			    <textarea name="content" id="content" placeholder="Remember, be nice!"}>${flash.content}</textarea>
     			</p>
     			<p>
     				<label for="code">Please type the code below: </label>
     				<img src="@{Events.captcha(randomID)}" />
     				<br />
-    				<input type="text" name="code" id="code" size="20" value="" />
+    				<input type="text" name="code" id="code" size="20" />
+    				#{ifErrors}<span class="error">#{error 'code' /}</span>#{/ifErrors}
     				<input type="hidden" name="randomID" value="${randomID}" />
 				</p>
     			<p>

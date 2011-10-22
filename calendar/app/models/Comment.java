@@ -13,13 +13,12 @@ import play.db.jpa.Model;
 @Entity
 public class Comment extends Model {
  
-	@Required
+	@Required(message="Author is required")
     public String author;
     
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
     public DateTime postedAt;
-     
-    @Required
+    
     @Lob
     public String content;
     
