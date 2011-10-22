@@ -6,7 +6,8 @@
 	<ul>
 		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
 		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
-		<input type="button" value="LoadMap" onclick="initialize()">
+	
+		
 	</ul>
 </div>	
 <div id="main-left">
@@ -17,17 +18,17 @@
 				<li>${location.street} ${location.num}</li>
 				<li>${location.pincode} ${location.city}</li>
 				<li>${location.country} </li>
-				<input type="button" value="ShowOnMap" onclick="codeAddress('${location.toString()}')">
+				<li><a href="javascript:initialize()">Load Map...</a></li>
+		       <li> <a href="javascript:codeAddress('${location.toString()}')">Show Location</a></li>
+				
 			</ul>
 		</p>
 		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
-		</div>
-	
-	
-		<script type="text/javascript"
+		</div>	
+<script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false">
 </script>
-		<style type="text/css">
+<style type="text/css">
   #map_canvas { height: 50% }
 </style>
 <script type="text/javascript">
@@ -36,7 +37,7 @@ var geocoder;
   var i=0;
   var lat;
   var lang;
-  
+ 
   function initialize() {
     geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -47,7 +48,19 @@ var geocoder;
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   }
-
+  function cal(address) {
+	    geocoder.geocode( { 'address': address}, function(results, status) {
+	      if (status == google.maps.GeocoderStatus.OK) {
+	        map.setCenter(results[0].geometry.location,18);
+	        var marker = new google.maps.Marker({
+	            map: map,
+	            position: results[0].geometry.location
+	        });
+	      } else {
+	        alert("Geocode was not successful for the following reason: " + status);
+	      }
+	    });
+	  }
   function codeAddress(address) {
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
