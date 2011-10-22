@@ -182,7 +182,7 @@ public class Events extends Controller {
     									String author, 
     									String content,
     									@Required(message="Please type the code") String code, 
-    							        String randomID){
+    							        @Required String randomID){
     	
     	Event event = Event.findById(id);
     	assert event != null;
