@@ -14,6 +14,6 @@ public class Location extends Model{
 
 	@Override
 	public String toString(){
-		return street + ", " + num + ", " + city + ", " + country + ", " + pincode;
+		return num + ", " + street + ", " + city + ", " + country + ", " + pincode;
 	}
 }

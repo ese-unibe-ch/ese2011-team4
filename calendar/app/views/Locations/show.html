@@ -1,26 +1,68 @@
 #{extends 'main.html' /}
 #{set title:'Locations'/}
 
-<div id="main-left">
-	<h2 class="title">Infos about this Location</h2>
-
-	<div id="location">
-		<p>
-			<ul style="list-style-type: none;">
-				<li>${location.street} ${location.num}</li>
-				<li>${location.pincode} ${location.city}</li>
-				<li>${location.country}</li>
-			</ul>
-		</p>
-		Google Maps here...
-	</div>
-</div>
-
 <div id="main-right">
 	<h2 class="title">Actions</h2>
 	<ul>
 		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
 		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
+		<input type="button" value="LoadMap" onclick="initialize()">
 	</ul>
+</div>	
+<div id="main-left">
+	<h2 class="title">Infos about this Location</h2>
+    	<div id="location">
+		<p>
+			<ul style="list-style-type: none;">
+				<li>${location.street} ${location.num}</li>
+				<li>${location.pincode} ${location.city}</li>
+				<li>${location.country} </li>
+				<input type="button" value="ShowOnMap" onclick="codeAddress('${location.toString()}')">
+			</ul>
+		</p>
+		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
+		</div>
+	
+	
+		<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false">
+</script>
+		<style type="text/css">
+  #map_canvas { height: 50% }
+</style>
+<script type="text/javascript">
+var geocoder;
+  var map;
+  var i=0;
+  var lat;
+  var lang;
+  
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+      zoom: 13,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
 
-</div>
+  function codeAddress(address) {
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location,18);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+</script>
+ 
+ 
+ 
+ 
