@@ -6,8 +6,6 @@
 	<ul>
 		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
 		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
-	
-		
 	</ul>
 </div>	
 <div id="main-left">
@@ -22,6 +20,16 @@
 		</p>
 		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
 		</div>
+		
+		<p>
+			${numberOfEvents} events are using this location:
+			<ul>
+			#{list items:events, as:'event'}
+				<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">${event.name}</a></li>
+			#{/list}
+			</ul>
+			and ${numberOfEvents-events.size()} private.
+		</p>
 
 <script type="text/javascript">
      $(document.getElementById('map_canvas')).ready(function() {

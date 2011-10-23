@@ -35,8 +35,10 @@ public class Locations extends Controller {
     	assert location != null;
     	
     	User connectedUser = User.find("byEmail", Security.connected()).first();
+    	List<Event> events = location.getEvents(connectedUser);
+    	long numberOfEvents = location.numberOfEvents();
     	
-    	render(connectedUser, location);
+    	render(connectedUser, location, events, numberOfEvents);
     }
 
     public static void edit(Long locationId) {
