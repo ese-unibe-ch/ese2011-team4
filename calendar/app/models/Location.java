@@ -53,6 +53,30 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
+	public long numberOfEventsByDayAndTime(DateTime start, DateTime end) {		
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
+				"WHERE e.location = ?1 " +
+				"AND e.endDate >= ?2 " +
+				"AND e.startDate < ?3");
+		query.setParameter(1, this);
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return (Long) query.getSingleResult();
+	}
+	
+	public long getEventsByDayAndTime(DateTime start, DateTime end, User visitor) {		
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE e.location = ?1 " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
+				"AND e.endDate >= ?3 " +
+				"AND e.startDate < ?4");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, start);
+		query.setParameter(4, end);
+		return (Long) query.getSingleResult();
+	}
+	
 	public List<Event> getEventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);

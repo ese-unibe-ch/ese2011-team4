@@ -211,4 +211,28 @@ public class Events extends Controller {
         Cache.set(id, code, "10mn");
         renderBinary(captcha);
     }
+    
+    public static void checkLocationCollision(String startDate,
+			String startTime,
+			String endDate, 
+			String endTime,
+			Long locationId) {
+    	long numberOfEvents = 0;
+    			
+    	try {
+    		format.parseDateTime(startDate+startTime);
+    		format.parseDateTime(endDate+endTime);
+    	} catch(IllegalArgumentException e) {
+    		render(numberOfEvents);
+    	}
+    	    	
+    	DateTime start = format.parseDateTime(startDate+startTime);
+    	DateTime end = format.parseDateTime(endDate+endTime);
+    	    	
+    	Location location = Location.findById(locationId);
+    	if(location != null) {
+    		numberOfEvents = location.numberOfEventsByDayAndTime(start, end);
+    	}
+    	render(numberOfEvents);
+    }
 }
