@@ -216,7 +216,8 @@ public class Events extends Controller {
 			String startTime,
 			String endDate, 
 			String endTime,
-			Long locationId) {
+			Long locationId,
+			boolean editEvent) {
     	long numberOfEvents = 0;
     			
     	try {
@@ -232,6 +233,9 @@ public class Events extends Controller {
     	Location location = Location.findById(locationId);
     	if(location != null) {
     		numberOfEvents = location.numberOfEventsByDayAndTime(start, end);
+    		if(editEvent) {
+    			numberOfEvents--;
+    		}
     	}
     	render(numberOfEvents);
     }

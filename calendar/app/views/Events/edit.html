@@ -16,7 +16,7 @@
 		#{/ifErrors}
 		<div id="event-form">
 		#{form @Events.update(calendar.id, event.id)}
-			#{event-form event:event, locations:locations /}
+			#{event-form event:event, locations:locations, editEvent:true /}
 		#{/form}
 		</div>
 	</div>
