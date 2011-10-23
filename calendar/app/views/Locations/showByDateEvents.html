@@ -1,0 +1,84 @@
+#{extends 'main.html' /}
+#{set title:'Locations'/}
+
+<div id="main-right">
+	<h2 class="title">Actions</h2>
+	<ul>
+		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
+		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
+	</ul>
+</div>	
+<div id="main-left">
+	<h2 class="title">Infos about this Location</h2>
+    	<div id="location">
+		
+		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
+		</div>
+		<p>
+		<p>
+			${numberOfEvents} events are using this location:
+			<ul>
+			#{list items:events, as:'event'}
+				<li><a href="@{Locations.showByDateEvents(startDate)}">${event.name}</a></li>
+			#{/list}
+			</ul>
+			and ${numberOfEvents-events.size()} private.
+		</p>
+
+<script type="text/javascript">
+     $(document.getElementById('map_canvas')).ready(function() {
+     	initialize();
+     	codeAddress('${location.toString()}');
+ 	});
+</script>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=false">
+</script>
+<style type="text/css">
+  #map_canvas { height: 50% }
+</style>
+<script type="text/javascript">
+var geocoder;
+  var map;
+  var i=0;
+  var lat;
+  var lang;
+ 
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+      zoom: 13,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
+  function cal(address) {
+	    geocoder.geocode( { 'address': address}, function(results, status) {
+	      if (status == google.maps.GeocoderStatus.OK) {
+	        map.setCenter(results[0].geometry.location,18);
+	        var marker = new google.maps.Marker({
+	            map: map,
+	            position: results[0].geometry.location
+	        });
+	      } else {
+	        alert("Geocode was not successful for the following reason: " + status);
+	      }
+	    });
+	  }
+  function codeAddress(address) {
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location,18);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+</script>
+ 
