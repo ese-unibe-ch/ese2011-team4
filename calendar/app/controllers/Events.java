@@ -217,7 +217,7 @@ public class Events extends Controller {
 			String endDate, 
 			String endTime,
 			Long locationId,
-			boolean editEvent) {
+			long eventId) {
     	long numberOfEvents = 0;
     			
     	try {
@@ -233,7 +233,9 @@ public class Events extends Controller {
     	Location location = Location.findById(locationId);
     	if(location != null) {
     		numberOfEvents = location.numberOfEventsByDayAndTime(start, end);
-    		if(editEvent) {
+    		Event event = Event.findById(eventId);
+    		if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate) && location.equals(event.location)) {
+    			System.out.println("aaa");
     			numberOfEvents--;
     		}
     	}

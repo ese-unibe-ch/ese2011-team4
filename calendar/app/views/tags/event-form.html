@@ -1,8 +1,8 @@
 <script type="text/javascript">
 function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDate', ':startTime', ':endDate', ':endTime', ':locationId', ':editEvent') /}
+   var action = #{jsAction @checkLocationCollision(':startDate', ':startTime', ':endDate', ':endTime', ':locationId', ':eventId') /}
    $('#LocationcollisionResponse').load(
-       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, editEvent: ${_editEvent?_editEvent:false}})
+       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
    )
 }
 </script>
