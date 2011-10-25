@@ -39,6 +39,23 @@ table a:hover {
 	background-color: none;
 }
 
+/** List locations **/
+
+#location-list ul {
+	list-style: none;
+	padding: 0px;
+}
+
+#location-list h3 {
+	display: inline;
+}
+
+.location-metadata {
+	font-size: 0.8em;
+	margin-bottom: 1em;
+	display: inline;
+}
+
 /** Location table**/
 
 table#locations{

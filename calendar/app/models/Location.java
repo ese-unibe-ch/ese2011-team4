@@ -20,22 +20,54 @@ public class Location extends Model{
 
 	@Override
 	public String toString(){
-		return num + ", " + street + ", " + city + ", " + country + ", " + pincode;
+		return street + " " + num + ", " + pincode + " " + city + ", " + country;
 	}
 	
-	public long numberOfEvents() {
+
+	public List<Event> getAllEvents() {
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE e.location = ?1 ");
+		query.setParameter(1, this);
+		return query.getResultList();
+	}
+	
+	public long numberOfAllEvents() {
 		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
 				"WHERE e.location = ?1 ");
 		query.setParameter(1, this);
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getEvents(User visitor) {
+	public List<Event> getVisibleEvents(User visitor) {
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 " +
-				"AND (e.isPrivate = false OR e.origin.owner = ?2) ");
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
 		query.setParameter(1, this);
 		query.setParameter(2, visitor);
+		return query.getResultList();
+	}
+	
+	public long numberOfVisibleEvents(User visitor) {
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
+				"WHERE e.location = ?1  " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		return (Long) query.getSingleResult();
+	}
+	
+	public List<Event> getEventsByDay(DateTime day, User visitor) {
+		DateTime start = day.withTime(0, 0, 0, 0);
+		DateTime end = start.plusDays(1);
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE e.location = ?1 " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
+				"AND e.endDate >= ?3 " +
+				"AND e.startDate < ?4");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, start);
+		query.setParameter(4, end);
 		return query.getResultList();
 	}
 	
@@ -43,17 +75,6 @@ public class Location extends Model{
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		
-		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
-				"WHERE e.location = ?1 " +
-				"AND e.endDate >= ?2 " +
-				"AND e.startDate < ?3");
-		query.setParameter(1, this);
-		query.setParameter(2, start);
-		query.setParameter(3, end);
-		return (Long) query.getSingleResult();
-	}
-	
-	public long numberOfEventsByDayAndTime(DateTime start, DateTime end) {		
 		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
 				"WHERE e.location = ?1 " +
 				"AND e.endDate >= ?2 " +
@@ -77,19 +98,15 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getEventsByDay(DateTime day, User visitor) {
-		DateTime start = day.withTime(0, 0, 0, 0);
-		DateTime end = start.plusDays(1);
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+	public long numberOfEventsByDayAndTime(DateTime start, DateTime end) {		
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
 				"WHERE e.location = ?1 " +
-				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
-				"AND e.endDate >= ?3 " +
-				"AND e.startDate < ?4");
+				"AND e.endDate >= ?2 " +
+				"AND e.startDate < ?3");
 		query.setParameter(1, this);
-		query.setParameter(2, visitor);
-		query.setParameter(3, start);
-		query.setParameter(4, end);
-		return query.getResultList();
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return (Long) query.getSingleResult();
 	}
 	
 	public static Location find(String street, String num, String city, String country, String pincode) {

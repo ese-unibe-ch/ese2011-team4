@@ -2,16 +2,11 @@
 	<h2 class="title">
 		Locations
 	</h2>
-	<table id="locations">
-			<tr>
-				<th>Location</th>
-				<th>Action</th>
-			</tr>
+	<ul>
 		#{list items:_locations, as:'location'}
-			<tr>
-				<td class="location"><a href="@{Locations.show(location.id)}">${location.toString()}</a></td>
-				<td><a href="@{Locations.edit(location.id)}">Edit</a></td>
-			</tr>
+			<li><a href="@{Locations.show(location.id)}">${location.toString()}</a>
+				<span class="location-metadata"> - used by ${location.numberOfAllEvents()} events (${location.numberOfAllEvents()-location.numberOfVisibleEvents(_connectedUser)} private)</span>
+			</li>
 		#{/list}
-	</table>
+	</ul>
 </div>

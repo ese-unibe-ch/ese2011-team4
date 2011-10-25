@@ -35,8 +35,8 @@ public class Locations extends Controller {
     	assert location != null;
     	
     	User connectedUser = User.find("byEmail", Security.connected()).first();
-    	List<Event> events = location.getEvents(connectedUser);
-    	long numberOfEvents = location.numberOfEvents();
+    	List<Event> events = location.getVisibleEvents(connectedUser);
+    	long numberOfEvents = location.numberOfAllEvents();
     	
     	render(connectedUser, location, events, numberOfEvents);
     }
@@ -48,6 +48,11 @@ public class Locations extends Controller {
     
     public static void delete(Long locationId) {
     	Location location = Location.findById(locationId);
+    	List<Event> events = location.getAllEvents();
+    	for(Event event: events) {
+    		event.location = null;
+    		event.validateAndSave();
+    	}
     	location.delete();
     	index();    	
     }
