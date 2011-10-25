@@ -49,7 +49,7 @@ public class Locations extends Controller {
     public static void delete(Long locationId) {
     	Location location = Location.findById(locationId);
     	location.delete();
-    	Application.index();    	
+    	index();    	
     }
     
     public static void update(	Long locationId,
@@ -85,21 +85,26 @@ public class Locations extends Controller {
     								String country,
     								String pincode) {
     	
-    	Location location = new Location();
-    	location.street = street;
-    	location.num = num;
-    	location.city = city;
-    	location.country = country;
-    	location.pincode = pincode;
-    	
-        if (location.validateAndSave())
-            show(location.id);
-        else {
-        	for(play.data.validation.Error e : Validation.errors())
-    			Logger.error(e.message());
-        	params.flash();
-        	validation.keep();
-        	add();
-        }
+    	Location existingLocation = Location.find(street, num, city, country, pincode);
+    	if(existingLocation == null) {
+    		Location location = new Location();
+    		location.street = street;
+    		location.num = num;
+    		location.city = city;
+    		location.country = country;
+    		location.pincode = pincode;
+  
+    		if (location.validateAndSave())
+    			show(location.id);
+    		else {
+    			for(play.data.validation.Error e : Validation.errors())
+    				Logger.error(e.message());
+    			params.flash();
+    			validation.keep();
+    			add();
+    		}
+    	} else {
+    		show(existingLocation.id);
+    	}
     }
 }

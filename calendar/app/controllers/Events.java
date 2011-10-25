@@ -235,7 +235,6 @@ public class Events extends Controller {
     		numberOfEvents = location.numberOfEventsByDayAndTime(start, end);
     		Event event = Event.findById(eventId);
     		if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate) && location.equals(event.location)) {
-    			System.out.println("aaa");
     			numberOfEvents--;
     		}
     	}

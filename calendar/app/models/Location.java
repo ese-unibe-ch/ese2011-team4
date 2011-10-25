@@ -91,4 +91,21 @@ public class Location extends Model{
 		query.setParameter(4, end);
 		return query.getResultList();
 	}
+	
+	public static Location find(String street, String num, String city, String country, String pincode) {
+		Query query = JPA.em().createQuery("SELECT e FROM Location e "+
+				"WHERE UPPER(e.street) = UPPER(?1) " +
+				"AND UPPER(e.num) = UPPER(?2) " +
+				"AND UPPER(e.city) = UPPER(?3) " +
+				"AND UPPER(e.country) = UPPER(?4) " +
+				"AND UPPER(e.pincode) = UPPER(?5)");
+		query.setParameter(1, street.trim());
+		query.setParameter(2, num.trim());
+		query.setParameter(3, city.trim());
+		query.setParameter(4, country.trim());
+		query.setParameter(5, pincode.trim());
+		query.setMaxResults(1);
+		return (query.getResultList().size() > 0)?(Location) query.getResultList().get(0):null;
+	}
+	
 }
