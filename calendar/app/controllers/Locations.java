@@ -35,8 +35,8 @@ public class Locations extends Controller {
     	assert location != null;
     	
     	User connectedUser = User.find("byEmail", Security.connected()).first();
-    	List<Event> events = location.getVisibleEvents(connectedUser);
-    	long numberOfEvents = location.numberOfAllEvents();
+    	List<Event> events = location.getVisibleUpcomingEvents(connectedUser);
+    	long numberOfEvents = location.numberOfAllUpcomingEvents();
     	
     	render(connectedUser, location, events, numberOfEvents);
     }

@@ -23,7 +23,7 @@
 				#{/list}
 			</ul>
 			#{if _event.location }
-				<span class="location">${_event.location.toString()}</span>
+				<a href="@{Locations.show(_event.location.id)}"><span class="location">${_event.location.toString()}</span></a>
 			#{/if}
 		</div>
 		<div class="event-menu">

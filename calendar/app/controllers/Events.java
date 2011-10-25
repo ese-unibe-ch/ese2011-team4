@@ -232,7 +232,7 @@ public class Events extends Controller {
     	    	
     	Location location = Location.findById(locationId);
     	if(location != null) {
-    		numberOfEvents = location.numberOfEventsByDayAndTime(start, end);
+    		numberOfEvents = location.numberOfAllEventsByDayAndTime(start, end);
     		Event event = Event.findById(eventId);
     		if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate) && location.equals(event.location)) {
     			numberOfEvents--;

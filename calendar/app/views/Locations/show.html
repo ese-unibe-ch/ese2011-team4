@@ -22,14 +22,14 @@
 		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
 		</div>
 		
+		<h3>Upcoming events</h3>
 		<p>
-			${numberOfEvents} events are using this location:
+			${numberOfEvents} upcoming events are using this location (${numberOfEvents-events.size()} private):
 			<ul>
 			#{list items:events, as:'event'}
 				<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">${event.name}</a></li>
 			#{/list}
 			</ul>
-			and ${numberOfEvents-events.size()} private.
 		</p>
 
 <script type="text/javascript">
