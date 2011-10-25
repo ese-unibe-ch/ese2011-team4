@@ -15,6 +15,13 @@
 				${_event.origin.owner.fullname}
 				#{/a}</span>
 			#{/if}
+			<ul class="followers">Users, who participate this event:
+				#{list items: _event.participants(), as: 'user'}
+					<li>
+						#{a @Calendars.display(user.id)}${user.fullname}#{/a}
+					</li>
+				#{/list}
+			</ul>
 			#{if _event.location }
 				<span class="location">${_event.location.toString()}</span>
 			#{/if}

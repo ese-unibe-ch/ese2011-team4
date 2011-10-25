@@ -56,8 +56,9 @@ public class User extends Model {
 	}
 	
 	public boolean isInFavorites(User user){
+		List<Favorite> favs = 	Favorite.find("followerId", id).fetch();
 		boolean found = false;
-		Iterator<Favorite> it = favorites.iterator();
+		Iterator<Favorite> it = favs.iterator();
 		while(it.hasNext() && !found){
 			Favorite fav = it.next();
 			if(fav.favoriteId == user.id)
