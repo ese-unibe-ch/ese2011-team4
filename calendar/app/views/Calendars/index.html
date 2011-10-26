@@ -1,13 +1,7 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title:'Home' /}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main-left">
-	#{calendar-list calendars:calendars, user:connectedUser /}
-</div>
-
-<div id="main-right">
-	#{user-nav users:users /}
-</div>
+#{calendar-list calendars:calendars, user:connectedUser /}

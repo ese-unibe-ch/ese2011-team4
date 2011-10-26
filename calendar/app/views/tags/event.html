@@ -15,6 +15,7 @@
 				${_event.origin.owner.fullname}
 				#{/a}</span>
 			#{/if}
+			#{if _event.participants().size() > 0}
 			<ul class="followers">Users, who participate this event:
 				#{list items: _event.participants(), as: 'user'}
 					<li>
@@ -22,6 +23,7 @@
 					</li>
 				#{/list}
 			</ul>
+			#{/if}
 			#{if _event.location }
 				<a href="@{Locations.show(_event.location.id)}"><span class="location">${_event.location.toString()}</span></a>
 			#{/if}

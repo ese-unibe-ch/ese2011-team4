@@ -22,23 +22,17 @@ public class Users extends Controller {
 	}
 	
 	public static void addContact(Long userId){
-		List<User> users = User.all().fetch();
 		User connectedUser = User.find("email", Security.connected()).first();
 		User favorite = User.findById(userId);
-		//if(Favorite.find("favoriteId", userId)==null){ Not necessary anymore ;)
-			Favorite newFav = new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
-			render(connectedUser, newFav, users);
-		//}
-		//else index();
+		new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
+		flash.success("You added %s to your favorite contacts.", favorite);
+	    index();
 	}
 	
 	public static void deleteContact(Long userId){
-		List<User> users = User.all().fetch();
-		User connectedUser = User.find("email", Security.connected()).first();
 		Favorite deleted = Favorite.find("favoriteId", userId).first();
-		Favorite.delete("favoriteId", userId);
-		render(connectedUser, users, deleted);
+		deleted.delete();
+		flash.success("You removed %s from your favorite contacts.", deleted.fullname);
+		index();
 	}
-	
-	
 }

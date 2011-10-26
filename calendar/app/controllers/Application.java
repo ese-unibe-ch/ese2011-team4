@@ -12,7 +12,8 @@ import models.*;
 
 public class Application extends Controller {
     public static void index() {
-    	Calendars.index();
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	Calendars.index(connectedUser.id);
     }
     
     public static void register() {
@@ -23,7 +24,7 @@ public class Application extends Controller {
 		User user = new User(email, password, fullname);
 		if(user.validateAndSave()) {
 			Security.authenticate(email, password);
-			Calendars.index();
+			Calendars.index(user.id);
 		} else {
 			params.flash();
 	        validation.keep();

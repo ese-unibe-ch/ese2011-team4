@@ -1,4 +1,28 @@
 #{extends 'home-view.html' /}
 #{set title: Users /}
 
-#{user-list users:users, connectedUser:connectedUser, favs:favs /}
+<div id="user-list">
+	<h2 class="title">
+		Currently registered users
+	</h2>
+	#{if flash.success}
+    <p class="success">${flash.success}</p>
+	#{/if}
+	
+	<table>
+			<tr>
+				<th class="user-name">User name</th>
+				<th class="user-calendars">Calendars</th>
+				<th class="add"></th>
+			</tr>
+		#{list items:users, as:'user'}
+			<tr>
+				<td class="user-name">${user.fullname}</td>
+				<td class="user-calendars">#{a @Calendars.index(user.id)}${user.fullname}'s calendars#{/a}</td>
+				#{if ( !connectedUser.equals(user) && !connectedUser.isInFavorites(user) )}
+						<td class="add">#{a @Users.addContact(user.id)}Add to favorites#{/a}</td>
+				#{/if}
+			</tr>
+		#{/list}
+		</table>
+</div>

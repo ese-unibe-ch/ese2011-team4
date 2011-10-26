@@ -73,15 +73,15 @@ public class Event extends Model implements Comparable<Event> {
 		this.save();
 	}
 	
-/**
- *
- * Returns a list of all calendars available for joining the event given for a certain user
- * 
- * @param	User 	The user which requests the join 
- * @return	List<Calendar> List of possible calendars for a join	
- * @see		models.Event#joinCalendar(Calendar calendar)
- * @since	Beta-v1.2
- */
+	/**
+	 *
+	 * Returns a list of all calendars available for joining the event given for a certain user
+	 * 
+	 * @param	User 	The user which requests the join 
+	 * @return	List<Calendar> List of possible calendars for a join	
+	 * @see		models.Event#joinCalendar(Calendar calendar)
+	 * @since	Iteration-1
+	 */
 	
 	public List<Calendar> availableJoins(User user) {
 		if(!isPrivate) {
@@ -94,6 +94,16 @@ public class Event extends Model implements Comparable<Event> {
 		} else
 			return new LinkedList<Calendar>();
 	}
+
+	/**
+	 *
+	 * Returns true if the event takes place at a certain day
+	 * 
+	 * @param	day 	The day to test
+	 * @return	true if the start date of the event is at this day	
+	 * @see		models.Event#isThisDayandLocation(DateTime day, Location loc)
+	 * @since	Beta-v1.2
+	 */
 	
 	public boolean isThisDay(DateTime day) {
 		return startDate.getYear() == day.getYear() 
@@ -120,24 +130,20 @@ public class Event extends Model implements Comparable<Event> {
 		return startDate.compareTo(e.startDate);
 	}
 	
-	public List<User> participants(){
-		List<User> parts = new LinkedList<User>();
-		for(Calendar cal: calendars){
-			if(!cal.owner.equals(origin.owner) && !isInParticipants(parts,cal.owner))
-				parts.add(cal.owner);
-		}
-		return parts;
-	}
+	/**
+	 *
+	 * Returns a list of users participating this event
+	 * 
+	 * @return	a list of all users that contain this event in one of their calendars
+	 * @since	Iteration-2
+	 */
 	
-	private boolean isInParticipants(List<User> users, User user){
-		boolean found = false;
-		Iterator<User> it = users.iterator();
-		while(it.hasNext() && !found){
-			User u = it.next();
-			if(u.id == user.id)
-				found = true;
-		}
-		return found;
+	public List<User> participants(){		
+		List<User> parts = new LinkedList<User>();
+		for(Calendar cal: calendars)
+			if(!cal.owner.equals(origin.owner) && !parts.contains(cal.owner))
+				parts.add(cal.owner);
+		return parts;
 	}
 	
 	static class EndAfterBeginCheck extends Check {

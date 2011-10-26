@@ -15,24 +15,17 @@ import play.mvc.With;
 @With(Secure.class)
 public class Calendars extends Controller {
 	
-    public static void index() {
+    public static void index(Long userId) {
     	User connectedUser = User.find("email", Security.connected()).first();
-    	Calendars.display(connectedUser.id);
+    	User user = User.findById(userId);
+    	List<Calendar> calendars = Calendar.find("owner", user).fetch();
+        render(calendars, connectedUser, user);
     }
     
     public static void add() {
     	User connectedUser = User.find("email", Security.connected()).first();
 	    render(connectedUser);
     }
-	
-    // TODO isn't necessary anymore (I think it's still necessary --> on the users page
-    // when you click on <user>'s calendars, this method is called)
-	public static void display(Long userId) {
-		User connectedUser = User.find("email", Security.connected()).first();
-    	User user = User.findById(userId);
-    	List<Calendar> calendars = Calendar.find("owner", user).fetch();
-        render(calendars, connectedUser, user);
-	}
 	
 	public static void showCurrentMonth(Long id) {
 		DateTime dt = new DateTime();
@@ -62,7 +55,7 @@ public class Calendars extends Controller {
     	Calendar calendar = Calendar.findById(id);
     	if(Security.check(calendar)) {
 	    	calendar.delete();
-	    	Calendars.index();
+	    	Calendars.index(calendar.owner.id);
     	} else
     		forbidden("Not your calendar!");
     }
@@ -72,7 +65,7 @@ public class Calendars extends Controller {
     	
     	Calendar calendar = new Calendar(connectedUser, name);
     	if (calendar.validateAndSave())
-    		Calendars.display(connectedUser.id);
+    		Calendars.index(connectedUser.id);
     	else {
     		params.flash();
     		validation.keep();
