@@ -3,9 +3,11 @@ package models;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -54,7 +56,11 @@ public class Event extends Model implements Comparable<Event> {
 	@Lob
 	public String description;
 	
+	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	public List<Comment> comments;
+	
 	public Event(Calendar calendar) {
+		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
@@ -114,6 +120,26 @@ public class Event extends Model implements Comparable<Event> {
 		return startDate.compareTo(e.startDate);
 	}
 	
+	public List<User> participants(){
+		List<User> parts = new LinkedList<User>();
+		for(Calendar cal: calendars){
+			if(!cal.owner.equals(origin.owner) && !isInParticipants(parts,cal.owner))
+				parts.add(cal.owner);
+		}
+		return parts;
+	}
+	
+	private boolean isInParticipants(List<User> users, User user){
+		boolean found = false;
+		Iterator<User> it = users.iterator();
+		while(it.hasNext() && !found){
+			User u = it.next();
+			if(u.id == user.id)
+				found = true;
+		}
+		return found;
+	}
+	
 	static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
@@ -121,5 +147,14 @@ public class Event extends Model implements Comparable<Event> {
 			setMessage("validation.EndAfterBeginCheck");
 			return event.startDate.isBefore(end);
 		}
+	}
+	
+	public Event addComment(String author, String content) {
+	    Comment newComment = new Comment(this).save();
+	    newComment.author = author;
+	    newComment.content = content;
+	    this.comments.add(newComment);
+	    this.save();
+	    return this;
 	}
 }

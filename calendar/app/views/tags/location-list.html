@@ -1,0 +1,12 @@
+<div id="location-list">
+	<h2 class="title">
+		Locations
+	</h2>
+	<ul>
+		#{list items:_locations, as:'location'}
+			<li><a href="@{Locations.show(location.id)}">${location.toString()}</a>
+				<span class="location-metadata"> - used by ${location.numberOfAllEvents()} events (${location.numberOfAllEvents()-location.numberOfVisibleEvents(_connectedUser)} private)</span>
+			</li>
+		#{/list}
+	</ul>
+</div>

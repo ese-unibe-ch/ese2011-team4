@@ -25,11 +25,11 @@ public class Users extends Controller {
 		List<User> users = User.all().fetch();
 		User connectedUser = User.find("email", Security.connected()).first();
 		User favorite = User.findById(userId);
-		if(Favorite.find("favoriteId", userId).first()==null){
+		//if(Favorite.find("favoriteId", userId)==null){ Not necessary anymore ;)
 			Favorite newFav = new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
 			render(connectedUser, newFav, users);
-		}
-		else index();
+		//}
+		//else index();
 	}
 	
 	public static void deleteContact(Long userId){

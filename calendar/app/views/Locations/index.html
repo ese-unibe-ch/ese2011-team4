@@ -1,0 +1,17 @@
+#{extends 'main.html' /}
+#{set title: 'Locations' /}
+
+<div id="main-left">
+	#{location-list locations:locations, connectedUser:connectedUser /}
+</div>
+<div id="main-right">
+<div class="navigation">
+	#{user-nav users:users, connectedUser:connectedUser /}
+	<h2 class"title">Actions</h2>
+	<ul>
+		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
+	<ul>
+</div>
+</div>
+
+

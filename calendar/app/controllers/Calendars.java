@@ -25,7 +25,8 @@ public class Calendars extends Controller {
 	    render(connectedUser);
     }
 	
-    // TODO isn't necessary anymore
+    // TODO isn't necessary anymore (I think it's still necessary --> on the users page
+    // when you click on <user>'s calendars, this method is called)
 	public static void display(Long userId) {
 		User connectedUser = User.find("email", Security.connected()).first();
     	User user = User.findById(userId);

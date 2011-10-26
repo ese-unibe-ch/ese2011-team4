@@ -9,41 +9,45 @@
         	href="@{'public/stylesheets/calendar-style.css'}" />
         <link rel="shortcut icon" type="image/png" 
             href="@{'/public/images/favicon.png'}" />
+       	<script src="@{'/public/javascripts/jquery-1.4.2.min.js'}"></script>
     </head>
     <body>
-		<header>
-			<hgroup>
-				<div id="logo">
-					<a href="@{Application.index()}">calpal.</a>
-					<span id="tagline">look into your cal, pal!</span>
-				</div>
-            <div id="tools">
-            <ol>
-				#{if session.username}
-					<li><span id="username">${session.username}</span></li>
-            		<li><a href="@{Secure.logout()}">Log out</a>
-				#{/if}
-				#{else}
-					<li><a href="@{Secure.login()}">Log in</a>
-					<li>#{a @Application.register()}Register#{/a}
-				#{/else}
+    	<div id="wrap">
+			<header>
+				<hgroup>
+					<div id="logo">
+						<a href="@{Application.index()}">calpal.</a>
+						<span id="tagline">look into your cal, pal!</span>
+					</div>
+        	    <div id="tools">
+        	    <ol>
+					#{if session.username}
+						<li><span id="username">${session.username}</span></li>
+        	    		<li><a href="@{Secure.logout()}">Log out</a>
+					#{/if}
+					#{else}
+						<li><a href="@{Secure.login()}">Log in</a>
+						<li>#{a @Application.register()}Register#{/a}
+					#{/else}
+					</ol>
+        	    </div>
+        	    
+        	    <nav id="sitenav">
+        	    <ol>
+					<li>#{a @Application.index()}Home#{/a}
+					<li>#{a @Calendars.index()}Calendars#{/a}
+					<li>#{a @Users.index()}Users#{/a}
+					<li>#{a @Locations.index()}Locations#{/a}
 				</ol>
-            </div>
-            
-            <nav id="sitenav">
-            <ol>
-				<li>#{a @Application.index()}Home#{/a}
-				<li>#{a @Calendars.index()}Calendars#{/a}
-				<li>#{a @Users.index()}Users#{/a}
-			</ol>
-			</nav>
-            </hgroup>
-        </header>
-        
-        <div id="main">
-            #{doLayout /} 
+				</nav>
+            	</hgroup>
+        	</header>
+        	
+        	<div id="main">
+        	    #{doLayout /} 
+        	</div>
         </div>
-        
+        	
         <div id="footer">
             calpal is the most powerful calendar engine built with the 
             <a href="http://www.playframework.org">Play framework</a>

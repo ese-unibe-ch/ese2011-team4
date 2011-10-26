@@ -1,0 +1,37 @@
+<p>
+#{field 'street'}
+   	<label for="name">Street</label>
+    <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_location?.street}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'num'}
+   	<label for="name">Number</label>
+    <input type="text" name="${field.name}" id="num" value="#{ifErrors}${flash.num}#{/ifErrors}#{else}${_location?.num}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'city'}
+   	<label for="name">City</label>
+    <input type="text" name="${field.name}" id="city" value="#{ifErrors}${flash.city}#{/ifErrors}#{else}${_location?.city}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'country'}
+   	<label for="name">Country</label>
+    <input type="text" name="${field.name}" id="country" value="#{ifErrors}${flash.country}#{/ifErrors}#{else}${_location?.country}#{/else}"/>
+#{/field}
+</p>
+<p>
+#{field 'pincode'}
+   	<label for="name">Pincode</label>
+    <input type="text" name="${field.name}" id="pincode" value="#{ifErrors}${flash.pincode}#{/ifErrors}#{else}${_location?.pincode}#{/else}"/>
+#{/field}
+</p>
+
+<p class="button">
+	<input type="submit" value="Submit your location" />
+</p>
+<p class="button">
+	<input type="reset" value="Reset" />
+</p>
