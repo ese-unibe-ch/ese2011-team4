@@ -303,8 +303,8 @@ table#month th.title {
 
 .comment{
 	display: inline-block;
-	padding-top: 10px;
-	width: 60%;
+	float: right;
+	padding: 5px;
 }
 
 .comment a:hover{
@@ -327,6 +327,17 @@ span.error {
    -webkit-border-radius: 6px;
    -moz-border-radius: 6px;
    -webkit-box-shadow: 0 2px 0 #800;
+}
+
+.author {
+	padding: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.author a:hover{
+	background-color: #333;
+	color: #fff;
 }
 
 form p {

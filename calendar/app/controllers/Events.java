@@ -174,8 +174,9 @@ public class Events extends Controller {
     
     public static void addComment(Long id){
     	Event event = Event.findById(id);
+    	User connectedUser = User.find("email", Security.connected()).first();
     	String randomID = Codec.UUID();
-        render(event, randomID);
+        render(event, connectedUser,  randomID);
     }
     
     public static void updateComment(	Long id, 

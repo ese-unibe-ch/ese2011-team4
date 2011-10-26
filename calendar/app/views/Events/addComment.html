@@ -4,16 +4,13 @@
 <body onload="window.scrollTo(0, getDocHeight())">
 	<div id="main-left">
 		#{comment event:event /}
+		#{if connectedUser!=null}
 		<div id="add-comment">
 			<hr>
-			<h3>Post a comment</h3>
-			
- 			#{form @Events.updateComment(event.id)}
-   				<p>
-    			    <label for="author">Your name: </label>
-    			    <input type="text" name="author" id="author" value="${flash.author}"/>
-    			    #{ifErrors}<span class="error">#{error 'comment.author' /}</span>#{/ifErrors}
-    			</p>
+			<h3>Post a comment</h3>	
+			<span class="author">Your name:
+    			    #{a @Calendars.display(connectedUser.id)}${connectedUser.fullname}#{/a}</span>		
+ 			#{form @Events.updateComment(event.id, connectedUser.fullname)}
     			<p>
     			    <label for="content">Your message: </label>
     			    <textarea name="content" id="content" placeholder="Remember, be nice!"}>${flash.content}</textarea>
@@ -31,6 +28,15 @@
     			</p>
 			#{/form}
 		</div>
+		#{/if}
+		#{else}
+			<h3> Please 
+				<a href="@{Secure.login()}">Log in</a>
+				or 
+				#{a @Application.register()}Register#{/a}
+				to post a comment!
+			</h3>
+		#{/else}
 	</div>
 
 	<div id="main-right">
