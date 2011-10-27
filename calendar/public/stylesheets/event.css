@@ -172,7 +172,7 @@ p.success {
 	border-radius: 6px;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
-	-webkit-box-shadow: 0 2px 0 #4E840B; 
+	-webkit-box-shadow: 0 2px 0 #4E840B;
 }
 
 /** Comment **/
@@ -201,7 +201,7 @@ p.success {
 	clear: both;	
 }
 
-#event hr {
+#events hr {
 	border: 0;
 	margin: 0px 10px 10px 0px;
 	color: #0051FF;

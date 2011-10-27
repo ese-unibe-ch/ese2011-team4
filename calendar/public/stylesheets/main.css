@@ -2,16 +2,16 @@
 
 html, body {
 	height: 100%;
-    background-image: url(../images/background.png);
-    background-repeat: repeat-x;
-    background-color: #EBEBFF;
-    font-family: Helvetica, Arial, Sans !important;
+	background-image: url(../images/background.png);
+	background-repeat: repeat-x;
+	background-color: #EBEBFF;
+	font-family: Helvetica, Arial, Sans !important;
 }
 
 body {
-    width: 920px;
-    padding: 0 30px;
-    margin: auto;
+	width: 920px;
+	padding: 0 30px;
+	margin: auto;
 }
 
 /** Wrapper **/
@@ -23,59 +23,60 @@ body {
 /** Application header **/	
 
 header {
-    padding-bottom: 10px;
+	padding-bottom: 10px;
 }
 
 hgroup {
-    position: relative;
+	position: relative;
 }
 
 #logo a {
-    height: 50px;
-    padding-left: 20px;
-    padding-bottom: 20px;
-    color: #fff;
-    font-size: 48px;
-    font-weight: bold;
-    letter-spacing: -4px;
-    text-shadow: 1px 2px 2px #000;
-    text-decoration: none;
+	height: 50px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	color: #fff;
+	font-size: 48px;
+	font-weight: bold;
+	letter-spacing: -4px;
+	text-shadow: 1px 2px 2px #000;
+	text-decoration: none;
 }
 
 #tagline {
-    margin-left: 5px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
+	margin-left: 5px;
+	color: #fff;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 #tools {
-    color: #fff;
-    list-style: none;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    top: -10px;
+	color: #fff;
+	list-style: none;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: 0;
+	top: -10px;
 }
 
 #tools ol {
-    list-style: none;
+	list-style: none;
 }
 
 #tools #username {
-    color: #333;
-    padding: 2px 2px 2px 10px;
+	color: #333;
+	padding: 2px 2px 2px 10px;
 }
 
 #tools a {
-    display: block;
-    color: #333;
-    text-decoration: none;
-    padding: 2px 2px 2px 10px;
-    -webkit-border-radius: 16px;
-    -moz-border-radius: 16px;
+	display: block;
+	color: #333;
+	text-decoration: none;
+	padding: 2px 2px 2px 10px;
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
 }
 
 #tools a:hover {
@@ -89,6 +90,7 @@ header nav {
 	width: 100%;
 	height: 47px;
 	background-color: #93B4FA;
+	border-radius: 16px;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
 }
@@ -110,6 +112,7 @@ header nav li a {
 	text-decoration: none;
 	display: block;
 	padding: .5em;
+	border-radius: 16px;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
 }
@@ -159,7 +162,7 @@ span.success {
 	border-radius: 6px;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
-	-webkit-box-shadow: 0 2px 0 #4E840B; 
+	-webkit-box-shadow: 0 2px 0 #4E840B;
 }
 
 form p {
@@ -227,10 +230,11 @@ form p.button {
 	float: left;
 	width: 560px;
 	background: #93B4FA;
+	padding: 20px;
+	margin-right: 10px;
+	border-radius: 16px;
 	-webkit-border-radius: 16px;
-   -moz-border-radius: 16px;
-   padding: 20px;
-   margin-right: 10px;
+	-moz-border-radius: 16px;
 }
 
 #main-right {
@@ -238,10 +242,11 @@ form p.button {
 	float: left;
 	width: 260px;
 	background: #93B4FA;
-   -webkit-border-radius: 16px;
-   -moz-border-radius: 16px;
-   padding: 20px;
-   margin-left: 620px;
+	padding: 20px;
+	margin-left: 620px;
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
 }
 
 .navigation ul {
@@ -255,33 +260,34 @@ form p.button {
 
 /** Login **/
 #login {
-    background: #93B4FA;
-    margin: 0px 250px 0px 250px;
-    padding: 5px;
-    -webkit-border-radius: 16px;
-    -moz-border-radius: 16px;
+	background: #93B4FA;
+	margin: 0px 250px 0px 250px;
+	padding: 5px;
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
 }
 
 #login form label {
-    width: 150px;
+	width: 150px;
 }
 
 /** Footer **/
 
 #footer {
-   margin-top: -32px;
+	margin-top: -32px;
 	height: 30px;
-   border-top: 2px solid #0051FF;
-   font-size: 70%;
-   padding-right: 30px;
-   text-align: center;
-   color: #333;
+	border-top: 2px solid #0051FF;
+	font-size: 70%;
+	padding-right: 30px;
+	text-align: center;
+	color: #333;
 	clear: both;
 }
 
 #footer a {
-   color: #333;
-   font-weight: bold;
+	color: #333;
+	font-weight: bold;
 }
 
 /*Opera Fix*/
