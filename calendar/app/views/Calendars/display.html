@@ -1,4 +1,7 @@
 #{extends 'home-view.html' /}
 #{set title: user.fullname /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
 
 #{calendar-list calendars:calendars, connectedUser:connectedUser, user:user, isOwner:isOwner /}

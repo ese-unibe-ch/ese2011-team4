@@ -23,17 +23,15 @@ function checkLocationCollision() {
 #{field 'name'}
    	<label for="name">Title</label>
     <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'name' /}</span>#{/ifErrors}-->
 #{/field}
 </p>
 <p>
 #{field 'startDate'}
     <label for"startDate">Start</label>
     <input type="text" name="${field.name}" id="startDate" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'event.startDate' /}</span>#{/ifErrors}-->
 #{/field}
 #{field 'startTime'}
-	<label for"startTime">Time</label>
+	<label for"startTime" class="time">Time</label>
     <input size=5px type="text" name="${field.name}" id="startTime" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
@@ -41,10 +39,9 @@ function checkLocationCollision() {
 #{field 'endDate'}
 	<label for"endDate">End</label>
 	<input type="text" name="${field.name}" id="endDate" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'event.endDate' /}</span>#{/ifErrors}-->
 #{/field}
 #{field 'endTime'}
-	<label for"endTime">Time</label>
+	<label for"endTime" class="time">Time</label>
     <input size=5px type="text" name="${field.name}" id="endTime" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
@@ -67,32 +64,6 @@ function checkLocationCollision() {
 #{/field}
 </p>
 
-<!--<p>
-#{field 'street'}
-	<label for"street">Street</label>
-    <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_event?.location?.street}#{/else}"/>
-#{/field}
-#{field 'num'}
-	<label for"num">Number</label>
-    <input type="text" name="${field.name}" id="num" value="#{ifErrors}${flash.num}#{/ifErrors}#{else}${_event?.location?.num}#{/else}"/>
-#{/field}
-</p>
-<p>
-#{field 'city'}
-	<label for"city">City</label>
-    <input type="text" name="${field.name}" id="city"/ value="#{ifErrors}${flash.city}#{/ifErrors}#{else}${_event?.location?.city}#{/else}"/>
-#{/field}
-#{field 'country'}
-	<label for"CountryLocation">Country</label>
-    <input type="text" name="${field.name}" id="country" value="#{ifErrors}${flash.country}#{/ifErrors}#{else}${_event?.location?.country}#{/else}"/>
-#{/field}
-</p>
-<p>
-#{field 'pincode'}
-	<label for"pincode">Pincode</label>
-    <input type="text" name="${field.name}" id="pincode" value="#{ifErrors}${flash.pincode}#{/ifErrors}#{else}${_event?.location?.pincode}#{/else}"/>
-#{/field}
-</p>-->
 <p class="description">
 #{field 'description'}
 	<label for"description">Description</label>

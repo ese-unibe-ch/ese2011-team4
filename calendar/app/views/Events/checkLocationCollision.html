@@ -1,5 +1,9 @@
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
 #{if numberOfEvents > 0}
-<div id="locationCollisionWarning" style="background-color: orange;">
+<span class="warning">
 Warning: ${numberOfEvents} events are using the same location at the same time!
-</div>
+</span>
 #{/if}

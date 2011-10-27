@@ -119,6 +119,75 @@ header nav li a:hover {
 	color: #fff;
 }
 
+
+/** Form **/
+
+form {
+	padding: 10px;
+}
+
+span.error {
+	display: inline-block;
+	background: #c00;
+	color: #fff;
+	padding: 3px 5px;
+	margin: 2px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-box-shadow: 0 2px 0 #800;
+}
+
+span.warning {
+	display: inline-block;
+	background-color: #ff8000;
+	color: #fff;
+	padding: 3px 5px;
+	margin: 2px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-box-shadow: 0 2px 0 #884400;
+}
+
+span.success {
+	display: inline-block;
+	background: #67AD10;
+	color: #fff;
+	padding: 10px;
+	margin: 2px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-box-shadow: 0 2px 0 #4E840B; 
+}
+
+form p {
+	margin: 5px 0 0 0;
+	clear: left;
+}
+
+form textarea {
+	width: 400px;
+	height: 150px;
+}
+
+form input, form textarea {
+	font-size: 14px;
+}
+
+form label {
+	display: inline-block;
+	width: 50px;
+	font-weight: bold;
+	font-size: 90%;
+	margin-bottom: 3px;
+}
+
+form p.button {
+	display: inline-block;
+}
+
 /** Register form **/
 #register {
 	background-color: #93B4FA;
@@ -132,7 +201,7 @@ header nav li a:hover {
 }
 
 #register form label {
-	width: 50px;
+	width: 100px;
 }
 
 /** Main content **/

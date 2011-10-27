@@ -1,5 +1,8 @@
 #{extends 'main.html' /}
 #{set title: 'Locations' /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
 
 <div id="main-left">
 	#{location-list locations:locations, connectedUser:connectedUser /}

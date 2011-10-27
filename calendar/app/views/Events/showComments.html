@@ -1,5 +1,8 @@
 #{extends 'main.html' /}
 #{set title: event.name /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
 
 #{if flash.success}
     <p class="success">${flash.success}</p>
