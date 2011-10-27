@@ -10,13 +10,17 @@ GET     /                                       		Application.index
 GET		/calendar/{id}									Calendars.showCurrentMonth
 GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
 GET		/register										Users.register
+GET		/users/favorite/add/{userId}					Users.addContact
+GET		/users/favorite/delete/{userId}					Users.deleteContact
 GET     /captcha                              			Events.captcha
-GET     /event/{id}  		                   			Events.showComments
-GET     /comment/{id}  		                   			Events.addComment
+GET		/calendar/{calendarId}/add/{year}-{month}-{day}	Events.add
+GET     /event/{id}/comments                   			Events.showComments
+GET     /event/{id}/comment	                   			Events.addComment
 POST	/comment/{id}/update							Events.updateComment
-GET		/calendar/{calendarId}/event/{eventId}					Events.edit
+GET		/calendar/{calendarId}/event/{eventId}/edit		Events.edit
 GET		/user/{userId}									Calendars.display
 GET		/location/{id}									Locations.show
+GET		/location/{locationId}/edit								Locations.edit
 
 # Ignore favicon requests
 GET     /favicon.ico                            		404
