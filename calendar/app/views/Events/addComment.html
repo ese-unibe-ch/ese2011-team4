@@ -3,12 +3,12 @@
 
 <body onload="window.scrollTo(0, getDocHeight())">
 	<div id="main-left">
-		#{comment event:event /}
+		#{comment event:event, connectedUser:connectedUser /}
 		#{if connectedUser!=null}
 		<div id="add-comment">
 			<hr>
 			<h3>Post a comment</h3>	
-			<span class="author">Your name:
+			<span class="author">Author:
     			    #{a @Calendars.display(connectedUser.id)}${connectedUser.fullname}#{/a}</span>		
  			#{form @Events.updateComment(event.id, connectedUser.fullname)}
     			<p>

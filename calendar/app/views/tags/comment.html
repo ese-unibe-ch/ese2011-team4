@@ -26,15 +26,22 @@
 				<h3>${_event.comments.size()} comment${_event.comments.size().pluralize()}</h3>
 				#{list items:_event.comments, as:'comment'}
 					<div class="event-comment">
-							<div class="comment-metadata">
-								<span class="comment-author">by ${comment.author},</span>
+						<div class="comment-metadata">
+							<span class="comment-author">by ${comment.author},</span>
    							<span class="comment-date">
    								${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}
 							</span>
 						</div>
-							<div class="comment-content">
-    						${comment.content}
-						</div>
+							<table>
+								<tr>
+									<th class="comment-content">${comment.content}</th>
+									<th class="deleteComment">
+										#{if _connectedUser.fullname.equals(comment.author)}
+											#{a @Events.deleteComment(_event.id, comment.id)}Delete#{/a}
+										#{/if}
+									</th>
+								</tr>
+							</table>
 					</div>
 				#{/list}
 			</ul>

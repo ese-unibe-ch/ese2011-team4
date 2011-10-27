@@ -167,9 +167,19 @@ public class Events extends Controller {
         }
     }
     
+    public static void deleteComment(Long eventId, Long commentId){
+    	Event event = Event.findById(eventId);
+    	Comment comment = Comment.findById(commentId);
+    	assert event!=null;
+    	assert comment!=null;
+    	comment.delete();
+    	showComments(event.id);
+    }
+    
     public static void showComments(Long id){
     	Event event = Event.findById(id);
-    	render(event);
+    	User connectedUser = User.find("email", Security.connected()).first();
+    	render(event, connectedUser);
     }
     
     public static void addComment(Long id){

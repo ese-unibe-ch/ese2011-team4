@@ -409,8 +409,8 @@ form p.button {
 }
 
 .event-comment {
-	padding: 0px 0px 10px 10px;
-	width: 75%;
+	padding: 0px 0px 10px 0;
+	width: 100%;
 	clear: both;	
 }
 
@@ -428,7 +428,8 @@ form p.button {
     	font-size: 55%;
     	display: block;
     	float: left;
-    	width: 80px;
+    	width: 15%;
+	margin-right: 5px;
     	text-align: right;
 }
 
@@ -438,17 +439,33 @@ form p.button {
 	display: block;
 }
 
-.event-comment .comment-content {
+.event-comment table{
+	width:84%;
+}
+
+.comment-content {
+	width: 75%;
    	position: relative;
    	background: #E4EAFF;
-
+	text-align: left;
     	font-size: 80%;
-    	margin-top: 10px;
-    	margin-bottom: 10px;
-    	margin-left: 100px;
     	padding: 10px;
     	-webkit-border-radius: 10px;
     	-moz-border-radius: 10px;
+}
+
+.deleteComment{
+
+}
+
+.deleteComment a{
+	font-size: 14px;
+	float: right;
+}
+
+.deleteComment a:hover{
+	background-color: #333;
+	color: #fff;
 }
 
 /** Comment-Form **/
