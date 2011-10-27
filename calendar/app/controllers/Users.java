@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import models.Calendar;
-import models.Favorite;
-import models.User;
+import models.*;
 import play.db.jpa.JPA;
 import play.Logger;
 import play.data.validation.Validation;
@@ -21,18 +19,19 @@ public class Users extends Controller {
 	    render(users, connectedUser);
 	}
 	
-	public static void addContact(Long userId){
-		User connectedUser = User.find("email", Security.connected()).first();
+	public static void addFavorite(Long id, Long userId){
+		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
-		new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
+		connectedUser.addFavorite(favorite);
 		flash.success("You added %s to your favorite contacts.", favorite);
 	    index();
 	}
 	
-	public static void deleteContact(Long userId){
-		Favorite deleted = Favorite.find("favoriteId", userId).first();
-		deleted.delete();
-		flash.success("You removed %s from your favorite contacts.", deleted.fullname);
+	public static void removeFavorite(Long id, Long userId){
+		User connectedUser = User.findById(id);
+		User favorite = User.findById(userId);
+		connectedUser.removeFavorite(favorite);
+		flash.success("You removed %s from your favorite contacts.", favorite);
 		index();
 	}
 }

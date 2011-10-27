@@ -13,7 +13,14 @@ import models.*;
 public class Application extends Controller {
     public static void index() {
     	User connectedUser = User.find("email", Security.connected()).first();
-    	Calendars.index(connectedUser.id);
+    	if(connectedUser == null)
+			try {
+				Secure.login();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		else
+    		Calendars.index(connectedUser.id);
     }
     
     public static void register() {

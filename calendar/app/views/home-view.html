@@ -11,7 +11,7 @@
 		<th class ="fav-name"></th>
 		<th class ="delete"></th>
 	</tr>
-	#{list items:connectedUser.favorites(), as:'fav'}
+	#{list items:connectedUser.favorites, as:'fav'}
 	<tr>
 		<td class = "fav-name"> #{a @Calendars.index(fav.favoriteId)}${fav.fullname}#{/a}</td>
 		<td class ="delete">#{a @Users.deleteContact(fav.favoriteId)}Delete#{/a}</td>

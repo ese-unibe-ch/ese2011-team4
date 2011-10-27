@@ -3,7 +3,7 @@
 
 <div id="user-list">
 	<h2 class="title">
-		Currently registered users
+		Registered users
 	</h2>
 	#{if flash.success}
     <p class="success">${flash.success}</p>
@@ -19,8 +19,8 @@
 			<tr>
 				<td class="user-name">${user.fullname}</td>
 				<td class="user-calendars">#{a @Calendars.index(user.id)}${user.fullname}'s calendars#{/a}</td>
-				#{if ( !connectedUser.equals(user) && !connectedUser.isInFavorites(user) )}
-						<td class="add">#{a @Users.addContact(user.id)}Add to favorites#{/a}</td>
+				#{if ( !connectedUser.equals(user) && !connectedUser.isFavorite(user) )}
+						<td class="add">#{a @Users.addFavorite(connectedUser.id, user.id)}Add to favorites#{/a}</td>
 				#{/if}
 			</tr>
 		#{/list}

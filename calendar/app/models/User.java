@@ -39,7 +39,7 @@ public class User extends Model {
 	@OneToMany(mappedBy="owner")
 	public List<Calendar> calendars;
 	
-	@OneToMany
+	@ManyToMany
 	public List<User> favorites;
 	
 	public boolean isAdmin;
@@ -55,13 +55,18 @@ public class User extends Model {
 		return find("byEmailAndPassword", email, password).first();
 	}
 	
-	public boolean isInFavorites(User user){
+	public boolean isFavorite(User user){
 		return favorites.contains(user);
 	}
 	
 	public void addFavorite(User user) {
 		assert !favorites.contains(user);
 		favorites.add(user);
+	}
+	
+	public void removeFavorite(User user) {
+		assert favorites.contains(user);
+		favorites.remove(user);
 	}
 	
 	@Override
