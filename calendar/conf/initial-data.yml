@@ -15,6 +15,7 @@ User(ed):
     email:          ed.exley@lapd.com
     password:       secret
     fullname:       Ed Exley
+    favorites:      bud
     
 Calendar(firstJackCalendar):
     name:           Jacks Agenda
@@ -41,67 +42,66 @@ Location(loc1):
 
 Event(e0):
     name:           Collections
-    startDate:      2011-09-13 09:00:00 +1
-    endDate:        2011-09-13 12:00:00 +1
+    startDate:      2011-10-05 09:00:00 +1
+    endDate:        2011-10-05 12:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
+    description:    This is a private event from Jack in the past.
     isPrivate:      true
 
 Event(e1):
     name:           Meet Lynn Bracken
-    startDate:      2011-10-20 13:00:00 +1
-    endDate:        2011-10-20 15:00:00 +1
+    startDate:      2011-11-05 13:00:00 +1
+    endDate:        2011-11-05 15:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    creator:        jack
     location:       loc1
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
+    description:    This is a public event from Jack at a location. 
     isPrivate:      false
     
 Event(e2):
     name:           Hit Exley
-    startDate:      2011-10-20 17:00:00 +1
-    endDate:        2011-10-20 18:00:00 +1
+    startDate:      2011-11-05 17:00:00 +1
+    endDate:        2011-11-05 18:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a private event from Jack.
     isPrivate:      true
     
 Event(e3):
     name:           Work
-    startDate:      2011-10-21 08:00:00 +1
-    endDate:        2011-10-21 11:00:00 +1
+    startDate:      2011-11-21 08:00:00 +1
+    endDate:        2011-11-21 11:00:00 +1
     calendars:      budCalendar
     origin:         budCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is going to be a repeating event from Bud.
     isPrivate:      false
     
 Event(e4):
     name:           Drinking whiskey
-    startDate:      2011-10-21 14:00:00 +1
-    endDate:        2011-10-21 17:00:00 +1
+    startDate:      2011-11-06 14:00:00 +1
+    endDate:        2011-11-06 17:00:00 +1
     calendars:      secondJackCalendar
     origin:         secondJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a private event from Jack in his second Calendar.
     isPrivate:      true
 
 Event(e5):
-    name:           Cinema
-    startDate:      2011-10-21 22:00:00 +1
-    endDate:        2011-10-22 08:00:00 +1
+    name:           Observation
+    startDate:      2011-11-04 08:00:00 +1
+    endDate:        2011-11-07 22:00:00 +1
     calendars:      edCalendar
     origin:         edCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a public event from Ed over three days.
     isPrivate:      false
     
 Event(e6):
     name:           Meeting with the mayor
-    startDate:      2011-10-15 11:00:00 +1
-    endDate:        2011-10-15 13:00:00 +1
+    startDate:      2011-11-04 11:00:00 +1
+    endDate:        2011-11-04 13:00:00 +1
     calendars:      edCalendar
     origin:         edCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is public event from Ed.
     isPrivate:      true
     
 Comment(c1):
@@ -121,4 +121,3 @@ Comment(c3):
     postedAt:       2011-10-21 11:00:00 +1
     content:        Jack is the owner of this event so he can add comments even if the event is private
     event:          e2
-    

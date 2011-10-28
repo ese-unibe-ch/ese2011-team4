@@ -23,6 +23,7 @@ public class Users extends Controller {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.addFavorite(favorite);
+		connectedUser.save();
 		flash.success("You added %s to your favorite contacts.", favorite);
 	    index();
 	}
@@ -31,6 +32,7 @@ public class Users extends Controller {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.removeFavorite(favorite);
+		connectedUser.save();
 		flash.success("You removed %s from your favorite contacts.", favorite);
 		index();
 	}
