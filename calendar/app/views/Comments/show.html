@@ -4,10 +4,6 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-#{if flash.success}
-    <p class="success">${flash.success}</p>
-#{/if}
-
 <div id="main-left">
 	#{comment event:event, connectedUser:connectedUser/}
 </div>

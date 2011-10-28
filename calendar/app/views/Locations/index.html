@@ -1,20 +1,7 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title: 'Locations' /}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main-left">
-	#{location-list locations:locations, connectedUser:connectedUser /}
-</div>
-<div id="main-right">
-<div class="navigation">
-	#{user-nav users:users, connectedUser:connectedUser /}
-	<h2 class"title">Actions</h2>
-	<ul>
-		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
-	<ul>
-</div>
-</div>
-
-
+#{location-list locations:locations, connectedUser:connectedUser /}

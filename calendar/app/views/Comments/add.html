@@ -7,39 +7,19 @@
 <body onload="window.scrollTo(0, getDocHeight())">
 	<div id="main-left">
 		#{comment event:event, connectedUser:connectedUser /}
-		#{if connectedUser!=null}
 		<div id="add-comment">
 			<hr>
-			<h3>Post a comment</h3>	
-			<span class="author">Author:
-    			    #{a @Calendars.display(connectedUser.id)}${connectedUser.fullname}#{/a}</span>		
- 			#{form @Events.updateComment(event.id, connectedUser.fullname)}
+			<h3>Post a comment</h3>		
+ 			#{form @Comments.update(event.id, connectedUser.id)}
     			<p>
-    			    <label for="content">Your message: </label>
+    			    <label for="content">Message: </label>
     			    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
     			</p>
-    			<p>
-    				<label for="code">Please type the code below: </label>
-    				<img src="@{Events.captcha(randomID)}" />
-    				<br />
-    				<input type="text" name="code" id="code" size="20" />
-    				#{ifErrors}<span class="error">#{error 'code' /}</span>#{/ifErrors}    				
-    				<input type="hidden" name="randomID" value="${randomID}" />
-				</p>
     			<p>
     		    	<input type="submit" value="Submit your comment" />
     			</p>
 			#{/form}
 		</div>
-		#{/if}
-		#{else}
-			<h3> Please 
-				<a href="@{Secure.login()}">Log in</a>
-				or 
-				#{a @Application.register()}Register#{/a}
-				to post a comment!
-			</h3>
-		#{/else}
 	</div>
 
 	<div id="main-right">

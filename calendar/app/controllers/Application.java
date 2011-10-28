@@ -1,6 +1,9 @@
 package controllers;
 
+import play.cache.Cache;
 import play.data.validation.Required;
+import play.libs.Codec;
+import play.libs.Images;
 import play.mvc.Controller;
 
 import java.text.ParseException;
@@ -24,18 +27,35 @@ public class Application extends Controller {
     }
     
     public static void register() {
-		render("/Users/register.html");
+    	String randomID = Codec.UUID();
+		render("/Users/register.html", randomID);
 	}
 	
-	public static void newUser(String email, String password, String fullname) {
+	public static void newUser(	String email, 
+								String password, 
+								String fullname, 
+								String code, 
+								String randomID) {
+		validation.equals(
+		        code, Cache.get(randomID)
+		    ).message("Invalid code. Please type it again");
+		
 		User user = new User(email, password, fullname);
 		if(user.validateAndSave()) {
 			Security.authenticate(email, password);
+			Cache.delete(randomID);
 			Calendars.index(user.id);
 		} else {
 			params.flash();
 	        validation.keep();
 	        register();
 		}
+	}
+	
+	public static void captcha(String id) {
+	    Images.Captcha captcha = Images.captcha();
+	    String code = captcha.getText("#333");
+	    Cache.set(id, code, "10mn");
+	    renderBinary(captcha);
 	}
 }

@@ -73,6 +73,15 @@ public class Event extends Model implements Comparable<Event> {
 		this.save();
 	}
 	
+	public Event addComment(String author, String content) {
+	    Comment newComment = new Comment(author, this);
+	    newComment.content = content;
+	    newComment.save();
+	    this.comments.add(newComment);
+	    this.save();
+	    return this;
+	}
+	
 	/**
 	 *
 	 * Returns a list of all calendars available for joining the event given for a certain user
@@ -153,14 +162,5 @@ public class Event extends Model implements Comparable<Event> {
 			setMessage("validation.EndAfterBeginCheck");
 			return event.startDate.isBefore(end);
 		}
-	}
-	
-	public Event addComment(String author, String content) {
-	    Comment newComment = new Comment(this).save();
-	    newComment.author = author;
-	    newComment.content = content;
-	    this.comments.add(newComment);
-	    this.save();
-	    return this;
 	}
 }

@@ -32,7 +32,7 @@
 			<ol>
 				<li><span class="actions">Actions</span>
 					<ol>
-						<li>#{a @Events.addComment(_event.id)}Comment#{/a}</li>
+						<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
 						#{if _connectedUser.equals(_event.origin.owner)}
 							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
 						#{/if}
@@ -57,7 +57,7 @@
 		${_event.description}
 		<div class="comment">
 			#{if _event.comments.size() != 0}
-				#{a @Events.showComments(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
+				#{a @Comments.show(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
 			#{/if}
 		</div>  
 	</div>

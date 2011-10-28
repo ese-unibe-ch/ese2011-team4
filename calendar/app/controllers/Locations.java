@@ -20,14 +20,13 @@ public class Locations extends Controller {
 	
     public static void index() {
     	List<Location> locations = Location.all().fetch();
-
     	User connectedUser = User.find("byEmail", Security.connected()).first();
-    	
     	render(connectedUser, locations);
     }
 
     public static void add() {
-	    render();
+    	User connectedUser = User.find("byEmail", Security.connected()).first();
+	    render(connectedUser);
     }
     
     public static void show(Long id) {

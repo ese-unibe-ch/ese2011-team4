@@ -1,33 +1,23 @@
-/** User table**/
+/** User index**/
 
-#user-list table {
-	width: 100%;
-	table-layout: fixed;
-}
-
-table .user-name{
-	width: 30%;
-	text-align: left;
-}
-
-table .user-calendars{
+#user-list .user-name {
+	display: inline-block;
 	width: 40%;
-	text-align: left;
-}	
+}
 
-table .add{
-	width: 35%;
-	text-align: left;
-}	
+#user-list .user-calendars {
+	display: inline-block;
+	width: 40%;
+}
+
+#user-list .add {
+	display: inline-block;
+	width: 15%;
+}
 
 #user-nav table{
 	width: 100%;
 	table-layout: fixed;
-}
-
-table .fav-name{
-	width: 75%
-	text-algin: left
 }
 
 table .delete{

@@ -34,7 +34,7 @@
 .event-menu .actions {
 	display: block;
 	padding: 5px;	
-	width: 65px;
+	width: 75px;
 	background-color: #fff;
 }
 
@@ -53,7 +53,7 @@
 	background-color: #fff;
 	color: #333;
 	padding: 5px;
-	width: 65px;
+	width: 75px;
 }
 
 #main .event-menu ul a {
@@ -115,10 +115,14 @@
 	margin-top: 10px;
 }
 
-.comment{
+.comment {
 	display: inline-block;
 	float: right;
-	padding: 5px;
+}
+
+.comment a {
+	display: inline-block;
+	padding: 3px;
 }
 
 .comment a:hover{
@@ -160,21 +164,6 @@
 	display: inline;
 }
 
-#captcha{
-	display: block;
-	height: 50px;
-}
-
-p.success {
-	background: #67AD10;
-	color: #fff;
-	padding: 10px;
-	border-radius: 6px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	-webkit-box-shadow: 0 2px 0 #4E840B;
-}
-
 /** Comment **/
 
 #event-content {
@@ -186,28 +175,10 @@ p.success {
 	padding: 0px;
 }
 
-#event-comments hr {
-	border: 0;
-	margin: 0px 10px 10px 0px;
-	color: #0051FF;
-	background-color: #0051FF;
-	height: 1px;
-	width: 100%;
-}
-
 .event-comment {
-	padding: 0px 0px 10px 0;
+	padding-bottom: 10px;
 	width: 100%;
-	clear: both;	
-}
-
-#events hr {
-	border: 0;
-	margin: 0px 10px 10px 0px;
-	color: #0051FF;
-	background-color: #0051FF;
-	height: 1px;
-	width: 100%;
+	clear: both;
 }
 
 .event-comment .comment-metadata {
@@ -240,20 +211,6 @@ p.success {
 	border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
-}
-
-.deleteComment{
-
-}
-
-.deleteComment a{
-	font-size: 14px;
-	float: right;
-}
-
-.deleteComment a:hover{
-	background-color: #333;
-	color: #fff;
 }
 
 /** Comment-Form **/
