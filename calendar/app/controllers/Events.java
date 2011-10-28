@@ -42,7 +42,7 @@ public class Events extends Controller {
     
 
     public static void edit(Long calendarId, Long eventId) {
-    	Event event = Event.findById(eventId);
+    	SingleEvent event = SingleEvent.findById(eventId);
     	List<Location> locations = Location.all().fetch();
     	
     	if(Security.check(event)) {
@@ -54,7 +54,7 @@ public class Events extends Controller {
     
     public static void delete(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
-    	Event event = Event.findById(eventId);
+    	SingleEvent event = SingleEvent.findById(eventId);
     	if(Security.check(calendar)) {
     		if(Security.check(event)) {
     			event.delete();
@@ -74,7 +74,7 @@ public class Events extends Controller {
     
     public static void joinCalendar(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
-    	Event event = Event.findById(eventId);
+    	SingleEvent event = SingleEvent.findById(eventId);
     	event.joinCalendar(calendar);
     	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	}
@@ -90,7 +90,7 @@ public class Events extends Controller {
 								String description,
 								Long locationId) {
     	
-    	Event event = Event.findById(eventId);
+    	SingleEvent event = SingleEvent.findById(eventId);
     	assert event != null;
     	
     	event.name = name;
@@ -103,6 +103,7 @@ public class Events extends Controller {
         	validation.keep();
         	Events.edit(calendarId, eventId);
     	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
@@ -145,7 +146,7 @@ public class Events extends Controller {
         	Events.add(calendarId);
     	}
     	
-    	Event event = new Event(calendar);
+    	SingleEvent event = new SingleEvent(calendar);
     	event.name = name;
 		event.startDate = format.parseDateTime(startDate+startTime);
 		event.endDate = format.parseDateTime(endDate+endTime);
@@ -187,7 +188,7 @@ public class Events extends Controller {
     	Location location = Location.findById(locationId);
     	if(location != null) {
     		numberOfEvents = location.numberOfAllEventsByDayAndTime(start, end);
-    		Event event = Event.findById(eventId);
+    		SingleEvent event = SingleEvent.findById(eventId);
     		if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate) && location.equals(event.location)) {
     			numberOfEvents--;
     		}

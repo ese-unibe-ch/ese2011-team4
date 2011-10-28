@@ -24,13 +24,13 @@ public class EventTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 	}
 	
 	@After
 	public void deleteDataBase() {
 		Fixtures.deleteDatabase();
-		assertEquals(0, Event.count());
+		assertEquals(0, SingleEvent.count());
 	}
 	
 	@Test
@@ -39,17 +39,17 @@ public class EventTest extends UnitTest {
 		Calendar calendar = Calendar.all().first();
 		
 		// Create an event
-		Event event = new Event(calendar);
+		SingleEvent event = new SingleEvent(calendar);
 		event.name = "Test 1";
 		event.startDate = format.parseDateTime("20.10.2011 10:00");
 		event.endDate = format.parseDateTime("20.10.2011 12:00");
 		event.isPrivate = false;
 		
 		assertTrue(event.validateAndSave());
-		assertEquals(8, Event.count());
+		assertEquals(8, SingleEvent.count());
 		
 		// Retrieve data
-		Event e = Event.findById(event.id);
+		SingleEvent e = SingleEvent.findById(event.id);
 		assertEquals(event, e);
 		assertEquals("Test 1", e.name);
 		assertEquals(format.parseDateTime("20.10.2011 10:00"), e.startDate);
@@ -60,17 +60,17 @@ public class EventTest extends UnitTest {
 	@Test
 	public void edit() {		
 		// Get an event and change some information
-		Event event = Event.all().first();
+		SingleEvent event = SingleEvent.all().first();
 		event.name = "Test 2";
 		DateTime start = event.startDate;
 		DateTime end = event.endDate;
 		boolean isPrivate = event.isPrivate;
 
 		assertTrue(event.validateAndSave());
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 		
 		// Retrieve data
-		Event e = Event.findById(event.id);
+		SingleEvent e = SingleEvent.findById(event.id);
 		assertEquals(event, e);
 		assertEquals("Test 2", e.name);
 		assertEquals(start, e.startDate);
@@ -81,15 +81,18 @@ public class EventTest extends UnitTest {
 	@Test
 	public void remove() {
 		// Get an event
-		Event event = Event.all().first();
+		SingleEvent event = SingleEvent.find("byName", "Meet Lynn Bracken").first();
 		Long id = event.id;
 		
 		// Delete it
 		event.delete();
 		
 		// Try to find it
-		assertNull(Event.findById(id));
-		assertEquals(6, Event.count());
+		assertNull(SingleEvent.findById(id));
+		assertEquals(6, SingleEvent.count());
+		
+		// Count comments
+		assertEquals(1, Comment.count());
 	}
 	
 	@Test
@@ -98,15 +101,15 @@ public class EventTest extends UnitTest {
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		
 		// Get visible event
-		Event visibleEvent = Event.find("byName", "Work").first();
+		SingleEvent visibleEvent = SingleEvent.find("byName", "Work").first();
 		assertTrue(visibleEvent.isVisible(jack));
 		
 		// Get invisible event
-		Event invisibleEvent = Event.find("byName", "Meeting with the mayor").first();
+		SingleEvent invisibleEvent = SingleEvent.find("byName", "Meeting with the mayor").first();
 		assertFalse(invisibleEvent.isVisible(jack));
 		
 		// Get own private event
-		Event ownEvent = Event.find("byName", "Collections").first();
+		SingleEvent ownEvent = SingleEvent.find("byName", "Collections").first();
 		assertTrue(ownEvent.isVisible(jack));
 	}
 	
@@ -117,10 +120,10 @@ public class EventTest extends UnitTest {
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Get some events
-		Event e3 = Event.find("byName", "Work").first();
-		Event e0 = Event.find("byName", "Collections").first();
+		SingleEvent e3 = SingleEvent.find("byName", "Work").first();
+		SingleEvent e0 = SingleEvent.find("byName", "Collections").first();
 		
-		assertEquals(2, e3.availableJoins(jack).size());
+		assertEquals(1, e3.availableJoins(jack).size());
 		assertEquals(0, e3.availableJoins(bud).size());
 		
 		// Private event can't join
@@ -134,7 +137,7 @@ public class EventTest extends UnitTest {
 		assertEquals(1, budCalendar.events.size());
 		
 		// Get a event
-		Event event = Event.find("byName", "Observation").first();
+		SingleEvent event = SingleEvent.find("byName", "Observation").first();
 		assertFalse(event.calendars.contains(budCalendar));
 		
 		// Join the calendar
@@ -143,8 +146,23 @@ public class EventTest extends UnitTest {
 		assertTrue(event.calendars.contains(budCalendar));
 				
 		// Make sure there weren't created any objects
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 		assertEquals(4, Calendar.count());
+	}
+	
+	@Test
+	public void showParticipants() {
+		// Get a event
+		Event event = Event.find("byName", "Work").first();
+		assertEquals(2, event.calendars.size());
+		
+		// Get two users
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		assertEquals(2, event.participants().size());
+		assertTrue(event.participants().contains(jack));
+		assertTrue(event.participants().contains(bud));
 	}
 	
 	@Test
@@ -153,7 +171,7 @@ public class EventTest extends UnitTest {
 		Calendar calendar = Calendar.all().first();
 		
 		// Create an event
-		Event event = new Event(calendar);
+		SingleEvent event = new SingleEvent(calendar);
 		event.name = "Test 3";
 		event.startDate = format.parseDateTime("20.10.2011 09:00");
 		event.endDate = format.parseDateTime("20.10.2011 08:00");
@@ -161,13 +179,13 @@ public class EventTest extends UnitTest {
 		
 		// Try to save it
 		assertFalse(event.validateAndSave());
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 	}
 	
 	@Test
 	public void isThisDay() {
 		// Get an event
-		Event event = Event.find("byName", "Collections").first();
+		SingleEvent event = SingleEvent.find("byName", "Collections").first();
 		
 		assertTrue(event.isThisDay(new DateTime().withDayOfMonth(5).withMonthOfYear(10).withYear(2011)));
 	}

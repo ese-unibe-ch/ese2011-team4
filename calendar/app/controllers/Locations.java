@@ -34,7 +34,7 @@ public class Locations extends Controller {
     	assert location != null;
     	
     	User connectedUser = User.find("byEmail", Security.connected()).first();
-    	List<Event> events = location.getVisibleUpcomingEvents(connectedUser);
+    	List<SingleEvent> events = location.getVisibleUpcomingEvents(connectedUser);
     	long numberOfEvents = location.numberOfAllUpcomingEvents();
     	
     	render(connectedUser, location, events, numberOfEvents);
@@ -47,8 +47,8 @@ public class Locations extends Controller {
     
     public static void delete(Long locationId) {
     	Location location = Location.findById(locationId);
-    	List<Event> events = location.getAllEvents();
-    	for(Event event: events) {
+    	List<SingleEvent> events = location.getAllEvents();
+    	for(SingleEvent event: events) {
     		event.location = null;
     		event.validateAndSave();
     	}

@@ -42,14 +42,13 @@ public class Calendar extends Model {
 	@Override
 	public Calendar delete() {
 		// First delete all events that were initially created in this calendar
-		for(Event e : events)
-			if(e.origin.equals(this))
-				e.delete();
+		Event.delete("origin", this);
+		this.save();
 		
 		return super.delete();
 	}
 	
-	public List<Event> eventsByDay(DateTime day, User visitor) {
+	public List<SingleEvent> eventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		
@@ -91,12 +90,13 @@ public class Calendar extends Model {
 	public String toString() {
 		return name;
 	}
-	public List<Event> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
+	
+	public List<SingleEvent> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.startDate > ?2 " +
+				"AND e.startDate >= ?2 " +
 				"AND e.endDate < ?3" +
 				"AND e.location.getLocation().contains(loc.getLocation())");
 		query.setParameter(1, visitor);
@@ -104,7 +104,8 @@ public class Calendar extends Model {
 		query.setParameter(3, end);
 		return query.getResultList();
 	}
-	public List<Event> eventsByLocation(User visitor,Location loc) {
+	
+	public List<SingleEvent> eventsByLocation(User visitor,Location loc) {
 		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE (e.isPrivate = false OR e.creator = ?1)" +

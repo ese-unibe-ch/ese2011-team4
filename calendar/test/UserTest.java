@@ -53,7 +53,7 @@ public class UserTest extends UnitTest{
 		
 		// Count objects
 		assertEquals(2, Calendar.count());
-		assertEquals(3, Event.count());
+		assertEquals(3, SingleEvent.count());
 	}
 	
 	@Test

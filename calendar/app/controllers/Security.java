@@ -7,7 +7,7 @@ public class Security extends Secure.Security {
 	    return User.connect(username, password) != null;
 	}
 	
-	static boolean check(Event event) {
+	static boolean check(SingleEvent event) {
 		if(event != null) {
 			return User.find("byEmail", connected()).first().equals(event.origin.owner);
 		}

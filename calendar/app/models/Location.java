@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Query;
 
+
 import org.joda.time.DateTime;
 
 import play.db.jpa.JPA;
@@ -24,7 +25,7 @@ public class Location extends Model{
 	}
 	
 
-	public List<Event> getAllEvents() {
+	public List<SingleEvent> getAllEvents() {
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 ");
 		query.setParameter(1, this);
@@ -38,7 +39,7 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getVisibleEvents(User visitor) {
+	public List<SingleEvent> getVisibleEvents(User visitor) {
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
@@ -56,7 +57,7 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getVisibleEventsByDay(DateTime day, User visitor) {
+	public List<SingleEvent> getVisibleEventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
@@ -85,7 +86,7 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getVisibleEventsByDayAndTime(DateTime start, DateTime end, User visitor) {		
+	public List<SingleEvent> getVisibleEventsByDayAndTime(DateTime start, DateTime end, User visitor) {		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
@@ -109,7 +110,7 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	public List<Event> getVisibleUpcomingEvents(User visitor) {		
+	public List<SingleEvent> getVisibleUpcomingEvents(User visitor) {		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +

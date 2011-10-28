@@ -47,9 +47,6 @@ public class CalendarTest extends UnitTest {
 		
 		// Validate and save
 		calendar.validateAndSave();
-		for(play.data.validation.Error e : Validation.errors()) {
-			Logger.info(e.message());
-		}
 		
 		assertTrue(calendar.validateAndSave());
 		assertEquals(5, Calendar.count());
@@ -69,7 +66,7 @@ public class CalendarTest extends UnitTest {
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 		
 		// Delete it
 		calendar.delete();
@@ -79,7 +76,10 @@ public class CalendarTest extends UnitTest {
 		assertEquals(3, Calendar.count());
 		
 		// Count events
-		assertEquals(6, Event.count());
+		assertEquals(6, SingleEvent.count());
+		
+		// Count comments
+		assertEquals(0, Comment.count());
 	}
 	
 	@Test
@@ -115,7 +115,7 @@ public class CalendarTest extends UnitTest {
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Test method
-		assertEquals(3, calendar.visibleEvents(jack));
-		assertEquals(1, calendar.visibleEvents(bud));
+		assertEquals(4, calendar.visibleEvents(jack));
+		assertEquals(2, calendar.visibleEvents(bud));
 	}
 }
