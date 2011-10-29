@@ -18,13 +18,13 @@ public class Location extends Model{
 	public String city;
 	public String country;
 	public String pincode;
-
+	
+	// TODO rewrite this method so that it also works if some fields are empty
 	@Override
 	public String toString(){
 		return street + " " + num + ", " + pincode + " " + city + ", " + country;
 	}
 	
-
 	public List<SingleEvent> getAllEvents() {
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE e.location = ?1 ");

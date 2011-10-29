@@ -2,20 +2,18 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.With;
-import models.Comment;
-import models.SingleEvent;
-import models.User;
+import models.*;
 
 @With(Secure.class)
 public class Comments extends Controller {
     public static void add(Long id){
-    	SingleEvent event = SingleEvent.findById(id);
+    	Event event = Event.findById(id);
     	User connectedUser = User.find("email", Security.connected()).first();
         render(event, connectedUser);
     }
 	
     public static void delete(Long eventId, Long commentId){
-    	SingleEvent event = SingleEvent.findById(eventId);
+    	Event event = Event.findById(eventId);
     	Comment comment = Comment.findById(commentId);
     	assert event != null;
     	assert comment != null;
@@ -25,13 +23,13 @@ public class Comments extends Controller {
     }
     
     public static void show(Long id){
-    	SingleEvent event = SingleEvent.findById(id);
+    	Event event = Event.findById(id);
     	User connectedUser = User.find("email", Security.connected()).first();
     	render(event, connectedUser);
     }
 
     public static void update(Long id, Long userId, String content ) {
-    	SingleEvent event = SingleEvent.findById(id);
+    	Event event = Event.findById(id);
     	assert event != null;
     	
     	User author = User.findById(userId);

@@ -13,6 +13,11 @@ public class Bootstrap extends Job {
         if(Play.mode == Play.Mode.DEV && User.count() == 0) {
         	Logger.info("Loading intial data");
             Fixtures.loadModels("initial-data.yml");
+            
+            // YAML can't load enum
+            EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+    		event.type = RepeatingType.WEEKLY;
+    		event.save();
         }
     }
 }

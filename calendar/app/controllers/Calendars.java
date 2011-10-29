@@ -45,7 +45,7 @@ public class Calendars extends Controller {
     	
     	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
-    	List<SingleEvent> events = calendar.eventsByDay(dt, connectedUser);
+    	List<SingleEvent> events = calendar.events(connectedUser, dt);
     	User calendarOwner = calendar.owner;
     	
     	render(calendar, dt, events, connectedUser, calendarOwner);

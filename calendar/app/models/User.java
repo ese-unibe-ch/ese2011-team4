@@ -36,13 +36,11 @@ public class User extends Model {
 	@Required
 	public String fullname;
 	
-	@OneToMany(mappedBy="owner")
+	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
 	public List<Calendar> calendars;
 	
 	@ManyToMany
 	public List<User> favorites;
-	
-	public boolean isAdmin;
 
 	public User(String email, String password, String fullname) {
 		this.email = email;
@@ -67,14 +65,6 @@ public class User extends Model {
 	public void removeFavorite(User user) {
 		assert favorites.contains(user);
 		favorites.remove(user);
-	}
-	
-	@Override
-	public User delete() {
-		for(Calendar c : calendars)
-			c.delete();
-		
-		return super.delete();
 	}
 	
 	@Override

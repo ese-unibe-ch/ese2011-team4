@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
@@ -39,20 +40,23 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
-	@Override
-	public Calendar delete() {
-		// First delete all events that were initially created in this calendar
-		Event.delete("origin", this);
-		this.save();
-		
-		return super.delete();
-	}
+	/**
+	 *
+	 * Returns a list of Events for a specific day and user
+	 * 
+	 * @param	visitor		The user which likes to see the events 
+	 * @param	day			The day requested		 
+	 * @return	List<SingleEvent> List of events for the requested day and user
+	 * @see		models.Calendar#events(User visitor, DateTime day, Location location)
+	 * @since	Iteration-3
+	 */
 	
-	public List<SingleEvent> eventsByDay(DateTime day, User visitor) {
+	public List<SingleEvent> events(User visitor, DateTime day) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+		// Get single events
+		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
 				"WHERE ?1 MEMBER OF e.calendars "+
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
 				"AND e.endDate >= ?3 " +
@@ -61,9 +65,49 @@ public class Calendar extends Model {
 		query.setParameter(2, visitor);
 		query.setParameter(3, start);
 		query.setParameter(4, end);
+		
+		List<SingleEvent> list = query.getResultList();
+		
+		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		
+		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
+			if(e.isThisDay(day))
+				list.add(e.createDummyEvent(day));
+		}
+		
+		return list;
+	}
+	
+	public List<SingleEvent> events(User visitor, DateTime day, Location location) {
+		List<SingleEvent> list = events(visitor, day);
+		List<SingleEvent> copy = new LinkedList<SingleEvent>();
+		for(SingleEvent e : list)
+			if(e.location.equals(location))
+				copy.add(e);
+		return copy;
+	}
+	
+	public List<SingleEvent> eventsByLocation(User visitor,Location loc) {
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
+				"AND e.location.getLocation().contains(loc.getLocation())");
+		query.setParameter(1, visitor);
 		return query.getResultList();
 	}
 	
+	@Override
+	public Calendar delete() {
+		// First delete all events that were initially created in this calendar
+		for(Event e : events)
+			if(e.origin.equals(this))
+				e.delete();
+		return super.delete();
+	}
+
 	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
 	public int visibleEvents(User user) {
 		int count = 0;
@@ -89,28 +133,5 @@ public class Calendar extends Model {
 	@Override
 	public String toString() {
 		return name;
-	}
-	
-	public List<SingleEvent> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
-		DateTime start = day.withTime(0, 0, 0, 0);
-		DateTime end = start.plusDays(1);
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.startDate >= ?2 " +
-				"AND e.endDate < ?3" +
-				"AND e.location.getLocation().contains(loc.getLocation())");
-		query.setParameter(1, visitor);
-		query.setParameter(2, start);
-		query.setParameter(3, end);
-		return query.getResultList();
-	}
-	
-	public List<SingleEvent> eventsByLocation(User visitor,Location loc) {
-		
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.location.getLocation().contains(loc.getLocation())");
-		query.setParameter(1, visitor);
-		return query.getResultList();
 	}
 }

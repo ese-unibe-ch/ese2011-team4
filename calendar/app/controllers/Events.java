@@ -42,7 +42,7 @@ public class Events extends Controller {
     
 
     public static void edit(Long calendarId, Long eventId) {
-    	SingleEvent event = SingleEvent.findById(eventId);
+    	Event event = Event.findById(eventId);
     	List<Location> locations = Location.all().fetch();
     	
     	if(Security.check(event)) {
@@ -54,7 +54,7 @@ public class Events extends Controller {
     
     public static void delete(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
-    	SingleEvent event = SingleEvent.findById(eventId);
+    	Event event = Event.findById(eventId);
     	if(Security.check(calendar)) {
     		if(Security.check(event)) {
     			event.delete();
@@ -74,7 +74,7 @@ public class Events extends Controller {
     
     public static void joinCalendar(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
-    	SingleEvent event = SingleEvent.findById(eventId);
+    	Event event = Event.findById(eventId);
     	event.joinCalendar(calendar);
     	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	}
@@ -90,7 +90,7 @@ public class Events extends Controller {
 								String description,
 								Long locationId) {
     	
-    	SingleEvent event = SingleEvent.findById(eventId);
+    	Event event = Event.findById(eventId);
     	assert event != null;
     	
     	event.name = name;
@@ -131,7 +131,8 @@ public class Events extends Controller {
     								String endTime,
     								boolean isPrivate, 
     								String description,
-    								Long locationId) {
+    								Long locationId,
+    								String repeat) {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
@@ -146,10 +147,28 @@ public class Events extends Controller {
         	Events.add(calendarId);
     	}
     	
-    	SingleEvent event = new SingleEvent(calendar);
-    	event.name = name;
-		event.startDate = format.parseDateTime(startDate+startTime);
-		event.endDate = format.parseDateTime(endDate+endTime);
+    	RepeatingType type = RepeatingType.NONE;
+    	if(repeat.equals("daily"))
+    		type = RepeatingType.DAILY;
+    	else if(repeat.equals("weekly"))
+    		type = RepeatingType.WEEKLY;
+    	else if(repeat.equals("monthly"))
+    		type = RepeatingType.MONTHLY;
+    	else if(repeat.equals("yearly"))
+    		type = RepeatingType.YEARLY;
+    	
+    	Event event;
+    	if(type == RepeatingType.NONE) {
+    		event = new SingleEvent(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime));
+    	} else {
+    		event = new EventSeries(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime),
+    									type);
+    	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
@@ -188,7 +207,7 @@ public class Events extends Controller {
     	Location location = Location.findById(locationId);
     	if(location != null) {
     		numberOfEvents = location.numberOfAllEventsByDayAndTime(start, end);
-    		SingleEvent event = SingleEvent.findById(eventId);
+    		Event event = Event.findById(eventId);
     		if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate) && location.equals(event.location)) {
     			numberOfEvents--;
     		}

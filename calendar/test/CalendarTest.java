@@ -59,6 +59,7 @@ public class CalendarTest extends UnitTest {
 		assertTrue(cal.events.isEmpty());
 	}
 	
+	@Ignore
 	@Test
 	public void delete() {
 		// Get a calendar
@@ -92,17 +93,17 @@ public class CalendarTest extends UnitTest {
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
-		assertEquals(2, jacks.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), jack).size());
-		assertEquals(1, jacks.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), bud).size());
+		assertEquals(2, jacks.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, jacks.events(bud, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
 		
 		// Event over 3 days
-		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011), jack).size());
-		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), jack).size());
-		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011), jack).size());
-		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011)).size());
 		
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011), jack).size());
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
 	}
 	
 	@Test

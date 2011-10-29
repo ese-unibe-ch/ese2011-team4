@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -15,14 +17,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
+
+import play.data.validation.Check;
+import play.data.validation.CheckWith;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
 @Entity
-@Inheritance
-@DiscriminatorColumn(name="EVENT_TYPE")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
 public abstract class Event extends Model {
 	@Required
@@ -33,12 +40,23 @@ public abstract class Event extends Model {
 	public String name;
 	
 	@Required
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+	public DateTime startDate;
+	
+	@Required
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+	@CheckWith(EndAfterBeginCheck.class)
+	public DateTime endDate;
+	
+	@Required
+	public RepeatingType type;
+	
 	@ManyToMany
 	public List<Calendar> calendars;
 	
 	public Boolean isPrivate;
 	
-	@OneToOne
+	@ManyToOne
 	public Location location;
 	
 	@Lob
@@ -47,11 +65,16 @@ public abstract class Event extends Model {
 	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
 	public List<Comment> comments;
 	
-	public Event(Calendar calendar) {
+	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate) {
 		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.name = name;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
+		this.isPrivate = false;
+		this.type = RepeatingType.NONE;
 	}
 	
 	public boolean isVisible(User visitor) {
@@ -114,5 +137,18 @@ public abstract class Event extends Model {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public abstract boolean isThisDay(DateTime day);
+	
+	public abstract boolean isThisDayandLocation(DateTime day, Location loc);
+	
+	static class EndAfterBeginCheck extends Check {
+		public boolean isSatisfied(Object event_, Object end_) {
+			Event event = (Event) event_;
+			DateTime end = (DateTime) end_;
+			setMessage("validation.EndAfterBeginCheck");
+			return event.startDate.isBefore(end);
+		}
 	}
 }

@@ -17,7 +17,7 @@ import play.db.jpa.JPA;
 import play.test.Fixtures;
 import play.test.UnitTest;
 
-public class EventTest extends UnitTest {
+public class SingleEventTest extends UnitTest {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm");
 	
 	@Before
@@ -39,11 +39,10 @@ public class EventTest extends UnitTest {
 		Calendar calendar = Calendar.all().first();
 		
 		// Create an event
-		SingleEvent event = new SingleEvent(calendar);
-		event.name = "Test 1";
-		event.startDate = format.parseDateTime("20.10.2011 10:00");
-		event.endDate = format.parseDateTime("20.10.2011 12:00");
-		event.isPrivate = false;
+		SingleEvent event = new SingleEvent(	calendar, 
+												"Test 1", 
+												format.parseDateTime("20.10.2011 10:00"), 
+												format.parseDateTime("20.10.2011 12:00"));
 		
 		assertTrue(event.validateAndSave());
 		assertEquals(8, SingleEvent.count());
@@ -134,7 +133,7 @@ public class EventTest extends UnitTest {
 	public void joinCalendar() {
 		// Get a calendar
 		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
-		assertEquals(1, budCalendar.events.size());
+		assertEquals(2, budCalendar.events.size());
 		
 		// Get a event
 		SingleEvent event = SingleEvent.find("byName", "Observation").first();
@@ -142,7 +141,7 @@ public class EventTest extends UnitTest {
 		
 		// Join the calendar
 		event.joinCalendar(budCalendar);
-		assertEquals(2, budCalendar.events.size());
+		assertEquals(3, budCalendar.events.size());
 		assertTrue(event.calendars.contains(budCalendar));
 				
 		// Make sure there weren't created any objects
@@ -171,11 +170,10 @@ public class EventTest extends UnitTest {
 		Calendar calendar = Calendar.all().first();
 		
 		// Create an event
-		SingleEvent event = new SingleEvent(calendar);
-		event.name = "Test 3";
-		event.startDate = format.parseDateTime("20.10.2011 09:00");
-		event.endDate = format.parseDateTime("20.10.2011 08:00");
-		event.isPrivate = false;
+		SingleEvent event = new SingleEvent(	calendar, 
+												"Test 3", 
+												format.parseDateTime("20.10.2011 09:00"),
+												format.parseDateTime("20.10.2011 08:00"));
 		
 		// Try to save it
 		assertFalse(event.validateAndSave());

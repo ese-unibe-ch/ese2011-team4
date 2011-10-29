@@ -9,6 +9,7 @@ import models.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -38,6 +39,7 @@ public class UserTest extends UnitTest{
 		assertEquals(4, User.count());
 	}
 	
+	@Ignore
 	@Test
 	public void delete() {
 		// Find a user

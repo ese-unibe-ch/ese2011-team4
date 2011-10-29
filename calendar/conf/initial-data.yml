@@ -76,7 +76,7 @@ SingleEvent(e3):
      - budCalendar
      - firstJackCalendar
     origin:         budCalendar
-    description:    This is going to be a repeating event from Bud.
+    description:    This is a event joined by Jack.
     isPrivate:      false
     
 SingleEvent(e4):
@@ -105,6 +105,16 @@ SingleEvent(e6):
     origin:         edCalendar
     description:    This is public event from Ed.
     isPrivate:      true
+
+EventSeries(r1):
+    name:           Weekly Meeting
+    startDate:      2011-11-07 14:00:00 +1
+    endDate:        2011-11-07 17:00:00 +1
+    calendars:      budCalendar
+    origin:         budCalendar
+    description:    This is a weekly repeating event.
+    isPrivate:      false
+    repeatingType:  models.RepeatingType.WEEKLY
     
 Comment(c1):
     author:         Michael

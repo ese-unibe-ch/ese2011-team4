@@ -29,19 +29,14 @@ import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
 @Entity
-@DiscriminatorValue("Single Event")
+@DiscriminatorValue("SINGLE")
 public class SingleEvent extends Event {
-	@Required
-	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	public DateTime startDate;
+	public SingleEvent(Calendar calendar, String name, DateTime startDate, DateTime endDate) {
+		super(calendar, name, startDate, endDate);
+	}
 	
-	@Required
-	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	@CheckWith(EndAfterBeginCheck.class)
-	public DateTime endDate;
-	
-	public SingleEvent(Calendar calendar) {
-		super(calendar);
+	public SingleEvent(RepeatingEvent event) {
+		super(event.origin, event.name, event.startDate, event.endDate);
 	}
 
 	/**
@@ -54,23 +49,16 @@ public class SingleEvent extends Event {
 	 * @since	Beta-v1.2
 	 */
 	
+	@Override
 	public boolean isThisDay(DateTime day) {
 		return startDate.getYear() == day.getYear() 
 			&& startDate.getDayOfYear() == day.getDayOfYear();
 	}
 	
+	@Override
 	public boolean isThisDayandLocation(DateTime day, Location loc) {
 		return startDate.getYear() == day.getYear() 
 			&& startDate.getDayOfYear() == day.getDayOfYear()
 			&& location.toString().contains(loc.toString());
-	}
-	
-	static class EndAfterBeginCheck extends Check {
-		public boolean isSatisfied(Object event_, Object end_) {
-			SingleEvent event = (SingleEvent) event_;
-			DateTime end = (DateTime) end_;
-			setMessage("validation.EndAfterBeginCheck");
-			return event.startDate.isBefore(end);
-		}
 	}
 }
