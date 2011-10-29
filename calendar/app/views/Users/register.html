@@ -10,28 +10,38 @@
 		#{field 'email'}
    			<label for="email">Email</label>
     		<input type="text" name="${field.name}" id="email" value="#{ifErrors}${flash.email}#{/ifErrors}"/>
-			<span class="message error">#{error 'user.email' /}</span>
+			#{errors}
+    			#{if error.key == 'user.email'}<span class="message error">#{error 'user.email' /}</span>#{/if}
+    		#{/errors}
 		#{/field}
 		</p>
 		<p>
 		#{field 'fullname'}
 	   		<label for="fullname">Full Name</label>
 	    	<input type="text" name="${field.name}" id="fullname" value="#{ifErrors}${flash.fullname}#{/ifErrors}"/>
-			<span class="message error">#{error 'user.fullname' /}</span>
+			#{errors}
+    			#{if error.key == 'user.fullname'}<span class="message error">#{error 'user.fullname' /}</span>#{/if}
+    		#{/errors}
 		#{/field}
 		</p>
 		<p>
 		#{field 'password'}
 	   		<label for="password">Password</label>
 	    	<input type="password" name="${field.name}" id="password" value="#{ifErrors}${flash.password}#{/ifErrors}"/>
-			<span class="message error">#{error 'user.password' /}</span>
+	    	#{errors}
+				#{if error.key == 'user.password'}<span class="message error">#{error 'user.password' /}</span>#{/if}
+    		#{/errors}
 		#{/field}
 		</p>
 		<p>
     		<label class="captcha" for="code">Please type the code below: </label>
     		<input type="text" name="code" id="code" size="18" value="" />
+    		#{errors}
+    			#{if error.key == 'captcha'}<span class="message error">#{error 'captcha' /}</span>#{/if}
+    		#{/errors}
     		<input type="hidden" name="randomID" value="${randomID}" />
     		<img class="captcha" src="@{Application.captcha(randomID)}" />
+
 		</p>
 		<p class="button">
 			<input type="submit" value="Submit" />

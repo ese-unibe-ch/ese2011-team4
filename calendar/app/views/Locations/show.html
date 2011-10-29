@@ -15,15 +15,15 @@
 <div id="main-left">
 	<h2 class="title">Infos about this Location</h2>
     	<div id="location">
-		<p>
-			<ul style="list-style-type: none;">
-				<li>${location.street} ${location.num}</li>
-				<li>${location.pincode} ${location.city}</li>
-				<li>${location.country} </li>
-			</ul>
-		</p>
-		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
+			<p>
+				<ul>
+					<li>${location.street} ${location.num}</li>
+					<li>${location.pincode} ${location.city}</li>
+					<li>${location.country} </li>
+				</ul>
+			</p>
 		</div>
+		<div id="map_canvas">Loading...</div>
 		
 		<h3>Upcoming events</h3>
 		<p>
@@ -44,9 +44,6 @@
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false">
 </script>
-<style type="text/css">
-  #map_canvas { height: 50% }
-</style>
 <script type="text/javascript">
 var geocoder;
   var map;
@@ -55,14 +52,18 @@ var geocoder;
   var lang;
  
   function initialize() {
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(-34.397, 150.644);
-    var myOptions = {
-      zoom: 13,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+    if(typeof google != "undefined") {
+      geocoder = new google.maps.Geocoder();
+      var latlng = new google.maps.LatLng(-34.397, 150.644);
+      var myOptions = {
+        zoom: 13,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    } else {
+      document.getElementById("map_canvas").innerHTML = "Could not load google maps.";
     }
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   }
   function cal(address) {
 	    geocoder.geocode( { 'address': address}, function(results, status) {
@@ -91,7 +92,3 @@ var geocoder;
     });
   }
 </script>
- 
- 
- 
- 

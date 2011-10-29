@@ -128,6 +128,8 @@ header nav li a:hover {
 
 .warning {
 	background-color: #ff8000;
+	padding: 10px;
+	border-radius: 16px;
 }
 
 .success {
@@ -243,10 +245,6 @@ form p.button {
 
 /** Register form **/
 
-#register .title {
-	text-align: center;
-}
-
 #register {
 	background-color: #93B4FA;
 	border-radius: 16px;
@@ -255,9 +253,21 @@ form p.button {
 	padding: 10px;
 }
 
+#register .title {
+	text-align: center;
+}
+
 #register .captcha {
 	display: block;	
-	width: auto;	
+	width: auto;
+}
+
+#register input#email, #register input#fullname, #register input#password {
+	width: 200px;
+}
+
+#register input#code {
+	width: 150px;
 }
 
 /** Some basic buttons **/

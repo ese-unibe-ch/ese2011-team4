@@ -38,7 +38,7 @@ public class Application extends Controller {
 								String randomID) {
 		validation.equals(
 		        code, Cache.get(randomID)
-		    ).message("Invalid code. Please type it again");
+		    ).key("captcha").message("Invalid code. Please type it again");
 		
 		User user = new User(email, password, fullname);
 		if(user.validateAndSave()) {
