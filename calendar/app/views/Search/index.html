@@ -1,0 +1,26 @@
+#{extends 'main.html' /}
+#{set title:'Search'/}
+
+<div id="main">
+	<div id="main-left">
+		<h2 class="title">Search this site</h2>
+		#{ifErrors}
+   		<span class="error">
+   			Oops...
+   			<ul>
+   			#{errors}
+       		<li>${error}</li>
+   			#{/errors}
+   			</ul>
+		</span>
+		#{/ifErrors}
+		<div id="search-form">
+		#{form @Search.search()}
+			#{search-form /}
+		#{/form}
+		</div>
+	</div>
+	<div id="main-right">
+		#{search-nav name:name /}
+	</div>
+</div>

@@ -234,6 +234,10 @@ form p.button {
 	display: inline-block;
 }
 
+form p.box label{
+	width: 85px;
+}
+
 /** Login **/
 
 #login {
