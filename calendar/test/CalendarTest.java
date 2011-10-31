@@ -86,19 +86,23 @@ public class CalendarTest extends UnitTest {
 	public void eventsPerDay() {
 		// Get some calendars
 		Calendar jacks = Calendar.find("byName", "Jacks Agenda").first();
-		Calendar buds = Calendar.find("byName", "Ed's Future Calandar").first();
+		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
 		
 		// Get two users
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
-		// Test method
-		assertEquals(2, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(1, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), bud).size());
-		assertEquals(1, buds.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(2, jacks.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(1, jacks.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), bud).size());
 		
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(14).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
+		// Event over 3 days
+		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(1, eds.eventsByDay(new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011), jack).size());
+		
+		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011), jack).size());
+		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011), jack).size());
 	}
 	
 	@Test

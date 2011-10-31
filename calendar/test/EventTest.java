@@ -134,7 +134,7 @@ public class EventTest extends UnitTest {
 		assertEquals(1, budCalendar.events.size());
 		
 		// Get a event
-		Event event = Event.find("byName", "Cinema").first();
+		Event event = Event.find("byName", "Observation").first();
 		assertFalse(event.calendars.contains(budCalendar));
 		
 		// Join the calendar
@@ -167,8 +167,8 @@ public class EventTest extends UnitTest {
 	@Test
 	public void isThisDay() {
 		// Get an event
-		Event event = Event.find("byName", "Cinema").first();
+		Event event = Event.find("byName", "Collections").first();
 		
-		assertTrue(event.isThisDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011)));
+		assertTrue(event.isThisDay(new DateTime().withDayOfMonth(5).withMonthOfYear(10).withYear(2011)));
 	}
 }

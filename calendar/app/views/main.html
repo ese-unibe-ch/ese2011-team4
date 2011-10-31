@@ -5,8 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" type="text/css" media="screen" 
             href="@{'/public/stylesheets/main.css'}" />
-       	<link rel="stylesheet" type="text/css" media="screen"
-        	href="@{'public/stylesheets/calendar-style.css'}" />
+        #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" 
             href="@{'/public/images/favicon.png'}" />
        	<script src="@{'/public/javascripts/jquery-1.4.2.min.js'}"></script>
@@ -35,7 +34,7 @@
         	    <nav id="sitenav">
         	    <ol>
 					<li>#{a @Application.index()}Home#{/a}
-					<li>#{a @Calendars.index()}Calendars#{/a}
+					<li>#{a @Application.index()}Calendars#{/a}
 					<li>#{a @Users.index()}Users#{/a}
 					<li>#{a @Locations.index()}Locations#{/a}
 				</ol>

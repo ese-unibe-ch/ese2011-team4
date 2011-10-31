@@ -39,8 +39,8 @@ public class User extends Model {
 	@OneToMany(mappedBy="owner")
 	public List<Calendar> calendars;
 	
-	@OneToMany
-	public List<Favorite> favorites;
+	@ManyToMany
+	public List<User> favorites;
 	
 	public boolean isAdmin;
 
@@ -48,27 +48,25 @@ public class User extends Model {
 		this.email = email;
 		this.password = password;
 		this.fullname = fullname;
-		this.favorites = new LinkedList<Favorite>();
+		this.favorites = new LinkedList<User>();
 	}
 	
 	public static User connect(String email, String password) {
 		return find("byEmailAndPassword", email, password).first();
 	}
 	
-	public boolean isInFavorites(User user){
-		List<Favorite> favs = 	Favorite.find("followerId", id).fetch();
-		boolean found = false;
-		Iterator<Favorite> it = favs.iterator();
-		while(it.hasNext() && !found){
-			Favorite fav = it.next();
-			if(fav.favoriteId == user.id)
-				found = true;
-		}
-		return found;
+	public boolean isFavorite(User user){
+		return favorites.contains(user);
 	}
 	
-	public List<Favorite> favorites() {
-		return Favorite.find("followerId", id).fetch();
+	public void addFavorite(User user) {
+		assert !favorites.contains(user);
+		favorites.add(user);
+	}
+	
+	public void removeFavorite(User user) {
+		assert favorites.contains(user);
+		favorites.remove(user);
 	}
 	
 	@Override
@@ -77,6 +75,11 @@ public class User extends Model {
 			c.delete();
 		
 		return super.delete();
+	}
+	
+	@Override
+	public String toString() {
+		return fullname;
 	}
 	
 	static class uniqueMailCheck extends Check {

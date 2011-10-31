@@ -1,4 +1,3 @@
-
 <h2 class="title"><span id="event-title">${_event.name}</span></h2>
 <div id="event">
 	<div class="event-metadata">
@@ -20,21 +19,31 @@
 	
 	<div id="event-content">
 		${_event.description}
+		#{if flash.success}
+   		<p class="success">${flash.success}</p>
+		#{/if}
 		<div id="event-comments">
 			<ul>
 				<hr>
 				<h3>${_event.comments.size()} comment${_event.comments.size().pluralize()}</h3>
 				#{list items:_event.comments, as:'comment'}
 					<div class="event-comment">
-							<div class="comment-metadata">
-								<span class="comment-author">by ${comment.author},</span>
+						<div class="comment-metadata">
+							<span class="comment-author">by ${comment.author},</span>
    							<span class="comment-date">
    								${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}
 							</span>
 						</div>
-							<div class="comment-content">
-    						${comment.content}
-						</div>
+							<table>
+								<tr>
+									<th class="comment-content">${comment.content}</th>
+									<th class="deleteComment">
+										#{if _connectedUser.fullname.equals(comment.author)}
+											<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
+										#{/if}
+									</th>
+								</tr>
+							</table>
 					</div>
 				#{/list}
 			</ul>

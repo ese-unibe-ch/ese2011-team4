@@ -78,4 +78,35 @@ public class UserTest extends UnitTest{
 	    assertNull(User.connect("bud.white@lapd.com", "notsosecret"));
 	    assertNull(User.connect("sid.hudgens@hollywood.com", "secret"));
 	}
+	
+	@Test
+	public void addFavorite() {
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		jack.addFavorite(bud);
+		assertEquals(1, jack.favorites.size());
+		assertTrue(jack.favorites.contains(bud));
+		
+		assertEquals(3, User.count());
+	}
+	
+	@Test
+	public void isFavorite() {
+		User ed = User.find("byEmail", "ed.exley@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		assertTrue(ed.isFavorite(bud));
+	}
+	
+	@Test
+	public void removeFavorite() {
+		User ed = User.find("byEmail", "ed.exley@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		ed.removeFavorite(bud);
+		assertFalse(ed.isFavorite(bud));
+		
+		assertEquals(3, User.count());
+	}
 }

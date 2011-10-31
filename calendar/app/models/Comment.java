@@ -12,8 +12,7 @@ import play.db.jpa.Model;
 
 @Entity
 public class Comment extends Model {
- 
-	@Required(message="Author is required")
+	@Required
     public String author;
     
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
@@ -26,9 +25,9 @@ public class Comment extends Model {
     @ManyToOne
     public Event event;
     
-    public Comment(Event event) {
+    public Comment(String author, Event event) {
+    	this.author = author;
         this.event = event;
         this.postedAt = new DateTime();
     }
- 
 }
