@@ -21,18 +21,41 @@ import play.db.jpa.JPA;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
+
+/**
+ * Calendar has a name, an owner and zero or more events. 
+ * 
+ * @version %I%, %G%
+ * @since Iteration-1
+ * @see 
+ */
 @Entity
 public class Calendar extends Model {
+	
+	/**
+	 * The calendar's name.
+	 */
 	@Required
 	public String name;
 	
+	/**
+	 * User who owns this calendar.
+	 */
 	@ManyToOne
 	@Required
 	public User owner;
 	
+	/**
+	 * 
+	 */
 	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
 	
+	/**
+	 * 
+	 * @param owner
+	 * @param name
+	 */
 	public Calendar(User owner, String name) {
 		this.owner = owner;
 		this.name = name;
