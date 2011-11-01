@@ -27,13 +27,14 @@ import play.db.jpa.Model;
  * religious, commercial, or administrative purposes.
  * <p>
  * Calendars have a name, an owner and zero or more {@link Event}s. Owner is the {@link User}
- * who possesses the calendar. Furthermore the owner can add or remove
- * events to the calendar.
+ * who possesses the calendar.
  * <p>
  * The class Calendar includes methods for:
  * <ul>
- * <li>deleting events
- * <li>showing events to a user at a specific day or a specific {@link Location} or for both
+ * <li>deleting the calendar
+ * <li>showing the calendar's events at a specific day to a user 
+ * <li>showing events at a specific day and a specific {@link Location} to a user
+ * <li>showing events at a specific location to a user
  * <li>showing all events a user is allowed to see
  * <li>representing all days in a specific month
  * </ul>
@@ -75,7 +76,7 @@ public class Calendar extends Model {
 	
 	
 	/** 
-	 * Constructor of class Calendar. The default behaviour is:
+	 * Calendar's constructor. The default behaviour is:
 	 * <ul> 
 	 * <li>Calendar has a name</li> 
 	 * <li>Calendar has an owner</li>
@@ -93,7 +94,11 @@ public class Calendar extends Model {
 	
 	
 	/**
+	 * This method first deletes all events that were initially 
+	 * created in this calendar. After that, it deletes this calendar itself.
 	 * 
+	 * @since 	Iteration-1
+	 * @see 	models.Event#origin
 	 */
 	@Override
 	public Calendar delete() {
@@ -105,6 +110,21 @@ public class Calendar extends Model {
 		return super.delete();
 	}
 	
+	
+	/**
+	 * Returns a list of all events available in this calendar 
+	 * at a specific day for a certain user.
+	 * <p>
+	 * The event is only visible when the given user is the owner of this event
+	 * or the event itself is public.
+	 * 
+	 * @param 	day			the day to check for events
+	 * @param 	visitor		the user who wants to see the events
+	 * @return	list of available events in this calendar under the defined constrictions
+	 * @see 	Event
+	 * @see		User
+	 * @since 	Iteration-1
+	 */
 	public List<Event> eventsByDay(DateTime day, User visitor) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
@@ -121,6 +141,19 @@ public class Calendar extends Model {
 		return query.getResultList();
 	}
 	
+	
+	/**
+	 * Returns the number of events available for a certain user.
+	 * <p>
+	 * The events are only available if the user is the owner of the event
+	 * or the event itself is public.
+	 * 
+	 * @param 	user	the user for whom the method checks for available events
+	 * @return 	number of available events under the defined constrictions
+	 * @see		Event
+	 * @see 	User
+	 * @since 	Iteration-1
+	 */
 	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
 	public int visibleEvents(User user) {
 		int count = 0;
@@ -130,7 +163,14 @@ public class Calendar extends Model {
 		return count;
 	}
 	
-    // Helper method to get a list of all days of a month
+	
+	/**
+	 * Returns a list of all days of a certain month.
+	 * 
+	 * @param 	dt	the month for which to get the days
+	 * @return a list of all days for this month
+	 * @since 	Iteration-1
+	 */
 	public static List<DateTime> getDaysInMonth(DateTime dt) {
 		DateTime first = dt.withDayOfMonth(1);
 		DateTime last = first.plusMonths(1).minusDays(1);
@@ -147,6 +187,24 @@ public class Calendar extends Model {
 	public String toString() {
 		return name;
 	}
+	
+		
+	/**
+	 * Returns a list of all events available at a specific day and a specific location
+	 * for a certain user.
+	 * <p>
+	 * An event is only visible when the given user is the owner of that event or the
+	 * event itself is public.
+	 * 
+	 * @param 	day		the day to check for events
+	 * @param 	visitor	the user who wants to see the events
+	 * @param 	loc		the location to check for events
+	 * @return	list of available events under the defined constrictions
+	 * @see		Event
+	 * @see 	Location
+	 * @see 	User
+	 * @since 	Iteration-1
+	 */
 	public List<Event> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
@@ -160,6 +218,22 @@ public class Calendar extends Model {
 		query.setParameter(3, end);
 		return query.getResultList();
 	}
+	
+
+	/**
+	 * Returns a list of all events available at a specific location for a certain user.
+	 * <p>
+	 * An event is only visible to the user if he is the owner of that event or the event
+	 * itself is public.
+	 * 
+	 * @param 	visitor	the user who wants to see the events
+	 * @param 	loc		the location to check for events
+	 * @return list of available events under the defined constrictions
+	 * @see		Event
+	 * @see 	Location
+	 * @see		User
+	 * @since 	Iteration-1
+	 */
 	public List<Event> eventsByLocation(User visitor,Location loc) {
 		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+

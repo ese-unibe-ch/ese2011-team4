@@ -26,6 +26,37 @@ import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
+
+/**
+ * An event is a temporary and scheduled happening with a defined goal or intention.
+ * <p>
+ * An event includes the following informations:
+ * <ul>
+ * <li>Origin: The {@link Calendar} to which the event belongs</li>
+ * <li>The event's name</li>
+ * <li>A list of zero or more calendars in which the event occurs</li>
+ * <li>A start and an end time between which the event takes place</li>
+ * <li>An event can be public or private. A private event is only visible to its owner</li>
+ * <li>A {@link Location} at which the event takes place</li>
+ * <li>A description</li>
+ * <li>A list of {@link Comment}s related to this event</li>
+ * </ul>
+ * <p>
+ * The class Event includes methods for:
+ * <ul>
+ * <li>deleting the calendar
+ * <li>showing the calendar's events at a specific day to a user 
+ * <li>showing events at a specific day and a specific {@link Location} to a user
+ * <li>showing events at a specific location to a user
+ * <li>showing all events a user is allowed to see
+ * <li>representing all days in a specific month
+ * </ul>
+ * 
+ * @since Iteration-1
+ * @see Location
+ * @see Comment
+ * @see Calendar
+ */
 @Entity
 public class Event extends Model implements Comparable<Event> {
 	@Required
@@ -90,8 +121,7 @@ public class Event extends Model implements Comparable<Event> {
 	 * @return	List<Calendar> List of possible calendars for a join	
 	 * @see		models.Event#joinCalendar(Calendar calendar)
 	 * @since	Iteration-1
-	 */
-	
+	 */	
 	public List<Calendar> availableJoins(User user) {
 		if(!isPrivate) {
 			Query query = JPA.em().createQuery("SELECT c FROM Calendar c "+
