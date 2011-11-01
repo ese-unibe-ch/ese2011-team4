@@ -23,38 +23,67 @@ import play.db.jpa.Model;
 
 
 /**
- * Calendar has a name, an owner and zero or more events. 
+ * The Calendar class represents a system of organizing days for social,
+ * religious, commercial, or administrative purposes.
+ * <p>
+ * Calendars have a name, an owner and zero or more {@link Event}s. Owner is the {@link User}
+ * who possesses the calendar. Furthermore the owner can add or remove
+ * events to the calendar.
+ * <p>
+ * The class Calendar includes methods for:
+ * <ul>
+ * <li>deleting events
+ * <li>showing events to a user at a specific day or a specific {@link Location} or for both
+ * <li>showing all events a user is allowed to see
+ * <li>representing all days in a specific month
+ * </ul>
  * 
- * @version %I%, %G%
  * @since Iteration-1
- * @see 
+ * @see Event
+ * @see Location
+ * @see User
  */
 @Entity
 public class Calendar extends Model {
 	
 	/**
-	 * The calendar's name.
+	 * This calendar's name.
+	 * 
+	 * @see models.Calendar#Calendar(User, String)
 	 */
 	@Required
 	public String name;
 	
+	
 	/**
 	 * User who owns this calendar.
+	 * 
+	 * @see models.Calendar#Calendar(User, String)
 	 */
 	@ManyToOne
 	@Required
 	public User owner;
 	
+	
 	/**
+	 * List of events which this calendar contains.
 	 * 
+	 * @see models.Calendar#Calendar(User, String)
 	 */
 	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
 	
-	/**
+	
+	/** 
+	 * Constructor of class Calendar. The default behaviour is:
+	 * <ul> 
+	 * <li>Calendar has a name</li> 
+	 * <li>Calendar has an owner</li>
+	 * <li>Calendar contains zero or more events</li> 
+	 * </ul> 
 	 * 
-	 * @param owner
-	 * @param name
+	 * @param owner		user who possesses this calendar
+	 * @param name		this calendar's name
 	 */
 	public Calendar(User owner, String name) {
 		this.owner = owner;
@@ -62,6 +91,10 @@ public class Calendar extends Model {
 		this.events = new LinkedList<Event>();
 	}
 	
+	
+	/**
+	 * 
+	 */
 	@Override
 	public Calendar delete() {
 		// First delete all events that were initially created in this calendar
