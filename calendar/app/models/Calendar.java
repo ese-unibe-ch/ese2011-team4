@@ -183,6 +183,10 @@ public class Calendar extends Model {
 		return days;
 	}
 	
+	
+	/**
+	 * Returns this calendar's name.
+	 */
 	@Override
 	public String toString() {
 		return name;

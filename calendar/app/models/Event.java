@@ -28,7 +28,8 @@ import play.db.jpa.Model;
 
 
 /**
- * An event is a temporary and scheduled happening with a defined goal or intention.
+ * An event is a temporary and scheduled happening with a defined goal or intention, which can
+ * be added to calendars.
  * <p>
  * An event includes the following informations:
  * <ul>
@@ -44,52 +45,102 @@ import play.db.jpa.Model;
  * <p>
  * The class Event includes methods for:
  * <ul>
- * <li>deleting the calendar
- * <li>showing the calendar's events at a specific day to a user 
- * <li>showing events at a specific day and a specific {@link Location} to a user
- * <li>showing events at a specific location to a user
- * <li>showing all events a user is allowed to see
- * <li>representing all days in a specific month
+ * <li>joining this event</li>
+ * <li>adding comments to this event</li>
+ * <li>testing if this event is available for a join</li>
+ * <li>getting the visibility of this event</li>
+ * <li>getting a list of participants of this event</li>
  * </ul>
  * 
  * @since Iteration-1
+ * @see User
  * @see Location
  * @see Comment
  * @see Calendar
  */
 @Entity
 public class Event extends Model implements Comparable<Event> {
+	
+	
+	/**
+	 * Calendar to which this events initially belongs.
+	 */
 	@Required
 	@ManyToOne
 	public Calendar origin;
 	
+	
+	/**
+	 * This event's name.
+	 */
 	@Required
 	public String name;
 	
+	
+	/**
+	 * Calendars which joined this event.
+	 */
 	@Required
 	@ManyToMany
 	public List<Calendar> calendars;
 	
+	
+	/**
+	 * Date on which this event begins.
+	 */
 	@Required
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	public DateTime startDate;
 	
+	
+	/**
+	 * Date on which this even ends.
+	 */
 	@Required
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	@CheckWith(EndAfterBeginCheck.class)
 	public DateTime endDate;
 	
+	
+	/**
+	 * Visibility of this event.
+	 */
 	public Boolean isPrivate;
 	
+	
+	/**
+	 * Location at which this event takes place.
+	 */
 	@OneToOne
 	public Location location;
 	
+	
+	/**
+	 * A written remark to describe this event.
+	 */
 	@Lob
 	public String description;
 	
+	
+	/**
+	 * Comments added to this event.
+	 */
 	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
 	public List<Comment> comments;
 	
+	
+	/**
+	 * Event's constructor. The default behaviour is:
+	 * <ul>
+	 * <li>Event has zero or more comments</li>
+	 * <li>Event belongs to a calendar</li>
+	 * <li>Event has zero or more other calendars which joined it</li>
+	 * </ul>
+	 * 
+	 * @param 	calendar	calendar to which this event belongs
+	 * @see 	Calendar
+	 * @see 	Comment
+	 */
 	public Event(Calendar calendar) {
 		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
@@ -97,6 +148,15 @@ public class Event extends Model implements Comparable<Event> {
 		this.calendars.add(calendar);
 	}
 	
+	
+	/**
+	 * Adds the given calendar to this event's calendar list. The calendar list
+	 * represents all calendars which have joined this event.
+	 * 
+	 * @param 	calendar		calendar to add to the event's calendar list
+	 * @see 	models.Event#calendars
+	 * @since 	Iteration-2
+	 */
 	public void joinCalendar(Calendar calendar) {
 		calendars.add(calendar);
 		calendar.events.add(this);
@@ -104,6 +164,16 @@ public class Event extends Model implements Comparable<Event> {
 		this.save();
 	}
 	
+	
+	/**
+	 * Adds a comment to this event. The comment has an author and some content.
+	 * 
+	 * @param 	author		user who posts the comment
+	 * @param 	content		the text contained in the comment
+	 * @return 	this event
+	 * @since 	Iteration-2
+	 * @see 	Comment
+	 */
 	public Event addComment(String author, String content) {
 	    Comment newComment = new Comment(author, this);
 	    newComment.content = content;
@@ -143,31 +213,70 @@ public class Event extends Model implements Comparable<Event> {
 	 * @see		models.Event#isThisDayandLocation(DateTime day, Location loc)
 	 * @since	Beta-v1.2
 	 */
-	
 	public boolean isThisDay(DateTime day) {
 		return startDate.getYear() == day.getYear() 
 			&& startDate.getDayOfYear() == day.getDayOfYear();
 	}
 	
+	
+	/**
+	 * Returns true if the given user is the owner of this event or the
+	 * event is public.
+	 * 
+	 * @param 	visitor who wants to see this event
+	 * @return true if visitor is owner of this event or if this event is public
+	 * @since 	Iteration-1
+	 * @see 	User
+	 */
 	public boolean isVisible(User visitor) {
 		return origin.owner.equals(visitor) || !isPrivate;
 	}
 	
+	
+	/**
+	 * Returns true if the given date is the start date of this event and
+	 * if the given location equals the event's location.
+	 * 
+	 * @param 	day		date to check whether it's equal to this event's start date or not
+	 * @param 	loc		location to check whether it's equal to this event's location
+	 * @return true if day equals this event's start date and if loc equals this event's location
+	 * @since 	Iteration-2
+	 * @see 	Location
+	 */
 	public boolean isThisDayandLocation(DateTime day, Location loc) {
 		return startDate.getYear() == day.getYear() 
 			&& startDate.getDayOfYear() == day.getDayOfYear()
 			&& location.toString().contains(loc.toString());
 	}
 
+	
+	/**
+	 * Returns this event's name.
+	 * 
+	 * @return this event's name
+	 * @since Iteration-1
+	 */
 	@Override
 	public String toString() {
 		return name;
 	}
 
+	
+	/**
+	 * Checks if the argument event's start date equals this event's start date.
+	 * 
+	 * @param e	event which's start date is compared to this event's start date
+	 * @return the value 0 if the argument event's start date is equal to this
+	 * event's start date; a value less than 0 if this event's start date is before 
+	 * the argument event's start date; a value greater than 0 if this event's start
+	 * date is after the argument event's start date.
+	 * @since Iteration-1
+	 */
 	@Override
 	public int compareTo(Event e) {
 		return startDate.compareTo(e.startDate);
 	}
+	
 	
 	/**
 	 *
@@ -176,7 +285,6 @@ public class Event extends Model implements Comparable<Event> {
 	 * @return	a list of all users that contain this event in one of their calendars
 	 * @since	Iteration-2
 	 */
-	
 	public List<User> participants(){		
 		List<User> parts = new LinkedList<User>();
 		for(Calendar cal: calendars)
@@ -184,6 +292,7 @@ public class Event extends Model implements Comparable<Event> {
 				parts.add(cal.owner);
 		return parts;
 	}
+	
 	
 	static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
