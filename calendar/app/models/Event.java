@@ -28,8 +28,8 @@ import play.db.jpa.Model;
 
 
 /**
- * An event is a temporary and scheduled happening with a defined goal or intention, which can
- * be added to calendars.
+ * The Event class represents a temporary and scheduled happening with a defined 
+ * goal or intention, which can be added to calendars.
  * <p>
  * An event includes the following informations:
  * <ul>
@@ -187,7 +187,7 @@ public class Event extends Model implements Comparable<Event> {
 	 *
 	 * Returns a list of all calendars available for joining the event given for a certain user
 	 * 
-	 * @param	User 	The user which requests the join 
+	 * @param	user 	The user which requests the join 
 	 * @return	List<Calendar> List of possible calendars for a join	
 	 * @see		models.Event#joinCalendar(Calendar calendar)
 	 * @since	Iteration-1
@@ -209,7 +209,7 @@ public class Event extends Model implements Comparable<Event> {
 	 * Returns true if the event takes place at a certain day
 	 * 
 	 * @param	day 	The day to test
-	 * @return	true if the start date of the event is at this day	
+	 * @return	<code>true</code> if the start date of the event is at this day, otherwise <code>false</code>
 	 * @see		models.Event#isThisDayandLocation(DateTime day, Location loc)
 	 * @since	Beta-v1.2
 	 */
@@ -224,7 +224,7 @@ public class Event extends Model implements Comparable<Event> {
 	 * event is public.
 	 * 
 	 * @param 	visitor who wants to see this event
-	 * @return true if visitor is owner of this event or if this event is public
+	 * @return <code>true</code> if visitor is owner of this event or if this event is public, otherwise <code>false</code>
 	 * @since 	Iteration-1
 	 * @see 	User
 	 */
@@ -239,7 +239,8 @@ public class Event extends Model implements Comparable<Event> {
 	 * 
 	 * @param 	day		date to check whether it's equal to this event's start date or not
 	 * @param 	loc		location to check whether it's equal to this event's location
-	 * @return true if day equals this event's start date and if loc equals this event's location
+	 * @return <code>true</code> if day equals this event's start date and if loc equals 
+	 * this event's location, otherwise <code>false</code>
 	 * @since 	Iteration-2
 	 * @see 	Location
 	 */
@@ -294,7 +295,7 @@ public class Event extends Model implements Comparable<Event> {
 	}
 	
 	
-	static class EndAfterBeginCheck extends Check {
+	private static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
 			DateTime end = (DateTime) end_;
