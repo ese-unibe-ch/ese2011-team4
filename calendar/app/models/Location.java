@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Query;
 
+
 import org.joda.time.DateTime;
 
 import play.db.jpa.JPA;
@@ -76,18 +77,17 @@ public class Location extends Model{
 	 */
 	public String pincode;
 
-	
 	/**
 	 * Returns this locations address written as "street number pincode city country".
 	 * 
 	 * @return this location's address
 	 * @since iteration-2
 	 */
+	// TODO rewrite this method so that it also works if some fields are empty
 	@Override
 	public String toString(){
 		return street + " " + num + ", " + pincode + " " + city + ", " + country;
 	}
-	
 
 	/**
 	 * Returns a list of all events taking place at this location.
@@ -116,7 +116,6 @@ public class Location extends Model{
 		return (Long) query.getSingleResult();
 	}
 	
-	
 	/**
 	 * Returns a list of all events which take place at this location and are
 	 * visible for a certain user.
@@ -139,7 +138,6 @@ public class Location extends Model{
 		return query.getResultList();
 	}
 	
-	
 	/**
 	 * Returns the number of all events which take place at this location and are
 	 * visible for a certain user.
@@ -161,7 +159,6 @@ public class Location extends Model{
 		query.setParameter(2, visitor);
 		return (Long) query.getSingleResult();
 	}
-	
 	
 	/**
 	 * Returns a list of all events which take place at this location at a certain day and are
@@ -192,7 +189,6 @@ public class Location extends Model{
 		return query.getResultList();
 	}
 	
-	
 	/**
 	 * Returns the number of all events which take place at this location at a certain day.
 	 * 
@@ -213,7 +209,6 @@ public class Location extends Model{
 		query.setParameter(3, end);
 		return (Long) query.getSingleResult();
 	}
-	
 	
 	/**
 	 * Returns a list of all events which take place at this location at a certain day and time 
@@ -244,7 +239,6 @@ public class Location extends Model{
 		return query.getResultList();
 	}
 	
-	
 	/**
 	 * Returns the number of all events which take place at this location at a certain day and time.
 	 * 
@@ -263,7 +257,6 @@ public class Location extends Model{
 		query.setParameter(3, end);
 		return (Long) query.getSingleResult();
 	}
-	
 	
 	/**
 	 * Returns a list of all upcoming events which take place at this location and are visible
@@ -310,7 +303,6 @@ public class Location extends Model{
 		query.setParameter(2, new DateTime());
 		return (Long) query.getSingleResult();
 	}
-	
 	
 	/**
 	 * Returns the searched location, if it exists.

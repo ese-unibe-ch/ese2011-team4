@@ -40,7 +40,7 @@ Location(loc1):
     country:        Switzerland
     pincode:        3000
 
-Event(e0):
+SingleEvent(e0):
     name:           Collections
     startDate:      2011-10-05 09:00:00 +1
     endDate:        2011-10-05 12:00:00 +1
@@ -49,7 +49,7 @@ Event(e0):
     description:    This is a private event from Jack in the past.
     isPrivate:      true
 
-Event(e1):
+SingleEvent(e1):
     name:           Meet Lynn Bracken
     startDate:      2011-11-05 13:00:00 +1
     endDate:        2011-11-05 15:00:00 +1
@@ -59,7 +59,7 @@ Event(e1):
     description:    This is a public event from Jack at a location. 
     isPrivate:      false
     
-Event(e2):
+SingleEvent(e2):
     name:           Hit Exley
     startDate:      2011-11-05 17:00:00 +1
     endDate:        2011-11-05 18:00:00 +1
@@ -68,16 +68,18 @@ Event(e2):
     description:    This is a private event from Jack.
     isPrivate:      true
     
-Event(e3):
+SingleEvent(e3):
     name:           Work
     startDate:      2011-11-21 08:00:00 +1
     endDate:        2011-11-21 11:00:00 +1
-    calendars:      budCalendar
+    calendars:      
+     - budCalendar
+     - firstJackCalendar
     origin:         budCalendar
-    description:    This is going to be a repeating event from Bud.
+    description:    This is a event joined by Jack.
     isPrivate:      false
     
-Event(e4):
+SingleEvent(e4):
     name:           Drinking whiskey
     startDate:      2011-11-06 14:00:00 +1
     endDate:        2011-11-06 17:00:00 +1
@@ -86,7 +88,7 @@ Event(e4):
     description:    This is a private event from Jack in his second Calendar.
     isPrivate:      true
 
-Event(e5):
+SingleEvent(e5):
     name:           Observation
     startDate:      2011-11-04 08:00:00 +1
     endDate:        2011-11-07 22:00:00 +1
@@ -95,7 +97,7 @@ Event(e5):
     description:    This is a public event from Ed over three days.
     isPrivate:      false
     
-Event(e6):
+SingleEvent(e6):
     name:           Meeting with the mayor
     startDate:      2011-11-04 11:00:00 +1
     endDate:        2011-11-04 13:00:00 +1
@@ -103,6 +105,16 @@ Event(e6):
     origin:         edCalendar
     description:    This is public event from Ed.
     isPrivate:      true
+
+EventSeries(r1):
+    name:           Weekly Meeting
+    startDate:      2011-11-07 14:00:00 +1
+    endDate:        2011-11-07 17:00:00 +1
+    calendars:      budCalendar
+    origin:         budCalendar
+    description:    This is a weekly repeating event.
+    isPrivate:      false
+    repeatingType:  models.RepeatingType.WEEKLY
     
 Comment(c1):
     author:         Michael

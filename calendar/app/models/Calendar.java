@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
@@ -20,7 +21,6 @@ import controllers.Events;
 import play.db.jpa.JPA;
 import play.data.validation.Required;
 import play.db.jpa.Model;
-
 
 /**
  * The Calendar class represents a system of organizing days for social,
@@ -44,6 +44,7 @@ import play.db.jpa.Model;
  * @see Location
  * @see User
  */
+
 @Entity
 public class Calendar extends Model {
 	
@@ -76,7 +77,7 @@ public class Calendar extends Model {
 	
 	
 	/** 
-	 * Calendar's constructor. The default behaviour is:
+	 * Calendar's constructor. The default behavior is:
 	 * <ul> 
 	 * <li>Calendar has a name</li> 
 	 * <li>Calendar has an owner</li>
@@ -91,7 +92,6 @@ public class Calendar extends Model {
 		this.name = name;
 		this.events = new LinkedList<Event>();
 	}
-	
 	
 	/**
 	 * This method first deletes all events that were initially 
@@ -109,8 +109,7 @@ public class Calendar extends Model {
 		
 		return super.delete();
 	}
-	
-	
+		
 	/**
 	 * Returns a list of all events available in this calendar 
 	 * at a specific day for a certain user.
@@ -125,11 +124,12 @@ public class Calendar extends Model {
 	 * @see		User
 	 * @since 	Iteration-1
 	 */
-	public List<Event> eventsByDay(DateTime day, User visitor) {
+	public List<SingleEvent> events(User visitor, DateTime day) {
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+		// Get single events
+		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
 				"WHERE ?1 MEMBER OF e.calendars "+
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
 				"AND e.endDate >= ?3 " +
@@ -138,9 +138,70 @@ public class Calendar extends Model {
 		query.setParameter(2, visitor);
 		query.setParameter(3, start);
 		query.setParameter(4, end);
+		
+		List<SingleEvent> list = query.getResultList();
+		
+		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		
+		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
+			if(e.isThisDay(day))
+				list.add(e.createDummyEvent(day));
+		}
+		
+		return list;
+	}
+
+	/**
+	 * Returns a list of all events available at a specific location for a certain user.
+	 * <p>
+	 * An event is only visible to the user if he is the owner of that event or the event
+	 * itself is public.
+	 * 
+	 * @param 	visitor	the user who wants to see the events
+	 * @param 	loc		the location to check for events
+	 * @return list of available events under the defined constraints
+	 * @see		Event
+	 * @see 	Location
+	 * @see		User
+	 * @since 	Iteration-1
+	 */
+	public List<Event> events(User visitor, Location loc) {
+		
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
+				"AND e.location.getLocation().contains(loc.getLocation())");
+		query.setParameter(1, visitor);
 		return query.getResultList();
 	}
-	
+
+	/**
+	 * Returns a list of all events available at a specific day and a specific location
+	 * for a certain user.
+	 * <p>
+	 * An event is only visible when the given user is the owner of that event or the
+	 * event itself is public.
+	 * 
+	 * @param 	day		the day to check for events
+	 * @param 	visitor	the user who wants to see the events
+	 * @param 	loc		the location to check for events
+	 * @return	list of available events under the defined constraints
+	 * @see		Event
+	 * @see 	Location
+	 * @see 	User
+	 * @since 	Iteration-1
+	 */
+	public List<SingleEvent> events(User visitor, DateTime day, Location location) {
+		List<SingleEvent> list = events(visitor, day);
+		List<SingleEvent> copy = new LinkedList<SingleEvent>();
+		for(SingleEvent e : list)
+			if(e.location.equals(location))
+				copy.add(e);
+		return copy;
+	}
 	
 	/**
 	 * Returns the number of events available for a certain user.
@@ -163,7 +224,6 @@ public class Calendar extends Model {
 		return count;
 	}
 	
-	
 	/**
 	 * Returns a list of all days of a certain month.
 	 * 
@@ -183,67 +243,11 @@ public class Calendar extends Model {
 		return days;
 	}
 	
-	
 	/**
 	 * Returns this calendar's name.
 	 */
 	@Override
 	public String toString() {
 		return name;
-	}
-	
-		
-	/**
-	 * Returns a list of all events available at a specific day and a specific location
-	 * for a certain user.
-	 * <p>
-	 * An event is only visible when the given user is the owner of that event or the
-	 * event itself is public.
-	 * 
-	 * @param 	day		the day to check for events
-	 * @param 	visitor	the user who wants to see the events
-	 * @param 	loc		the location to check for events
-	 * @return	list of available events under the defined constrictions
-	 * @see		Event
-	 * @see 	Location
-	 * @see 	User
-	 * @since 	Iteration-1
-	 */
-	public List<Event> eventsByDayandLocation(DateTime day, User visitor,Location loc) {
-		DateTime start = day.withTime(0, 0, 0, 0);
-		DateTime end = start.plusDays(1);
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.startDate > ?2 " +
-				"AND e.endDate < ?3" +
-				"AND e.location.getLocation().contains(loc.getLocation())");
-		query.setParameter(1, visitor);
-		query.setParameter(2, start);
-		query.setParameter(3, end);
-		return query.getResultList();
-	}
-	
-
-	/**
-	 * Returns a list of all events available at a specific location for a certain user.
-	 * <p>
-	 * An event is only visible to the user if he is the owner of that event or the event
-	 * itself is public.
-	 * 
-	 * @param 	visitor	the user who wants to see the events
-	 * @param 	loc		the location to check for events
-	 * @return list of available events under the defined constrictions
-	 * @see		Event
-	 * @see 	Location
-	 * @see		User
-	 * @since 	Iteration-1
-	 */
-	public List<Event> eventsByLocation(User visitor,Location loc) {
-		
-		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.location.getLocation().contains(loc.getLocation())");
-		query.setParameter(1, visitor);
-		return query.getResultList();
 	}
 }

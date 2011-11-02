@@ -34,7 +34,7 @@ public class CommentTest extends UnitTest {
 	@Test
 	public void postComments() {
 		// Get a event
-		Event event = Event.find("byName", "Collections").first();
+		SingleEvent event = SingleEvent.find("byName", "Collections").first();
 	 
 	    // Post a first comment
 		event.addComment("Jeff", "Nice post");

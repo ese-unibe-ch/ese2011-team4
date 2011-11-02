@@ -69,7 +69,7 @@ public class User extends Model {
 	/**
 	 * This user's calendars.
 	 */
-	@OneToMany(mappedBy="owner")
+	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
 	public List<Calendar> calendars;
 	
 	/**
@@ -82,7 +82,6 @@ public class User extends Model {
 	 * <code>true</code> if this user is the administrator, otherwise <code>false</code>
 	 */
 	public boolean isAdmin;
-
 	
 	/**
 	 * User's constructor. The default behaviour is:
@@ -103,7 +102,6 @@ public class User extends Model {
 		this.fullname = fullname;
 		this.favorites = new LinkedList<User>();
 	}
-	
 	
 	/**
 	 * Returns this user.
@@ -172,7 +170,6 @@ public class User extends Model {
 		
 		return super.delete();
 	}
-	
 	
 	/**
 	 * Returns this user's full name.

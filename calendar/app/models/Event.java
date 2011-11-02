@@ -1,24 +1,25 @@
 package models;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Query;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+
 
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
@@ -59,8 +60,10 @@ import play.db.jpa.Model;
  * @see Calendar
  */
 @Entity
-public class Event extends Model implements Comparable<Event> {
-	
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
+@Table(name="Event")
+public abstract class Event extends Model implements Comparable<Event>{
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -69,13 +72,11 @@ public class Event extends Model implements Comparable<Event> {
 	@ManyToOne
 	public Calendar origin;
 	
-	
 	/**
 	 * This event's name.
 	 */
 	@Required
 	public String name;
-	
 	
 	/**
 	 * Calendars which joined this event.
@@ -84,15 +85,13 @@ public class Event extends Model implements Comparable<Event> {
 	@ManyToMany
 	public List<Calendar> calendars;
 	
-	
 	/**
 	 * Date on which this event begins.
 	 */
 	@Required
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	public DateTime startDate;
-	
-	
+	public DateTime startDate;	
+
 	/**
 	 * Date on which this even ends.
 	 */
@@ -101,19 +100,22 @@ public class Event extends Model implements Comparable<Event> {
 	@CheckWith(EndAfterBeginCheck.class)
 	public DateTime endDate;
 	
+	/**
+	 * Repeating type if any
+	 */
+	@Required
+	public RepeatingType type;
 	
 	/**
 	 * Visibility of this event.
 	 */
 	public Boolean isPrivate;
 	
-	
 	/**
 	 * Location at which this event takes place.
 	 */
 	@OneToOne
-	public Location location;
-	
+	public Location location;	
 	
 	/**
 	 * A written remark to describe this event.
@@ -121,13 +123,11 @@ public class Event extends Model implements Comparable<Event> {
 	@Lob
 	public String description;
 	
-	
 	/**
 	 * Comments added to this event.
 	 */
 	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
 	public List<Comment> comments;
-	
 	
 	/**
 	 * Event's constructor. The default behaviour is:
@@ -141,13 +141,17 @@ public class Event extends Model implements Comparable<Event> {
 	 * @see 	Calendar
 	 * @see 	Comment
 	 */
-	public Event(Calendar calendar) {
+	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate) {
 		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.name = name;
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
+		this.isPrivate = false;
+		this.type = RepeatingType.NONE;
 	}
-	
 	
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
@@ -163,8 +167,7 @@ public class Event extends Model implements Comparable<Event> {
 		calendar.save();
 		this.save();
 	}
-	
-	
+
 	/**
 	 * Adds a comment to this event. The comment has an author and some content.
 	 * 
@@ -174,13 +177,12 @@ public class Event extends Model implements Comparable<Event> {
 	 * @since 	Iteration-2
 	 * @see 	Comment
 	 */
-	public Event addComment(String author, String content) {
+	public void addComment(String author, String content) {
 	    Comment newComment = new Comment(author, this);
 	    newComment.content = content;
 	    newComment.save();
 	    this.comments.add(newComment);
 	    this.save();
-	    return this;
 	}
 	
 	/**
@@ -189,12 +191,12 @@ public class Event extends Model implements Comparable<Event> {
 	 * 
 	 * @param	user 	The user which requests the join 
 	 * @return	List<Calendar> List of possible calendars for a join	
-	 * @see		models.Event#joinCalendar(Calendar calendar)
+	 * @see		models.SingleEvent#joinCalendar(Calendar calendar)
 	 * @since	Iteration-1
 	 */	
 	public List<Calendar> availableJoins(User user) {
 		if(!isPrivate) {
-			Query query = JPA.em().createQuery("SELECT c FROM Calendar c "+
+			Query query = JPA.em().createQuery("SELECT c FROM Calendar c " +
 					"WHERE c.owner = ?1 "+
 					"AND ?2 NOT MEMBER OF c.events");
 			query.setParameter(1, user);
@@ -203,21 +205,17 @@ public class Event extends Model implements Comparable<Event> {
 		} else
 			return new LinkedList<Calendar>();
 	}
-
+	
 	/**
 	 *
-	 * Returns true if the event takes place at a certain day
+	 * Returns a list of users participating this event
 	 * 
 	 * @param	day 	The day to test
 	 * @return	<code>true</code> if the start date of the event is at this day, otherwise <code>false</code>
 	 * @see		models.Event#isThisDayandLocation(DateTime day, Location loc)
 	 * @since	Beta-v1.2
 	 */
-	public boolean isThisDay(DateTime day) {
-		return startDate.getYear() == day.getYear() 
-			&& startDate.getDayOfYear() == day.getDayOfYear();
-	}
-	
+	public abstract boolean isThisDay(DateTime day);
 	
 	/**
 	 * Returns true if the given user is the owner of this event or the
@@ -244,25 +242,9 @@ public class Event extends Model implements Comparable<Event> {
 	 * @since 	Iteration-2
 	 * @see 	Location
 	 */
-	public boolean isThisDayandLocation(DateTime day, Location loc) {
-		return startDate.getYear() == day.getYear() 
-			&& startDate.getDayOfYear() == day.getDayOfYear()
-			&& location.toString().contains(loc.toString());
-	}
+	public abstract boolean isThisDayandLocation(DateTime day, Location loc);
 
-	
-	/**
-	 * Returns this event's name.
-	 * 
-	 * @return this event's name
-	 * @since Iteration-1
-	 */
-	@Override
-	public String toString() {
-		return name;
-	}
 
-	
 	/**
 	 * Checks if the argument event's start date equals this event's start date.
 	 * 
@@ -278,7 +260,6 @@ public class Event extends Model implements Comparable<Event> {
 		return startDate.compareTo(e.startDate);
 	}
 	
-	
 	/**
 	 *
 	 * Returns a list of users participating this event
@@ -292,9 +273,21 @@ public class Event extends Model implements Comparable<Event> {
 			if(!cal.owner.equals(origin.owner) && !parts.contains(cal.owner))
 				parts.add(cal.owner);
 		return parts;
+	}	
+	
+	/**
+	 * Returns this event's name.
+	 * 
+	 * @return this event's name
+	 * @since Iteration-1
+	 * @return	a list of all users that contain this event in one of their calendars
+	 * @since	Iteration-2
+	 */
+	@Override
+	public String toString() {
+		return name;
 	}
-	
-	
+
 	private static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;

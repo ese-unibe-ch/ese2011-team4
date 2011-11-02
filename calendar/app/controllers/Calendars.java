@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import models.Calendar;
-import models.Event;
+import models.SingleEvent;
 import models.User;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -45,7 +45,7 @@ public class Calendars extends Controller {
     	
     	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
-    	List<Event> events = calendar.eventsByDay(dt, connectedUser);
+    	List<SingleEvent> events = calendar.events(connectedUser, dt);
     	User calendarOwner = calendar.owner;
     	
     	render(calendar, dt, events, connectedUser, calendarOwner);

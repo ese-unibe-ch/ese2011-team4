@@ -19,7 +19,7 @@
 			<ul class="followers">Users, who participate this event:
 				#{list items: _event.participants(), as: 'user'}
 					<li>
-						#{a @Calendars.display(user.id)}${user.fullname}#{/a}
+						#{a @Calendars.index(user.id)}${user.fullname}#{/a}
 					</li>
 				#{/list}
 			</ul>
@@ -37,11 +37,21 @@
 							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
 						#{/if}
 						#{if _connectedUser.equals(_calendar.owner)}
-							<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
+							#{if _event.type = models.RepeatingType.NONE}
+								<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
+							#{/if}
+							#{else}							
+								<li class="more"><span class="action">Delete</span>
+									<ul>
+										<li>#{a @Events.delete(_calendar.id, _event.id, false)}Series#{/a}</li>
+										<li>#{a @Events.delete(_calendar.id, _event.id, true)}This event#{/a}</li>									
+									</ul>
+								</li>
+							#{/else}
 						#{/if}
 						#{if _event.availableJoins(_connectedUser).size() > 0}
 							<li class="more"><span class="actions">Join</span>
-								<ul	>
+								<ul>
 									#{list items:_event.availableJoins(_connectedUser), as:'availableCalendar'}
 										<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
 									#{/list}

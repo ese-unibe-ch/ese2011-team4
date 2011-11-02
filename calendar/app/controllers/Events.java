@@ -103,6 +103,7 @@ public class Events extends Controller {
         	validation.keep();
         	Events.edit(calendarId, eventId);
     	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
@@ -130,7 +131,8 @@ public class Events extends Controller {
     								String endTime,
     								boolean isPrivate, 
     								String description,
-    								Long locationId) {
+    								Long locationId,
+    								String repeat) {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
@@ -145,10 +147,28 @@ public class Events extends Controller {
         	Events.add(calendarId);
     	}
     	
-    	Event event = new Event(calendar);
-    	event.name = name;
-		event.startDate = format.parseDateTime(startDate+startTime);
-		event.endDate = format.parseDateTime(endDate+endTime);
+    	RepeatingType type = RepeatingType.NONE;
+    	if(repeat.equals("daily"))
+    		type = RepeatingType.DAILY;
+    	else if(repeat.equals("weekly"))
+    		type = RepeatingType.WEEKLY;
+    	else if(repeat.equals("monthly"))
+    		type = RepeatingType.MONTHLY;
+    	else if(repeat.equals("yearly"))
+    		type = RepeatingType.YEARLY;
+    	
+    	Event event;
+    	if(type == RepeatingType.NONE) {
+    		event = new SingleEvent(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime));
+    	} else {
+    		event = new EventSeries(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime),
+    									type);
+    	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	

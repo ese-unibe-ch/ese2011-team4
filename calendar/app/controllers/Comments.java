@@ -2,9 +2,7 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.With;
-import models.Comment;
-import models.Event;
-import models.User;
+import models.*;
 
 @With(Secure.class)
 public class Comments extends Controller {
