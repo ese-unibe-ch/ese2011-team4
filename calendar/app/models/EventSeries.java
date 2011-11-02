@@ -30,7 +30,7 @@ public class EventSeries extends Event {
 		case MONTHLY:
 			return startDate.getDayOfMonth() == day.getDayOfMonth();
 		case YEARLY:
-			return startDate.getDayOfYear() == day.getDayOfYear();
+			return (startDate.getMonthOfYear() == day.getMonthOfYear() && startDate.getDayOfMonth() == day.getDayOfMonth());
 		}
 		return false;
 	}
