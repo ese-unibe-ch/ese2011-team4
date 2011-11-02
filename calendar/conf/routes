@@ -7,18 +7,18 @@
 
 # Home page
 GET     /                                       		Application.index
+GET     /captcha                              			Application.captcha
 GET		/calendar/{id}									Calendars.showCurrentMonth
 GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
+GET		/calendars/index/{userId}						Calendars.index
 GET		/register										Users.register
 GET		/users/favorite/add/{userId}					Users.addContact
 GET		/users/favorite/delete/{userId}					Users.deleteContact
-GET     /captcha                              			Application.captcha
-GET		/calendar/{calendarId}/add/{year}-{month}-{day}	Events.add
-GET     /event/{id}/comments                   			Events.showComments
-GET     /event/{id}/comment	                   			Events.addComment
-POST	/comment/{id}/update							Events.updateComment
+GET     /event/{id}/comments                   			Comments.show
+GET     /event/{id}/comment	                   			Comments.add
+POST	/comment/{id}/update							Comments.update
 GET		/calendar/{calendarId}/event/{eventId}/edit		Events.edit
-GET		/user/{userId}									Calendars.display
+GET		/calendar/{calendarId}/add/{year}-{month}-{day}	Events.add
 GET		/location/{id}									Locations.show
 GET		/location/{locationId}/edit                     Locations.edit
 
