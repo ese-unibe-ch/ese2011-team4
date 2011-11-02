@@ -17,7 +17,7 @@ public class Calendars extends Controller {
 	
     public static void index(Long userId) {
     	User connectedUser = User.find("email", Security.connected()).first();
-    	User user = User.findById(userId);
+    	User user = (User) ((userId==null)?connectedUser:User.findById(userId));
     	List<Calendar> calendars = Calendar.find("owner", user).fetch();
         render(calendars, connectedUser, user);
     }
