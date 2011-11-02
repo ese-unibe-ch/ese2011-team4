@@ -1,0 +1,49 @@
+#{extends 'main.html' /}
+#{set title:'Search'/}
+<div id="main">
+	<div id="main-left">
+	<div id="search-users">
+	#{if matchUsers.size() == 0 && searchUsers}
+		No user found, for the string "${name}".
+	#{/if}
+	#{elseif searchUsers}
+		Following users were found:
+	<ul>
+		#{list items: matchUsers, as: 'user'}
+			<li><a href ="@{Calendars.index(user.id)}">${user.toString()}</a></li>
+		#{/list}
+	</ul>
+	#{/elseif}
+	</div>
+	<div class="search-calendars">
+	#{if matchCalendars.size() == 0 && searchCalendars}
+		No calendar found, for the string "${name}".
+	#{/if}
+	#{elseif searchCalendars}
+		Following calendars were found:
+	<ul>
+		#{list items: matchCalendars, as: 'cal'}
+			<li><a href="@{Calendars.showCurrentMonth(cal.id)}">${cal.toString()}</a></li>
+		#{/list}
+	</ul>
+	#{/elseif}
+	</div>
+	
+	<div class="search-events">
+	#{if matchEvents.size() == 0 && searchEvents}
+		No event found, for the string "${name}".
+	#{/if}
+	#{elseif searchEvents}
+		Following events were found:
+	<ul>
+		#{list items: matchEvents, as: 'event'}
+			<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(),event.startDate.getDayOfMonth())}">${event.toString()}</a></li>
+		#{/list}
+	</ul>
+	#{/elseif}
+	</div>
+	</div>
+	<div id="main-right">
+		#{search-nav /}
+	</div>
+</div>

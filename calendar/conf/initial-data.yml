@@ -15,6 +15,7 @@ User(ed):
     email:          ed.exley@lapd.com
     password:       secret
     fullname:       Ed Exley
+    favorites:      bud
     
 Calendar(firstJackCalendar):
     name:           Jacks Agenda
@@ -39,86 +40,96 @@ Location(loc1):
     country:        Switzerland
     pincode:        3000
 
-Event(e0):
+SingleEvent(e0):
     name:           Collections
-    startDate:      2011-09-13 09:00:00 +1
-    endDate:        2011-09-13 12:00:00 +1
+    startDate:      2011-10-05 09:00:00 +1
+    endDate:        2011-10-05 12:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
+    description:    This is a private event from Jack in the past.
     isPrivate:      true
 
-Event(e1):
+SingleEvent(e1):
     name:           Meet Lynn Bracken
-    startDate:      2011-10-20 13:00:00 +1
-    endDate:        2011-10-20 15:00:00 +1
+    startDate:      2011-11-05 13:00:00 +1
+    endDate:        2011-11-05 15:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    creator:        jack
     location:       loc1
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam. 
+    description:    This is a public event from Jack at a location. 
     isPrivate:      false
     
-Event(e2):
+SingleEvent(e2):
     name:           Hit Exley
-    startDate:      2011-10-20 17:00:00 +1
-    endDate:        2011-10-20 18:00:00 +1
+    startDate:      2011-11-05 17:00:00 +1
+    endDate:        2011-11-05 18:00:00 +1
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a private event from Jack.
     isPrivate:      true
     
-Event(e3):
+SingleEvent(e3):
     name:           Work
-    startDate:      2011-10-21 08:00:00 +1
-    endDate:        2011-10-21 11:00:00 +1
-    calendars:      budCalendar
+    startDate:      2011-11-21 08:00:00 +1
+    endDate:        2011-11-21 11:00:00 +1
+    calendars:      
+     - budCalendar
+     - firstJackCalendar
     origin:         budCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a event joined by Jack.
     isPrivate:      false
     
-Event(e4):
+SingleEvent(e4):
     name:           Drinking whiskey
-    startDate:      2011-10-21 14:00:00 +1
-    endDate:        2011-10-21 17:00:00 +1
+    startDate:      2011-11-06 14:00:00 +1
+    endDate:        2011-11-06 17:00:00 +1
     calendars:      secondJackCalendar
     origin:         secondJackCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a private event from Jack in his second Calendar.
     isPrivate:      true
 
-Event(e5):
-    name:           Cinema
-    startDate:      2011-10-21 22:00:00 +1
-    endDate:        2011-10-22 08:00:00 +1
+SingleEvent(e5):
+    name:           Observation
+    startDate:      2011-11-04 08:00:00 +1
+    endDate:        2011-11-07 22:00:00 +1
     calendars:      edCalendar
     origin:         edCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is a public event from Ed over three days.
     isPrivate:      false
     
-Event(e6):
+SingleEvent(e6):
     name:           Meeting with the mayor
-    startDate:      2011-10-15 11:00:00 +1
-    endDate:        2011-10-15 13:00:00 +1
+    startDate:      2011-11-04 11:00:00 +1
+    endDate:        2011-11-04 13:00:00 +1
     calendars:      edCalendar
     origin:         edCalendar
-    description:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui quis neque bibendum sed dapibus metus commodo. Vestibulum sem enim, tincidunt sed pellentesque nec, tempor a tortor. Donec leo neque, consequat in mollis a, posuere vel dui. Donec tempus vestibulum augue, et sagittis lectus dictum eget. In nec quam.
+    description:    This is public event from Ed.
     isPrivate:      true
+
+EventSeries(r1):
+    name:           Weekly Meeting
+    startDate:      2011-11-07 14:00:00 +1
+    endDate:        2011-11-07 17:00:00 +1
+    calendars:      budCalendar
+    origin:         budCalendar
+    description:    This is a weekly repeating event.
+    isPrivate:      false
+    repeatingType:  models.RepeatingType.WEEKLY
     
 Comment(c1):
     author:         Michael
     postedAt:       2011-11-13 09:00:00 +1
     content:        first post
-    event:          e0
+    event:          e1
     
 Comment(c2):
     author:         Marc
     postedAt:       2011-11-13 10:00:00 +1
     content:        second post
-    event:          e0
+    event:          e1
     
 Comment(c3):
-    author:         Jack
+    author:         Jack Vincennes
     postedAt:       2011-10-21 11:00:00 +1
     content:        Jack is the owner of this event so he can add comments even if the event is private
     event:          e2
-    

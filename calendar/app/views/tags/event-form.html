@@ -22,35 +22,32 @@ function checkLocationCollision() {
 <p>
 #{field 'name'}
    	<label for="name">Title</label>
-    <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'name' /}</span>#{/ifErrors}-->
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'startDate'}
     <label for"startDate">Start</label>
-    <input type="text" name="${field.name}" id="startDate" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'event.startDate' /}</span>#{/ifErrors}-->
+    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'startTime'}
-	<label for"startTime">Time</label>
-    <input size=5px type="text" name="${field.name}" id="startTime" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
+	<label for"startTime" class="time">Time</label>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'endDate'}
 	<label for"endDate">End</label>
-	<input type="text" name="${field.name}" id="endDate" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
-    <!--#{ifErrors}<span class="error">#{error 'event.endDate' /}</span>#{/ifErrors}-->
+	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'endTime'}
-	<label for"endTime">Time</label>
-    <input size=5px type="text" name="${field.name}" id="endTime" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
+	<label for"endTime" class="time">Time</label>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'isPrivate'}
-	<input type="checkbox" name="${field.name}" id="isPrivate" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
 	<label for="isPrivate" id="isPrivate">Private event</label>
 #{/field}
 </p>
@@ -58,7 +55,7 @@ function checkLocationCollision() {
 <p>
 #{field 'locationId'}
 	<label for="locationId">Location</label>
-	<select name="${field.name}" id="locationId" onchange="javascript:checkLocationCollision()">
+	<select name="${field.name}" id="${field.name}" onchange="javascript:checkLocationCollision()">
 		<option value="-1">No location</option>
 		#{list items:_locations, as:'location'}
 			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _event?.location?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
@@ -67,36 +64,23 @@ function checkLocationCollision() {
 #{/field}
 </p>
 
-<!--<p>
-#{field 'street'}
-	<label for"street">Street</label>
-    <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_event?.location?.street}#{/else}"/>
-#{/field}
-#{field 'num'}
-	<label for"num">Number</label>
-    <input type="text" name="${field.name}" id="num" value="#{ifErrors}${flash.num}#{/ifErrors}#{else}${_event?.location?.num}#{/else}"/>
+<p>
+#{field 'repeat'}
+	<label for="repeat">Repeat</label>
+	<select name="${field.name}" id="${field.name}">
+		<option value="none">No repeat</option>
+		<option value="daily" #{ifErrors}#{if flash.repeat.toString() == "daily"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "daily"}selected="selected"#{/if}#{/else}*>Daily</option>
+		<option value="weekly" #{ifErrors}#{if flash.repeat.toString() == "weekly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "weekly"}selected="selected"#{/if}#{/else}*>Weekly</option>
+		<option value="monthly" #{ifErrors}#{if flash.repeat.toString() == "monthly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "monthly"}selected="selected"#{/if}#{/else}*>Monthly</option>
+		<option value="yearly" #{ifErrors}#{if flash.repeat.toString() == "yearly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "yearly"}selected="selected"#{/if}#{/else}*>Yearly</option>
+	</select>
 #{/field}
 </p>
-<p>
-#{field 'city'}
-	<label for"city">City</label>
-    <input type="text" name="${field.name}" id="city"/ value="#{ifErrors}${flash.city}#{/ifErrors}#{else}${_event?.location?.city}#{/else}"/>
-#{/field}
-#{field 'country'}
-	<label for"CountryLocation">Country</label>
-    <input type="text" name="${field.name}" id="country" value="#{ifErrors}${flash.country}#{/ifErrors}#{else}${_event?.location?.country}#{/else}"/>
-#{/field}
-</p>
-<p>
-#{field 'pincode'}
-	<label for"pincode">Pincode</label>
-    <input type="text" name="${field.name}" id="pincode" value="#{ifErrors}${flash.pincode}#{/ifErrors}#{else}${_event?.location?.pincode}#{/else}"/>
-#{/field}
-</p>-->
+
 <p class="description">
 #{field 'description'}
 	<label for"description">Description</label>
-    <textarea name="${field.name}" id="description">#{ifErrors}${flash.description}#{/ifErrors}#{else}${_event?.description}#{/else}</textarea>
+    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.description}#{/ifErrors}#{else}${_event?.description}#{/else}</textarea>
 #{/field}
 </p>
 

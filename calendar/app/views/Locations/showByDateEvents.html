@@ -1,38 +1,28 @@
 #{extends 'main.html' /}
 #{set title:'Locations'/}
-#{set 'moreStyles'}
-	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
-#{/set}
 
 <div id="main-right">
 	<h2 class="title">Actions</h2>
 	<ul>
-		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
 		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
-		<li><a href="@{Locations.delete(location.id)}">Delete this location</a></li>
+		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
 	</ul>
 </div>	
 <div id="main-left">
 	<h2 class="title">Infos about this Location</h2>
     	<div id="location">
-			<p>
-				<ul>
-					<li>${location.street} ${location.num}</li>
-					<li>${location.pincode} ${location.city}</li>
-					<li>${location.country} </li>
-				</ul>
-			</p>
-		</div>
-		<div id="map_canvas">Loading...</div>
 		
-		<h3>Upcoming events</h3>
+		<div id="map_canvas" style="width: 320px; height: 480px;"></div>
+		</div>
 		<p>
-			${numberOfEvents} upcoming events are using this location (${numberOfEvents-events.size()} private):
+		<p>
+			${numberOfEvents} events are using this location:
 			<ul>
 			#{list items:events, as:'event'}
-				<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">${event.name}</a></li>
+				<li><a href="@{Locations.showByDateEvents(startDate)}">${event.name}</a></li>
 			#{/list}
 			</ul>
+			and ${numberOfEvents-events.size()} private.
 		</p>
 
 <script type="text/javascript">
@@ -44,6 +34,9 @@
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false">
 </script>
+<style type="text/css">
+  #map_canvas { height: 50% }
+</style>
 <script type="text/javascript">
 var geocoder;
   var map;
@@ -52,18 +45,14 @@ var geocoder;
   var lang;
  
   function initialize() {
-    if(typeof google != "undefined") {
-      geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(-34.397, 150.644);
-      var myOptions = {
-        zoom: 13,
-        center: latlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    } else {
-      document.getElementById("map_canvas").innerHTML = "Could not load google maps.";
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+      zoom: 13,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   }
   function cal(address) {
 	    geocoder.geocode( { 'address': address}, function(results, status) {
@@ -92,3 +81,4 @@ var geocoder;
     });
   }
 </script>
+ 

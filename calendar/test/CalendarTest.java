@@ -47,9 +47,6 @@ public class CalendarTest extends UnitTest {
 		
 		// Validate and save
 		calendar.validateAndSave();
-		for(play.data.validation.Error e : Validation.errors()) {
-			Logger.info(e.message());
-		}
 		
 		assertTrue(calendar.validateAndSave());
 		assertEquals(5, Calendar.count());
@@ -62,6 +59,7 @@ public class CalendarTest extends UnitTest {
 		assertTrue(cal.events.isEmpty());
 	}
 	
+	@Ignore
 	@Test
 	public void delete() {
 		// Get a calendar
@@ -69,7 +67,7 @@ public class CalendarTest extends UnitTest {
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(7, Event.count());
+		assertEquals(7, SingleEvent.count());
 		
 		// Delete it
 		calendar.delete();
@@ -79,26 +77,33 @@ public class CalendarTest extends UnitTest {
 		assertEquals(3, Calendar.count());
 		
 		// Count events
-		assertEquals(6, Event.count());
+		assertEquals(6, SingleEvent.count());
+		
+		// Count comments
+		assertEquals(0, Comment.count());
 	}
 	
 	@Test
 	public void eventsPerDay() {
 		// Get some calendars
 		Calendar jacks = Calendar.find("byName", "Jacks Agenda").first();
-		Calendar buds = Calendar.find("byName", "Ed's Future Calandar").first();
+		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
 		
 		// Get two users
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
-		// Test method
-		assertEquals(2, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(1, jacks.eventsByDay(new DateTime().withDayOfMonth(20).withMonthOfYear(10).withYear(2011), bud).size());
-		assertEquals(1, buds.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
+		assertEquals(2, jacks.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, jacks.events(bud, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
 		
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(14).withMonthOfYear(10).withYear(2011), jack).size());
-		assertEquals(0, jacks.eventsByDay(new DateTime().withDayOfMonth(21).withMonthOfYear(10).withYear(2011), jack).size());
+		// Event over 3 days
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(1, eds.events(jack, new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011)).size());
+		
+		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(6).withMonthOfYear(11).withYear(2011)).size());
+		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
 	}
 	
 	@Test
@@ -111,7 +116,7 @@ public class CalendarTest extends UnitTest {
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Test method
-		assertEquals(3, calendar.visibleEvents(jack));
-		assertEquals(1, calendar.visibleEvents(bud));
+		assertEquals(4, calendar.visibleEvents(jack));
+		assertEquals(2, calendar.visibleEvents(bud));
 	}
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import models.Calendar;
-import models.Favorite;
-import models.User;
+import models.*;
 import play.db.jpa.JPA;
 import play.Logger;
 import play.data.validation.Validation;
@@ -21,24 +19,21 @@ public class Users extends Controller {
 	    render(users, connectedUser);
 	}
 	
-	public static void addContact(Long userId){
-		List<User> users = User.all().fetch();
-		User connectedUser = User.find("email", Security.connected()).first();
+	public static void addFavorite(Long id, Long userId){
+		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
-		//if(Favorite.find("favoriteId", userId)==null){ Not necessary anymore ;)
-			Favorite newFav = new Favorite(favorite.id, connectedUser.id, favorite.fullname).save();
-			render(connectedUser, newFav, users);
-		//}
-		//else index();
+		connectedUser.addFavorite(favorite);
+		connectedUser.save();
+		flash.success("You added %s to your favorite contacts.", favorite);
+	    index();
 	}
 	
-	public static void deleteContact(Long userId){
-		List<User> users = User.all().fetch();
-		User connectedUser = User.find("email", Security.connected()).first();
-		Favorite deleted = Favorite.find("favoriteId", userId).first();
-		Favorite.delete("favoriteId", userId);
-		render(connectedUser, users, deleted);
+	public static void removeFavorite(Long id, Long userId){
+		User connectedUser = User.findById(id);
+		User favorite = User.findById(userId);
+		connectedUser.removeFavorite(favorite);
+		connectedUser.save();
+		flash.success("You removed %s from your favorite contacts.", favorite);
+		index();
 	}
-	
-	
 }

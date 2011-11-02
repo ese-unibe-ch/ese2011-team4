@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import play.Logger;
+import play.data.validation.Validation;
 import play.test.Fixtures;
 import play.test.UnitTest;
 
@@ -21,13 +23,13 @@ public class LocationTest extends UnitTest {
 	@After
 	public void deleteDataBase() {
 		Fixtures.deleteDatabase();
-		assertEquals(0, Event.count());
+		assertEquals(0, SingleEvent.count());
 	}
 	
 	@Test
 	public void eventWithLocation() {
 		// Get an event
-		Event e1 = Event.find("byName", "Meet Lynn Bracken").first();
+		SingleEvent e1 = SingleEvent.find("byName", "Meet Lynn Bracken").first();
 		
 		// Test if it has an event
 		assertEquals("Bernstrasse", e1.location.street);
@@ -36,7 +38,7 @@ public class LocationTest extends UnitTest {
 	@Test
 	public void addLocation() {
 		// Get an Event
-		Event e0 = Event.find("byName", "Collections").first();
+		SingleEvent e0 = SingleEvent.find("byName", "Collections").first();
 		
 		// Create a new Location
 		Location location = new Location();
@@ -54,6 +56,10 @@ public class LocationTest extends UnitTest {
 		e0.location = location;
 		
 		// Save it
+		e0.validateAndSave();
+		for(play.data.validation.Error e : Validation.errors())
+			Logger.info(e.message());
+		
 		assertTrue(e0.validateAndSave());
 		
 		// Retrieve data

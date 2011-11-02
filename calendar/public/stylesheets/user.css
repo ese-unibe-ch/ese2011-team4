@@ -1,0 +1,30 @@
+/** User index**/
+
+#user-list .user-name {
+	display: inline-block;
+	width: 40%;
+}
+
+#user-list .user-calendars {
+	display: inline-block;
+	width: 40%;
+}
+
+#user-list .add {
+	display: inline-block;
+	width: 15%;
+}
+
+#user-nav table{
+	width: 100%;
+	table-layout: fixed;
+}
+
+table .delete{
+	width: 30%
+	text-algin: left
+}
+
+table a:hover {
+	background-color: none;
+}

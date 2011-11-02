@@ -1,11 +1,7 @@
-
-
-	<h2 class="title">Options</h2>
+<h2 class="title">Options</h2>
 	<div class="navigation">
 		<ul>
 			<li><a class="navigation" href="@{Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}">Go back</a></li>
-			#{secure.check _event}
-				<li><a class="navigation" href="@{Events.addComment(_event.id)}">Add a comment</a></li>
-			#{/secure.check}
+			<li><a class="navigation" href="@{Comments.add(_event.id)}">Add a comment</a></li>
 		</ul>
 	</div>

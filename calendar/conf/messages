@@ -1,8 +1,14 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+
 secure.username=Your email:
 secure.password=Your password:
 secure.signin=Log in now
+
+user.email=Email
+user.fullname=Fullname
+user.password=Password
+
 validation.required=%s is required
 validation.EndAfterBeginCheck=End must be after start

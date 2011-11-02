@@ -70,7 +70,6 @@ public class Events extends Controller {
     		}
     	} else
     		forbidden("Not your calendar!");
-    	
     }
     
     public static void joinCalendar(Long calendarId, Long eventId) {
@@ -82,11 +81,11 @@ public class Events extends Controller {
     
     public static void update(	Long calendarId,
     							Long eventId, 
-								@Required String name, 
-								@Required String startDate,
-								@Required String startTime,
-								@Required String endDate, 
-								@Required String endTime,
+								String name, 
+								String startDate,
+								String startTime,
+								String endDate, 
+								String endTime,
 								boolean isPrivate, 
 								String description,
 								Long locationId) {
@@ -104,6 +103,7 @@ public class Events extends Controller {
         	validation.keep();
         	Events.edit(calendarId, eventId);
     	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
@@ -131,7 +131,8 @@ public class Events extends Controller {
     								String endTime,
     								boolean isPrivate, 
     								String description,
-    								Long locationId) {
+    								Long locationId,
+    								String repeat) {
     	
     	Calendar calendar = Calendar.findById(calendarId);
     	assert calendar != null;
@@ -146,10 +147,28 @@ public class Events extends Controller {
         	Events.add(calendarId);
     	}
     	
-    	Event event = new Event(calendar);
-    	event.name = name;
-		event.startDate = format.parseDateTime(startDate+startTime);
-		event.endDate = format.parseDateTime(endDate+endTime);
+    	RepeatingType type = RepeatingType.NONE;
+    	if(repeat.equals("daily"))
+    		type = RepeatingType.DAILY;
+    	else if(repeat.equals("weekly"))
+    		type = RepeatingType.WEEKLY;
+    	else if(repeat.equals("monthly"))
+    		type = RepeatingType.MONTHLY;
+    	else if(repeat.equals("yearly"))
+    		type = RepeatingType.YEARLY;
+    	
+    	Event event;
+    	if(type == RepeatingType.NONE) {
+    		event = new SingleEvent(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime));
+    	} else {
+    		event = new EventSeries(	calendar, 
+    									name,format.parseDateTime(startDate+startTime),
+    									format.parseDateTime(endDate+endTime),
+    									type);
+    	}
+    	
     	event.isPrivate = isPrivate;
     	event.description = description;
     	
@@ -165,51 +184,6 @@ public class Events extends Controller {
         	validation.keep();
         	Events.add(calendarId);
         }
-    }
-    
-    public static void showComments(Long id){
-    	Event event = Event.findById(id);
-    	render(event);
-    }
-    
-    public static void addComment(Long id){
-    	Event event = Event.findById(id);
-    	String randomID = Codec.UUID();
-        render(event, randomID);
-    }
-    
-    public static void updateComment(	Long id, 
-    									String author, 
-    									String content,
-    									@Required(message="Please type the code") String code, 
-    							        @Required String randomID){
-    	
-    	validation.equals(code, Cache.get(randomID)).message("Invalid code. Please type it again");
-    	
-    	Event event = Event.findById(id);
-    	assert event != null;
-    	Comment comment = new Comment(event);
-    	comment.author = author;
-    	comment.content = content;
- 
-    	if(!validation.hasErrors() && comment.validateAndSave()){
-    		flash.success("Thanks for posting %s", author);
-    		Cache.delete(randomID);
-    		showComments(event.id);
-    	}
-    	
-    	else{
-    		params.flash();
-    		validation.keep();
-			addComment(event.id);
-    	}
-    }
-    
-    public static void captcha(String id) {
-    	Images.Captcha captcha = Images.captcha();
-        String code = captcha.getText("#E4EAFD");
-        Cache.set(id, code, "10mn");
-        renderBinary(captcha);
     }
     
     public static void checkLocationCollision(String startDate,

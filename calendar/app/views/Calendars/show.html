@@ -1,5 +1,9 @@
 #{extends 'main.html' /}
 #{set title:calendar.name/}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
 
 <div id="main-left">
 	<h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
@@ -42,7 +46,7 @@
 				#{/if}
 					
 				#{list items:calendar.getDaysInMonth(dt), as:'day'}
-					<td class="#{if calendar.eventsByDay(day, connectedUser).size() > 0}events#{/if}
+					<td class="#{if calendar.events(connectedUser, day).size() > 0}events#{/if}
 						#{if day.getDayOfMonth() == dt.getDayOfMonth()}selected#{/if}">
 						#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
 						${day.getDayOfMonth()}

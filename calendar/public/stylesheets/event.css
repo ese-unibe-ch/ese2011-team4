@@ -1,0 +1,241 @@
+/** Event header **/
+
+.event-header {
+	position: relative;
+}
+
+.event-title {
+	font-weight: bold;
+	font-size: 1.2em;
+	display: inline;
+}
+
+.event-metadata {
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+.private {
+	margin-left: 10px;
+}
+
+.location {
+	display: block;
+}
+
+/** Event menu **/
+
+.event-menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.event-menu .actions {
+	display: block;
+	padding: 5px;	
+	width: 75px;
+	background-color: #fff;
+}
+
+.event-menu .actions:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+.event-menu ol {
+	list-style: none;
+	padding: 0;
+}
+
+#main .event-menu a {
+	display: block;
+	background-color: #fff;
+	color: #333;
+	padding: 5px;
+	width: 75px;
+}
+
+#main .event-menu ul a {
+	width: 170px;	
+}
+
+#main .event-menu li a:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+.event-menu li ol {
+	display: none;
+	position: absolute;
+}
+
+.event-menu li:hover ol {
+	display: block;
+	z-index: 100;
+}
+
+.event-menu li ol li ul {
+	display: none;
+	position: absolute;
+}
+
+.event-menu li.more span {
+	display: inline-block;
+	float: right;
+}
+
+.event-menu li.more:hover ul {
+	display: inline-block;
+	width: 170px;
+	left: -180px;
+}
+
+/** Event content **/
+
+.event {
+	margin-bottom: 10px;
+}
+
+#events ul {
+	list-style: none;
+	padding: 0px;
+}
+
+#add-comment hr {
+	border: 0;
+	margin: 0px 10px 10px 0px;
+	color: #0051FF;
+	background-color: #0051FF;
+	height: 1px;
+	width: 100%;
+}
+
+.event-content {
+	margin-top: 10px;
+}
+
+.comment {
+	display: inline-block;
+	float: right;
+}
+
+.comment a {
+	display: inline-block;
+	padding: 3px;
+}
+
+.comment a:hover{
+	background-color: #333;
+	color: #fff;
+}
+
+/** Event form **/
+
+.author {
+	padding: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.author a:hover{
+	background-color: #333;
+	color: #fff;
+}
+
+#event-form label {
+	width: 80px;
+}
+
+#event-form label.time {
+	width: 45px;
+	margin-left: 15px;
+}
+
+#event-form #startTime, #event-form #endTime {
+	width: 40px;
+}
+
+.description label {
+	display: block;
+}
+
+#isPrivate {
+	display: inline;
+}
+
+/** Comment **/
+
+#event-content {
+	margin-top: 10px;
+}
+
+#event-comments ul {
+	list-style: none;
+	padding: 0px;
+}
+
+.event-comment {
+	padding-bottom: 10px;
+	width: 100%;
+	clear: both;
+}
+
+.event-comment .comment-metadata {
+	display: block;
+	font-size: 55%;
+	display: block;
+	float: left;
+	width: 15%;
+	margin-right: 5px;
+	text-align: right;
+}
+
+.event-comment .comment-author {
+	font-size: 150%;
+	font-weight: bold;
+	display: block;
+}
+
+.event-comment table{
+	width:84%;
+}
+
+.comment-content {
+	width: 75%;
+	position: relative;
+	background: #E4EAFF;
+	text-align: left;
+	font-size: 80%;
+	padding: 10px;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+
+/** Comment-Form **/
+
+#add-comment form textarea {
+	width: 75%;
+ 	height: 150px;
+	font-size: 100%;
+	margin-bottom: 10px;
+	padding: 10px;
+	resize: none;
+}
+
+#add-comment form input, form textarea {
+	padding-left: 5px;
+	margin-bottom: 10px;
+	background: #E4EAFF;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+
+#add-comment form label {
+	width: 50%;
+	display: block;
+	font-weight: bold;
+	color: #333333;
+}

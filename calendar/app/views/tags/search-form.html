@@ -1,0 +1,27 @@
+<p>
+#{field 'name'}
+   	<label for="name">Name</label>
+    <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+<p class ="box">
+<label>Search for:</label>
+#{field 'searchUsers'}
+	<input type="checkbox" name="${field.name}" id="searchUsers" checked="1">
+	<label for="searchUsers">users</label>
+#{/field}
+#{field 'searchCalendars'}
+	<input type="checkbox" name="${field.name}" id="searchCalendars">
+	<label for="searchCalendars">calendars</label>
+#{/field}
+#{field 'searchEvents'}
+	<input type="checkbox" name="${field.name}" id="searchEvents">
+	<label for="searchEvents">events</label>
+#{/field}
+</p>
+<p class="button">
+	<input type="submit" value="Search" />
+</p>
+<p class="button">
+	<input type="reset" value="Reset" />
+</p>
