@@ -30,7 +30,9 @@ import play.db.jpa.Model;
 
 /**
  * The Event class represents a temporary and scheduled happening with a defined 
- * goal or intention, which can be added to calendars.
+ * goal or intention, which can be added to calendars. The Event class is abstract
+ * and therefor only its implementation can be used, which are {@link SingleEvent}
+ * and {@link EventSeries}.
  * <p>
  * An event includes the following informations:
  * <ul>
@@ -38,6 +40,7 @@ import play.db.jpa.Model;
  * <li>The event's name</li>
  * <li>A list of zero or more calendars in which the event occurs</li>
  * <li>A start and an end time between which the event takes place</li>
+ * <li>A {@link RepeatingType} which is used by the {@link EventSeries}</li>
  * <li>An event can be public or private. A private event is only visible to its owner</li>
  * <li>A {@link Location} at which the event takes place</li>
  * <li>A description</li>
@@ -54,6 +57,8 @@ import play.db.jpa.Model;
  * </ul>
  * 
  * @since Iteration-1
+ * @see SingleEvent
+ * @see EventSeries
  * @see User
  * @see Location
  * @see Comment

@@ -37,14 +37,14 @@
 							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
 						#{/if}
 						#{if _connectedUser.equals(_calendar.owner)}
-							#{if _event.type = models.RepeatingType.NONE}
+							#{if _event.type == models.RepeatingType.NONE || _event.origin != _calendar}
 								<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
 							#{/if}
 							#{else}							
-								<li class="more"><span class="action">Delete</span>
+								<li class="more"><span class="actions">Delete</span>
 									<ul>
-										<li>#{a @Events.delete(_calendar.id, _event.id, false)}Series#{/a}</li>
-										<li>#{a @Events.delete(_calendar.id, _event.id, true)}This event#{/a}</li>									
+										<li>#{a @Events.delete(_calendar.id, _event.id)}Series#{/a}</li>
+										<li>#{a @Events.mutateSeries(_calendar.id, _event.id, _event.startDate)}Event#{/a}</li>									
 									</ul>
 								</li>
 							#{/else}

@@ -74,6 +74,7 @@ public class RepeatingEventTest extends UnitTest {
 		
 		assertEquals(event.name, dummy.name);
 		assertEquals(event.comments, dummy.comments);
+		assertEquals(event.startDate.withDayOfMonth(7).withMonthOfYear(11).withYear(2011), dummy.startDate);
 		assertEquals(RepeatingType.WEEKLY, dummy.type);
 	}
 }

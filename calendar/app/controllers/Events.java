@@ -72,6 +72,22 @@ public class Events extends Controller {
     		forbidden("Not your calendar!");
     }
     
+    public static void mutateSeries(Long calendarId, Long eventId, DateTime start) {
+    	Calendar calendar = Calendar.findById(calendarId);
+    	EventSeries series = EventSeries.findById(eventId);
+    	assert calendar != null && series != null;
+    	
+    	if(Security.check(calendar)) {
+    		if(Security.check(series)) {
+    			series.mutate(start);
+    			series.save();
+    			Calendars.showCurrentMonth(calendarId);
+    		} else
+    			forbidden("Not your event!");
+    	} else
+    		forbidden("Not your calendar!");
+    }
+    
     public static void joinCalendar(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
     	Event event = Event.findById(eventId);
