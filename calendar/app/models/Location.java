@@ -34,9 +34,18 @@ import play.db.jpa.Model;
  * and are visible for a certain user</li>
  * <li>searching for a certain location</li>
  * </ul>
+ * <p>
+ * The location class doesn't provide any method for checking whether two events take place at the
+ * same position and the same time. This function is implemented in controller Events.
  * 
  * @since Iteration-2
  * @see User
+ * @see controllers.Events#checkLocationCollision(	String startDate,
+ *													String startTime,
+ *													String endDate, 
+ *													String endTime,
+ *													Long locationId,
+ *													long eventId)
  */
 @Entity
 public class Location extends Model{
@@ -331,5 +340,4 @@ public class Location extends Model{
 		query.setMaxResults(1);
 		return (query.getResultList().size() > 0)?(Location) query.getResultList().get(0):null;
 	}
-	
 }
