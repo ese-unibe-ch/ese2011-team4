@@ -105,6 +105,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
 	}
 	
+	@Ignore("relies on system date")
 	@Test
 	public void visibleEvents() {
 		// Get a calendar
@@ -115,7 +116,7 @@ public class CalendarTest extends UnitTest {
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Test method
-		assertEquals(4, calendar.visibleEvents(jack));
-		assertEquals(2, calendar.visibleEvents(bud));
+		assertEquals(4, calendar.visibleEvents(jack).size());
+		assertEquals(2, calendar.visibleEvents(bud).size());
 	}
 }

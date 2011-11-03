@@ -171,7 +171,6 @@ public class Calendar extends Model {
 	 * @since 	Iteration-1
 	 */
 	public List<Event> events(User visitor, Location loc) {
-		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
 				"AND e.location.getLocation().contains(loc.getLocation())");
@@ -205,24 +204,28 @@ public class Calendar extends Model {
 	}
 	
 	/**
-	 * Returns the number of events available for a certain user.
+	 * Returns a list of upcoming events in the next 30 days for a specific user.
 	 * <p>
 	 * The events are only available if the user is the owner of the event
-	 * or the event itself is public.
+	 * or the event itself is public and it always uses the current time.
 	 * 
 	 * @param 	user	the user for whom the method checks for available events
-	 * @return 	number of available events under the defined constrictions
+	 * @return 	list of available events for the user in the next 30 days
 	 * @see		Event
 	 * @see 	User
 	 * @since 	Iteration-1
 	 */
-	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
-	public int visibleEvents(User user) {
-		int count = 0;
-		for(Event e : events)
-			if(owner == user || !e.isPrivate)
-				count++;
-		return count;
+	public List<Event> visibleEvents(User visitor) {
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)" +
+				"AND e.startDate > ?3 " +
+				"AND e.startDate < ?4");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, new DateTime());
+		query.setParameter(4, new DateTime().plusDays(30));
+		return query.getResultList();
 	}
 	
 	/**
