@@ -24,6 +24,15 @@ public class SingleEventTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
 		assertEquals(7, SingleEvent.count());
 	}
 	
@@ -151,17 +160,17 @@ public class SingleEventTest extends UnitTest {
 	
 	@Test
 	public void showParticipants() {
-		// Get a event
-		Event event = Event.find("byName", "Work").first();
+		// Get a event with no participants
+		Event event = Event.find("byName", "Meeting with the mayor").first();
+		assertEquals(1, event.calendars.size());
+		assertEquals(0, event.participants().size());
+		
+		// Get a event with 1 participant
+		event = Event.find("byName", "Work").first();
 		assertEquals(2, event.calendars.size());
-		
-		// Get two users
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
-		User bud = User.find("byEmail", "bud.white@lapd.com").first();
-		
-		assertEquals(2, event.participants().size());
+		assertEquals(1, event.participants().size());
 		assertTrue(event.participants().contains(jack));
-		assertTrue(event.participants().contains(bud));
 	}
 	
 	@Test

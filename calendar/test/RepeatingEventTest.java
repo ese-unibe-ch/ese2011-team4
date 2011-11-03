@@ -18,6 +18,15 @@ public class RepeatingEventTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
 		assertEquals(1, EventSeries.count());
 	}
 	
@@ -54,8 +63,6 @@ public class RepeatingEventTest extends UnitTest {
 	public void testWeeklyEvent() {
 		// Get a calendar
 		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
-		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
-		event.type = RepeatingType.WEEKLY;
 		
 		List<SingleEvent> list = budCalendar.events(budCalendar.owner, new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011));
 		
@@ -83,7 +90,6 @@ public class RepeatingEventTest extends UnitTest {
 		// Get a event
 		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
 		Calendar calendar = event.origin;
-		event.type = RepeatingType.WEEKLY;
 		
 		DateTime dt = new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011);		
 		
