@@ -142,6 +142,7 @@ public class Calendar extends Model {
 		
 		List<SingleEvent> list = query.getResultList();
 		
+		// Get Repeating events
 		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
 				"WHERE ?1 MEMBER OF e.calendars " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2)");

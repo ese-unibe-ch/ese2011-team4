@@ -77,4 +77,18 @@ public class RepeatingEventTest extends UnitTest {
 		assertEquals(event.startDate.withDayOfMonth(7).withMonthOfYear(11).withYear(2011), dummy.startDate);
 		assertEquals(RepeatingType.WEEKLY, dummy.type);
 	}
+	
+	@Test
+	public void mutateEvent() {
+		// Get a event
+		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		Calendar calendar = event.origin;
+		event.type = RepeatingType.WEEKLY;
+		
+		DateTime dt = new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011);		
+		
+		event.mutate(dt);
+		List<SingleEvent> list = calendar.events(calendar.owner, dt);
+		assertEquals(0, list.size());
+	}
 }

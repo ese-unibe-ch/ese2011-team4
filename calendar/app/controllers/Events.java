@@ -40,7 +40,6 @@ public class Events extends Controller {
     		forbidden("Not your calendar!");
     }
     
-
     public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
     	List<Location> locations = Location.all().fetch();
@@ -60,28 +59,44 @@ public class Events extends Controller {
     			event.delete();
     			Calendars.showCurrentMonth(calendarId);
     		} else {
+    			// Delete a joined event
     			assert calendar.events.contains(event);
     			
     			calendar.events.remove(event);
     			event.calendars.remove(calendar);
     			calendar.save();
     			event.save();
-    			Calendars.showCurrentMonth(calendarId);
+    			Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
     		}
     	} else
     		forbidden("Not your calendar!");
     }
     
-    public static void mutateSeries(Long calendarId, Long eventId, DateTime start) {
+    public static void editOfSeries(Long calendarId, Long eventId, int day, int year) {
     	Calendar calendar = Calendar.findById(calendarId);
     	EventSeries series = EventSeries.findById(eventId);
     	assert calendar != null && series != null;
+    	DateTime dt = new DateTime().withYear(year).withDayOfYear(day);
+    	
+    	if(Security.check(series)) {
+    		series.mutate(dt);
+    		series.save();
+    		edit(calendarId, series.editSingleEvent(dt).id);
+    	} else
+    		forbidden("Not your event!");
+    }
+    
+    public static void deleteOfSeries(Long calendarId, Long eventId, int day, int year) {
+    	Calendar calendar = Calendar.findById(calendarId);
+    	EventSeries series = EventSeries.findById(eventId);
+    	assert calendar != null && series != null;
+    	DateTime dt = new DateTime().withYear(year).withDayOfYear(day);
     	
     	if(Security.check(calendar)) {
     		if(Security.check(series)) {
-    			series.mutate(start);
+    			series.mutate(dt);
     			series.save();
-    			Calendars.showCurrentMonth(calendarId);
+    			Calendars.show(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
     		} else
     			forbidden("Not your event!");
     	} else
