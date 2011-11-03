@@ -235,7 +235,6 @@ public abstract class Event extends Model implements Comparable<Event>{
 		return origin.owner.equals(visitor) || !isPrivate;
 	}
 	
-	
 	/**
 	 * Returns true if the given date is the start date of this event and
 	 * if the given location equals the event's location.
@@ -248,7 +247,6 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * @see 	Location
 	 */
 	public abstract boolean isThisDayandLocation(DateTime day, Location loc);
-
 
 	/**
 	 * Checks if the argument event's start date equals this event's start date.
@@ -279,6 +277,21 @@ public abstract class Event extends Model implements Comparable<Event>{
 				parts.add(cal.owner);
 		return parts;
 	}	
+	
+	/**
+	 * 
+	 * Deletes the event
+	 * 
+	 * @return 	the object deleted
+	 * @since	Iteration-1
+	 */
+	@Override
+	public Event delete() {
+		for(Comment p : Comment.find("byEvent", this).<Comment>fetch()) {
+		    p.delete();
+		}
+		return super.delete();
+	}
 	
 	/**
 	 * Returns this event's name.

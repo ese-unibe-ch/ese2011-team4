@@ -47,7 +47,6 @@ import play.db.jpa.Model;
 
 @Entity
 public class Calendar extends Model {
-	
 	/**
 	 * This calendar's name.
 	 * 
@@ -55,7 +54,6 @@ public class Calendar extends Model {
 	 */
 	@Required
 	public String name;
-	
 	
 	/**
 	 * User who owns this calendar.
@@ -66,7 +64,6 @@ public class Calendar extends Model {
 	@Required
 	public User owner;
 	
-	
 	/**
 	 * List of events which this calendar contains.
 	 * 
@@ -74,7 +71,6 @@ public class Calendar extends Model {
 	 */
 	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
-	
 	
 	/** 
 	 * Calendar's constructor. The default behavior is:
@@ -102,10 +98,15 @@ public class Calendar extends Model {
 	 */
 	@Override
 	public Calendar delete() {
-		// First delete all events that were initially created in this calendar
-		for(Event e : events)
+		// First delete the event - calendar relation
+		for(Event e : events) {
 			if(e.origin.equals(this))
 				e.delete();
+			else {
+				e.calendars.remove(this);
+				e.save();
+			}
+		}
 		
 		return super.delete();
 	}

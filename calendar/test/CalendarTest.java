@@ -59,15 +59,14 @@ public class CalendarTest extends UnitTest {
 		assertTrue(cal.events.isEmpty());
 	}
 	
-	@Ignore
 	@Test
 	public void delete() {
 		// Get a calendar
-		Calendar calendar = Calendar.find("byName", "Jacks Secret Agenda").first();
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, Event.count());
 		
 		// Delete it
 		calendar.delete();
@@ -77,7 +76,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(3, Calendar.count());
 		
 		// Count events
-		assertEquals(6, SingleEvent.count());
+		assertEquals(5, Event.count());
 		
 		// Count comments
 		assertEquals(0, Comment.count());

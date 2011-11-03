@@ -1,5 +1,3 @@
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -55,7 +53,8 @@ public class UserTest extends UnitTest{
 		
 		// Count objects
 		assertEquals(2, Calendar.count());
-		assertEquals(3, SingleEvent.count());
+		assertEquals(4, Event.count());
+		assertEquals(0, Comment.count());
 	}
 	
 	@Test
