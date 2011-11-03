@@ -1,0 +1,201 @@
+/** CSS-reset **/
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a,del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, .event,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+html, body {
+	background-color: transparent;
+	font-size: 12pt;
+	font-family:'Times New Roman',Times,serif;
+	color:#000000;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+
+/**Not displayed**/
+
+
+#previous-month,
+#next-month,
+header,
+.event-menu,
+.comment,
+#main-right{
+	display: none;
+}
+
+
+/**No float**/
+
+body:before,
+header nav li a,
+#main-left,
+#main-right,
+.event-menu li.more span,
+.comment{
+	float:none !important;
+}
+
+/** Set up print css **/
+
+a:link{
+         color: #000000;
+         text-decoration:none;
+}
+
+#main-left{
+	border-radius: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.title{
+	font-weight: bold;
+	padding: 0.5em;
+	text-align: center;
+}
+
+
+#calendar{
+	padding-top: 1em;
+	float: right;
+}
+
+#calendar-navigation{
+	font-size: 14pt;
+	font-weight: bold;
+	padding-bottom: 0.3em;
+}
+
+#calendar-name{
+	font-size: 18pt;
+}
+
+
+
+#current-month{
+	
+}
+
+#month{
+	border-style:solid;
+	border-width:1px;	
+}
+
+table tr td{
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+#month td.selected a{
+	color: #3300CC !important;
+}
+
+#events{
+	padding: 2em 0 2em 0;
+	width: 50%;
+}
+
+.event{
+	padding-bottom: 1em;
+}
+
+#events ul{
+	padding: 0 !important;
+
+}
+
+.event-header{
+}
+
+.event-title{
+	float:left;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+.event-metadata{
+	padding-left: 1em;
+}
+
+.date{
+	padding-left: 0.5em;
+	font-size: 9pt;
+}
+
+.private{
+	font-size: 9pt;
+}
+
+.owner{
+	font-size: 9pt;
+}
+
+.followers{
+	margin-top: 0.3em;
+}
+
+.location{
+}
+
+.event-content{
+	font-weight: italic;
+	padding: 0.8em 0 0 1em;
+}
+
+#footer {
+	clear: both;
+	border-top: 1.5pt solid;
+	font-size: .95em;
+	color: #333;
+	text-align: center;
+}

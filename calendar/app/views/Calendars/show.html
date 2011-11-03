@@ -65,23 +65,23 @@
 				#{/if}		
 			</tr>
 		</table>
+	</div>
 
-		<div id="events">
-			#{if events.size() > 0}
-				<ul>
-					<hr />
-					#{list items:events, as:'event'}
-						#{event calendar:calendar, event:event, connectedUser:connectedUser /}
-					#{/list}
-				</ul>
-			#{/if}
+	<div id="events">
+		#{if events.size() > 0}
+			<ul>
+				<hr />
+				#{list items:events, as:'event'}
+					#{event calendar:calendar, event:event, connectedUser:connectedUser /}
+				#{/list}
+			</ul>
+		#{/if}
 		
-			#{else}
-				<div class="empty">
-	        		There are no events for the selected date.
-	    		</div>
-			#{/else}
-		</div>
+		#{else}
+			<div class="empty">
+	       		There are no events for the selected date.
+	   		</div>
+		#{/else}
 	</div>
 </div>
 
