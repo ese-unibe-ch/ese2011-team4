@@ -1,9 +1,11 @@
 /** CSS-reset **/
-html, body, div, span,
+
+html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a,del, dfn, em, img, ins, kbd, q, s, samp,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
-b, u, i, center, .event,
+b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
@@ -62,6 +64,7 @@ html, body {
 
 /**Not displayed**/
 
+#footer,
 hr,
 #previous-month,
 #next-month,
@@ -86,13 +89,7 @@ header nav li a,
 
 /** Set up print css **/
 
-a:link{
-         color: #000000;
-         text-decoration:none;
-}
-
 #main-left{
-	border-radius: none;
 	margin: 0;
 	padding: 0;
 	width: 100%;
@@ -100,14 +97,18 @@ a:link{
 
 .title{
 	font-weight: bold;
-	padding: 0.5em;
 	text-align: center;
 }
 
 
 #calendar{
-	padding-top: 1em;
+	padding: 1.3em 0 1.3em 1.3em;
 	float: right;
+}
+
+#calendar-name{
+	font-size: 18pt;
+	text-decoration: underline;
 }
 
 #calendar-navigation{
@@ -116,23 +117,17 @@ a:link{
 	padding-bottom: 0.3em;
 }
 
-#calendar-name{
-	font-size: 18pt;
-}
-
-
-
-#current-month{
-	
-}
-
 #month{
 	border-style:solid;
 	border-width:1px;	
 }
 
+#month .title{
+	padding: 0.3em;
+}
+
 table tr td{
-	padding-bottom: 5px;
+	padding-bottom: 0.3em;
 	text-align: center;
 }
 
@@ -141,61 +136,60 @@ table tr td{
 }
 
 #events{
-	padding: 2em 0 2em 0;
-	width: 50%;
+	padding-top: 1em;
+	width: 55%;
 }
 
-.event{
-	padding-bottom: 1em;
-}
-
-#events ul{
-	padding: 0 !important;
-
+a:link{
+         color: #000000;
+         text-decoration:none;
 }
 
 .event-header{
+	margin-top: 1.5em;
 }
 
 .event-title{
-	float:left;
+	margin-bottom: 0.3em;
 	font-weight: bold;
-	font-size: 12pt;
+	font-size: 13pt;
 }
 
 .event-metadata{
-	padding-left: 1em;
+	padding-left: 0.8em;
 }
 
 .date{
-	padding-left: 0.5em;
-	font-size: 9pt;
+	margin-right: 10em;
+	font-size: 11pt;
 }
 
 .private{
-	font-size: 9pt;
+	margin-right: 15em;
+	font-style: italic;
+	font-size: 11pt;
 }
 
 .owner{
-	font-size: 9pt;
+	font-style: italic;
+	font-size: 11pt;
 }
 
 .followers{
-	margin-top: 0.3em;
+	font-size: 11pt;
 }
 
 .location{
+	font-size: 11pt;
+	color: #0000ff;
 }
 
 .event-content{
-	font-weight: italic;
-	padding: 0.8em 0 0 1em;
+	width: 180%;
+	font-style: italic;
+	padding: 0.5em 0 0 0.8em;
 }
 
-#footer {
-	clear: both;
-	border-top: 1.5pt solid;
-	font-size: .95em;
-	color: #333;
-	text-align: center;
+.empty{
+	margin: 2em 0 0 1em;
 }
