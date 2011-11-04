@@ -55,3 +55,14 @@
         </div>
     </body>
 </html>
+
+<script>$(document).ready(function () {  
+	var el = $('#main-right');
+	var elpos_original = el.offset().top - parseFloat($('#main-right').css('margin-top').replace(/auto/,0));
+
+	$(window).scroll(function(){
+    	var y=$(this).scrollTop();
+   		if(y<elpos_original){el.stop().animate({'top':119});}
+    	else{el.stop().animate({'top':y-elpos_original+135});}
+	});
+});</script>

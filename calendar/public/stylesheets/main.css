@@ -185,7 +185,7 @@ form p {
 }
 
 #main-right {
-	position: fixed;
+	position: absolute;
 	float: left;
 	width: 260px;
 	background: #93B4FA;
