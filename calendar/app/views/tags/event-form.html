@@ -50,6 +50,7 @@ function checkEventCollision() {
     <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
 #{/field}
 </p>
+
 <p>
 #{field 'startDate'}
     <label for"startDate">Start</label>
@@ -60,6 +61,7 @@ function checkEventCollision() {
     <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
+
 <p>
 #{field 'endDate'}
 	<label for"endDate">End</label>
@@ -70,6 +72,7 @@ function checkEventCollision() {
     <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
+
 <p>
 #{field 'isPrivate'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
@@ -94,10 +97,10 @@ function checkEventCollision() {
 	<label for="repeat">Repeat</label>
 	<select name="${field.name}" id="${field.name}">
 		<option value="none">No repeat</option>
-		<option value="daily" #{ifErrors}#{if flash.repeat.toString() == "daily"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "daily"}selected="selected"#{/if}#{/else}*>Daily</option>
-		<option value="weekly" #{ifErrors}#{if flash.repeat.toString() == "weekly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "weekly"}selected="selected"#{/if}#{/else}*>Weekly</option>
-		<option value="monthly" #{ifErrors}#{if flash.repeat.toString() == "monthly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "monthly"}selected="selected"#{/if}#{/else}*>Monthly</option>
-		<option value="yearly" #{ifErrors}#{if flash.repeat.toString() == "yearly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "yearly"}selected="selected"#{/if}#{/else}*>Yearly</option>
+		<option value="daily" #{if _event.type == models.RepeatingType.DAILY}selected#{/if}>Daily</option>
+		<option value="weekly" #{if _event.type == models.RepeatingType.WEEKLY}selected#{/if}>Weekly</option>
+		<option value="monthly" #{if _event.type == models.RepeatingType.MONTHLY}selected#{/if}>Monthly</option>
+		<option value="yearly" #{if _event.type == models.RepeatingType.YEARLY}selected#{/if}>Yearly</option>
 	</select>
 #{/field}
 </p>
