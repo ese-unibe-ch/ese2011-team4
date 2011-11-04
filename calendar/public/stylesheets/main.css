@@ -148,7 +148,6 @@ form p {
 /** Main content **/
 
 #main {
-	overflow: auto;
 	padding-bottom: 32px;
 	display: inline-block;
 	width: 100%;
