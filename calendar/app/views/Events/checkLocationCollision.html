@@ -1,5 +1,5 @@
 #{if numberOfEvents > 0}
 <span class="warning">
-Warning: ${numberOfEvents} events are using the same location at the same time!
+Warning: ${numberOfEvents} event${numberOfEvents.pluralize()} ${numberOfEvents>1 ? 'are' : 'is'} using the same location at the same time!
 </span>
 #{/if}
