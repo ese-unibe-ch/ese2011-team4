@@ -245,4 +245,33 @@ public class Events extends Controller {
     	}
     	render(numberOfEvents);
     }
+    
+    public static void checkEventCollision(String startDate,
+			String startTime,
+			String endDate, 
+			String endTime,
+			long calendarId,
+			long eventId) {
+    	long numberOfEvents = 0;
+    			
+    	try {
+    		format.parseDateTime(startDate+startTime);
+    		format.parseDateTime(endDate+endTime);
+    	} catch(IllegalArgumentException e) {
+    		render(numberOfEvents);
+    	}
+    	    	
+    	DateTime start = format.parseDateTime(startDate+startTime);
+    	DateTime end = format.parseDateTime(endDate+endTime);
+    	    	
+    	Calendar calendar = Calendar.findById(calendarId);
+    	Event event = Event.findById(eventId);
+    	if(calendar != null) {
+    		numberOfEvents = calendar.numberOfAllEventsInCalendarByDayAndTime(start, end);
+        	if(event != null && start.isBefore(event.endDate) && end.isAfter(event.startDate)) {
+        		numberOfEvents--;
+        	}
+    	}
+    	render(numberOfEvents);
+    }
 }

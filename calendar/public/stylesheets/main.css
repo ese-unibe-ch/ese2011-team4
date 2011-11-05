@@ -119,25 +119,30 @@ header nav li a:hover {
 /** Message **/
 
 .error {
+	display: block;
 	background-color: #c00;
 	display: inline-block;
 	color: #fff;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
 }
 
 .warning {
+	display: block;
 	background-color: #ff8000;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
 }
 
 .success {
+	display: block;
 	background-color: #67AD10;
 	color: #fff;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
-}
 }
 
 form p {

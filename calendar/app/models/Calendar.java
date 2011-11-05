@@ -255,4 +255,23 @@ public class Calendar extends Model {
 	public String toString() {
 		return name;
 	}
+
+	/**
+	 * Returns the number of all events in this calendar which take place at a certain day and time.
+	 * 
+	 * @param start		day and time of the date's start which is to be checked for events
+	 * @param end		day and time of the date's end which is to be checked for events
+	 * @return number of all events in this calendar which take place at a certain day and time
+	 * @since Iteration-5
+	 */
+	public long numberOfAllEventsInCalendarByDayAndTime(DateTime start, DateTime end) {		
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND e.endDate >= ?2 " +
+				"AND e.startDate < ?3");
+		query.setParameter(1, this);
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return (Long) query.getSingleResult();
+	}
 }
