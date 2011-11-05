@@ -262,7 +262,7 @@ public class Calendar extends Model {
 	 * @param start		day and time of the date's start which is to be checked for events
 	 * @param end		day and time of the date's end which is to be checked for events
 	 * @return number of all events in this calendar which take place at a certain day and time
-	 * @since Iteration-5
+	 * @since Iteration-4
 	 */
 	public long numberOfAllEventsInCalendarByDayAndTime(DateTime start, DateTime end) {		
 		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
