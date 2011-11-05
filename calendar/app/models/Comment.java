@@ -29,20 +29,17 @@ public class Comment extends Model {
 	@Required
     public String author;
 	
-	
 	/**
 	 * Date at which the comment was posted.
 	 */
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
     public DateTime postedAt;
     
-	
 	/**
 	 * Content of the comment.
 	 */
     @Lob
     public String content;
-    
     
     /**
      * Event which belongs to the comment.
@@ -50,7 +47,6 @@ public class Comment extends Model {
     @Required
     @ManyToOne
     public Event event;
-    
     
     /**
      * Comment's constructor. The default behaviour is:

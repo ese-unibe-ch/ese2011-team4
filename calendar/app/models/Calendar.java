@@ -47,7 +47,6 @@ import play.db.jpa.Model;
 
 @Entity
 public class Calendar extends Model {
-	
 	/**
 	 * This calendar's name.
 	 * 
@@ -55,7 +54,6 @@ public class Calendar extends Model {
 	 */
 	@Required
 	public String name;
-	
 	
 	/**
 	 * User who owns this calendar.
@@ -66,7 +64,6 @@ public class Calendar extends Model {
 	@Required
 	public User owner;
 	
-	
 	/**
 	 * List of events which this calendar contains.
 	 * 
@@ -74,7 +71,6 @@ public class Calendar extends Model {
 	 */
 	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
-	
 	
 	/** 
 	 * Calendar's constructor. The default behavior is:
@@ -102,10 +98,15 @@ public class Calendar extends Model {
 	 */
 	@Override
 	public Calendar delete() {
-		// First delete all events that were initially created in this calendar
-		for(Event e : events)
+		// First delete the event - calendar relation
+		for(Event e : events) {
 			if(e.origin.equals(this))
 				e.delete();
+			else {
+				e.calendars.remove(this);
+				e.save();
+			}
+		}
 		
 		return super.delete();
 	}
@@ -141,6 +142,7 @@ public class Calendar extends Model {
 		
 		List<SingleEvent> list = query.getResultList();
 		
+		// Get Repeating events
 		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
 				"WHERE ?1 MEMBER OF e.calendars " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
@@ -170,7 +172,6 @@ public class Calendar extends Model {
 	 * @since 	Iteration-1
 	 */
 	public List<Event> events(User visitor, Location loc) {
-		
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
 				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
 				"AND e.location.getLocation().contains(loc.getLocation())");
@@ -204,24 +205,28 @@ public class Calendar extends Model {
 	}
 	
 	/**
-	 * Returns the number of events available for a certain user.
+	 * Returns a list of upcoming events in the next 30 days for a specific user.
 	 * <p>
 	 * The events are only available if the user is the owner of the event
-	 * or the event itself is public.
+	 * or the event itself is public and it always uses the current time.
 	 * 
 	 * @param 	user	the user for whom the method checks for available events
-	 * @return 	number of available events under the defined constrictions
+	 * @return 	list of available events for the user in the next 30 days
 	 * @see		Event
 	 * @see 	User
 	 * @since 	Iteration-1
 	 */
-	// TODO change this method to a method, that returns all future events as a list, visible for a specific user
-	public int visibleEvents(User user) {
-		int count = 0;
-		for(Event e : events)
-			if(owner == user || !e.isPrivate)
-				count++;
-		return count;
+	public List<Event> visibleEvents(User visitor) {
+		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)" +
+				"AND e.startDate > ?3 " +
+				"AND e.startDate < ?4");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, new DateTime());
+		query.setParameter(4, new DateTime().plusDays(30));
+		return query.getResultList();
 	}
 	
 	/**
@@ -249,5 +254,24 @@ public class Calendar extends Model {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	/**
+	 * Returns the number of all events in this calendar which take place at a certain day and time.
+	 * 
+	 * @param start		day and time of the date's start which is to be checked for events
+	 * @param end		day and time of the date's end which is to be checked for events
+	 * @return number of all events in this calendar which take place at a certain day and time
+	 * @since Iteration-4
+	 */
+	public long numberOfAllEventsInCalendarByDayAndTime(DateTime start, DateTime end) {		
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND e.endDate >= ?2 " +
+				"AND e.startDate < ?3");
+		query.setParameter(1, this);
+		query.setParameter(2, start);
+		query.setParameter(3, end);
+		return (Long) query.getSingleResult();
 	}
 }

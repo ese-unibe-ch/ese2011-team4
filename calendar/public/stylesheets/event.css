@@ -82,6 +82,9 @@
 
 .event-menu li.more span {
 	display: inline-block;
+}
+
+.event-menu li.more:hover span {	
 	float: right;
 }
 

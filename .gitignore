@@ -23,8 +23,6 @@
 *.log
 *.ser
 
-server.pid
-
 # Hidden files
 .*
 !.gitignore

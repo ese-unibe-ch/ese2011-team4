@@ -33,18 +33,22 @@
 				<li><span class="actions">Actions</span>
 					<ol>
 						<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
-						#{if _connectedUser.equals(_event.origin.owner)}
-							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
-						#{/if}
 						#{if _connectedUser.equals(_calendar.owner)}
 							#{if _event.type == models.RepeatingType.NONE || _event.origin != _calendar}
+								<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
 								<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
 							#{/if}
-							#{else}							
+							#{else}
+								<li class="more"><span class="actions">Edit</span>
+									<ul>
+										<li>#{a @Events.edit(_calendar.id, _event.id)}Series#{/a}</li>
+										<li>#{a @Events.editOfSeries(_calendar.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+									</ul>
+								</li>							
 								<li class="more"><span class="actions">Delete</span>
 									<ul>
 										<li>#{a @Events.delete(_calendar.id, _event.id)}Series#{/a}</li>
-										<li>#{a @Events.mutateSeries(_calendar.id, _event.id, _event.startDate)}Event#{/a}</li>									
+										<li>#{a @Events.deleteOfSeries(_calendar.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
 									</ul>
 								</li>
 							#{/else}
@@ -72,4 +76,3 @@
 		</div>  
 	</div>
 </div>
-<hr>

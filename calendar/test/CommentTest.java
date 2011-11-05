@@ -22,6 +22,15 @@ public class CommentTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
 		assertEquals(3, Comment.count());
 	}
 	

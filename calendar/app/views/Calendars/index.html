@@ -4,4 +4,34 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-#{calendar-list calendars:calendars, user:connectedUser /}
+<div id="calendar-list">
+	<h2 class="title">
+	#{if user.email.equals(session.username)}Your Calendars#{/if}
+	#{else}${user.fullname}'s Calendars#{/else}
+
+	</h2>
+	#{if calendars.size() > 0}
+		<ul>
+		#{list items:calendars, as:'calendar'}
+			<li>
+				<h3 class="calendar-name">#{a @Calendars.showCurrentMonth(calendar.id)}${calendar.name}#{/a}</h3>
+				<div class="calendar-metadata">
+				<span class="calendar-events">
+				has ${calendar.visibleEvents(connectedUser).size() ?: 'no'}  upcoming
+				event${calendar.visibleEvents(connectedUser).size().pluralize()}
+				</span>
+				#{if user.email.equals(session.username)}
+				<span class="delete button"> - #{a @Calendars.delete(calendar.id)}delete#{/a}</span>
+				#{/if}
+				</div>
+			</li>
+		#{/list}
+		</ul>
+	#{/if}
+	
+	#{else}
+	    <div class="empty">
+	        There are no calendars for this user.
+	    </div>
+	#{/else}
+</div>

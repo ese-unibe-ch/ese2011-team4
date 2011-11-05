@@ -1,5 +1,3 @@
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -21,6 +19,15 @@ public class UserTest extends UnitTest{
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
 		assertEquals(3, User.count());
 	}
 	
@@ -55,7 +62,8 @@ public class UserTest extends UnitTest{
 		
 		// Count objects
 		assertEquals(2, Calendar.count());
-		assertEquals(3, SingleEvent.count());
+		assertEquals(4, Event.count());
+		assertEquals(0, Comment.count());
 	}
 	
 	@Test

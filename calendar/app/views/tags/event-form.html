@@ -1,8 +1,17 @@
 <script type="text/javascript">
 function checkLocationCollision() {
    var action = #{jsAction @checkLocationCollision(':startDate', ':startTime', ':endDate', ':endTime', ':locationId', ':eventId') /}
-   $('#LocationcollisionResponse').load(
+   $('#LocationCollisionResponse').load(
        action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   )
+}
+</script>
+
+<script type="text/javascript">
+function checkEventCollision() {
+   var action = #{jsAction @checkEventCollision(':startDate', ':startTime', ':endDate', ':endTime', ':calendarId', ':eventId') /}
+   $('#EventCollisionResponse').load(
+       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
    )
 }
 </script>
@@ -12,12 +21,28 @@ function checkLocationCollision() {
    		// Disable caching of AJAX responses
     	cache: false
 	});
-     $(document.getElementById('LocationcollisionResponse')).ready(function() {
+     $(document.getElementById('LocationCollisionResponse')).ready(function() {
      	checkLocationCollision();
+ 	});
+     $(document.getElementById('EventCollisionResponse')).ready(function() {
+     	checkEventCollision();
  	});
 </script>
 
-<div id="LocationcollisionResponse"></div>
+		#{ifErrors}
+   		<span class="error">
+   			Oops...
+   			<ul>
+   			#{errors}
+       		<li>${error}</li>
+   			#{/errors}
+   			</ul>
+		</span>
+		#{/ifErrors}
+
+<div id="LocationCollisionResponse"></div>
+
+<div id="EventCollisionResponse"></div>
 
 <p>
 #{field 'name'}
@@ -28,21 +53,21 @@ function checkLocationCollision() {
 <p>
 #{field 'startDate'}
     <label for"startDate">Start</label>
-    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'startTime'}
 	<label for"startTime" class="time">Time</label>
-    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'endDate'}
 	<label for"endDate">End</label>
-	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
+	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'endTime'}
 	<label for"endTime" class="time">Time</label>
-    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
 <p>
