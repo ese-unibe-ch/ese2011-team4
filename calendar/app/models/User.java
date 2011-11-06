@@ -39,7 +39,7 @@ import play.db.jpa.Model;
  * </ul>
  * 
  * @since Iteration-1
- * @see Calendar
+ * @see Calendarw
  */
 @Entity
 public class User extends Model {
