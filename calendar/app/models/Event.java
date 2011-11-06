@@ -140,13 +140,18 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * <li>Event has zero or more comments</li>
 	 * <li>Event belongs to a calendar</li>
 	 * <li>Event has zero or more other calendars which joined it</li>
+	 * <li>Event has a repeating type.
 	 * </ul>
 	 * 
-	 * @param 	calendar	calendar to which this event belongs
+	 * @param 	calendar		calendar to which this event belongs
+	 * @param	name			name of the event
+	 * @param	startDate		startDate of the event
+	 * @param	endDate			endDate of the event
+	 * @param	repeatingType	Type of the repeating rule if any
 	 * @see 	Calendar
 	 * @see 	Comment
 	 */
-	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate) {
+	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate, RepeatingType repeating) {
 		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
 		this.startDate = startDate;
@@ -155,7 +160,31 @@ public abstract class Event extends Model implements Comparable<Event>{
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
 		this.isPrivate = false;
-		this.type = RepeatingType.NONE;
+		this.type = repeating;
+	}
+	/**
+	 * Static method to generate events depending on the type. The default behaviour is:
+	 * <ul>
+	 * <li>Event has zero or more comments</li>
+	 * <li>Event belongs to a calendar</li>
+	 * <li>Event has zero or more other calendars which joined it</li>
+	 * <li>Event has a repeating type.
+	 * </ul>
+	 * 
+	 * @param 	calendar		calendar to which this event belongs
+	 * @param	name			name of the event
+	 * @param	startDate		startDate of the event
+	 * @param	endDate			endDate of the event
+	 * @param	repeatingType	Type of the repeating rule if any
+	 * @see 	Calendar
+	 * @see 	Comment
+	 */
+	public static Event createEvent(Calendar calendar, String name, DateTime startDate, DateTime endDate, RepeatingType repeating) {
+		if(repeating == RepeatingType.NONE) {
+			return new SingleEvent(calendar, name, startDate, endDate);
+		} else {
+			return new EventSeries(calendar, name, startDate, endDate, repeating);
+		}
 	}
 	
 	/**

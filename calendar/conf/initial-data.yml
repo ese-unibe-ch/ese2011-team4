@@ -114,7 +114,7 @@ EventSeries(r1):
     origin:         budCalendar
     description:    This is a weekly repeating event.
     isPrivate:      false
-    repeatingType:  models.RepeatingType.WEEKLY
+    repeatingType:  WEEKLY
     
 Comment(c1):
     author:         Michael

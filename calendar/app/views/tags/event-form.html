@@ -1,17 +1,17 @@
 <script type="text/javascript">
 function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDate', ':startTime', ':endDate', ':endTime', ':locationId', ':eventId') /}
+   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
    $('#LocationCollisionResponse').load(
-       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
    )
 }
 </script>
 
 <script type="text/javascript">
 function checkEventCollision() {
-   var action = #{jsAction @checkEventCollision(':startDate', ':startTime', ':endDate', ':endTime', ':calendarId', ':eventId') /}
+   var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
    $('#EventCollisionResponse').load(
-       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
    )
 }
 </script>
@@ -52,9 +52,9 @@ function checkEventCollision() {
 </p>
 
 <p>
-#{field 'startDate'}
-    <label for"startDate">Start</label>
-    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
+#{field 'startDay'}
+    <label for"startDay">Start</label>
+    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDay}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'startTime'}
 	<label for"startTime" class="time">Time</label>
@@ -63,9 +63,9 @@ function checkEventCollision() {
 </p>
 
 <p>
-#{field 'endDate'}
-	<label for"endDate">End</label>
-	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
+#{field 'endDay'}
+	<label for"endDay">End</label>
+	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDay}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'endTime'}
 	<label for"endTime" class="time">Time</label>
@@ -93,14 +93,14 @@ function checkEventCollision() {
 </p>
 
 <p>
-#{field 'repeat'}
-	<label for="repeat">Repeat</label>
+#{field 'repeating'}
+	<label for="repeat">Repeat</label>	
 	<select name="${field.name}" id="${field.name}">
-		<option value="none">No repeat</option>
-		<option value="daily" #{if _event.type == models.RepeatingType.DAILY}selected#{/if}>Daily</option>
-		<option value="weekly" #{if _event.type == models.RepeatingType.WEEKLY}selected#{/if}>Weekly</option>
-		<option value="monthly" #{if _event.type == models.RepeatingType.MONTHLY}selected#{/if}>Monthly</option>
-		<option value="yearly" #{if _event.type == models.RepeatingType.YEARLY}selected#{/if}>Yearly</option>
+		<option value="${models.RepeatingType.NONE}">No repeat</option>
+		<option value="${models.RepeatingType.DAILY}" #{if _event?.type == models.RepeatingType.DAILY}selected#{/if}>Daily</option>
+		<option value="${models.RepeatingType.WEEKLY}" #{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}>Weekly</option>
+		<option value="${models.RepeatingType.MONTHLY}" #{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}>Monthly</option>
+		<option value="${models.RepeatingType.YEARLY}" #{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}>Yearly</option>
 	</select>
 #{/field}
 </p>
