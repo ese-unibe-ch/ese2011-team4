@@ -22,7 +22,6 @@ import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
-
 /**
  * The User class represents an end-user who uses the calendar application.
  * <p>
@@ -44,7 +43,6 @@ import play.db.jpa.Model;
  */
 @Entity
 public class User extends Model {
-	
 	/**
 	 * This user's email address.
 	 */
@@ -117,7 +115,45 @@ public class User extends Model {
 		return find("byEmailAndPassword", email, password).first();
 	}
 	
-	
+	/**
+	 * This method first deletes all calendars of this user and then deletes
+	 * this user itself
+	 * 
+	 * @since Iteration-1
+	 * @see Calendar
+	 */
+	@Override
+	public User delete() {
+		// First delete calendars
+		for(Calendar c : calendars)
+			c.delete();
+				
+		merge();
+		return super.delete();
+	}
+
+	/**
+	 * Adds the argument user to this user's favorite list.
+	 * 
+	 * @param user	user to add to this user's favorite list
+	 * @since Iteration-2
+	 */
+	public void addFavorite(User user) {
+		assert !favorites.contains(user);
+		favorites.add(user);
+	}
+
+	/**
+	 * Removes the argument user from this user's favorite list.
+	 * 
+	 * @param user	user to remove from this user's favorite list.
+	 * @since Iteration-2
+	 */
+	public void removeFavorite(User user) {
+		assert favorites.contains(user);
+		favorites.remove(user);
+	}
+
 	/**
 	 * Returns <code>true</code> if the argument user is in this user's favorite list, otherwise
 	 * <code>false</code>
@@ -129,46 +165,6 @@ public class User extends Model {
 	 */
 	public boolean isFavorite(User user){
 		return favorites.contains(user);
-	}
-	
-	
-	/**
-	 * Adds the argument user to this user's favorite list.
-	 * 
-	 * @param user	user to add to this user's favorite list
-	 * @since Iteration-2
-	 */
-	public void addFavorite(User user) {
-		assert !favorites.contains(user);
-		favorites.add(user);
-	}
-	
-	
-	/**
-	 * Removes the argument user from this user's favorite list.
-	 * 
-	 * @param user	user to remove from this user's favorite list.
-	 * @since Iteration-2
-	 */
-	public void removeFavorite(User user) {
-		assert favorites.contains(user);
-		favorites.remove(user);
-	}
-	
-	
-	/**
-	 * This method first deletes all calendars of this user and then deletes
-	 * this user itself
-	 * 
-	 * @since Iteration-1
-	 * @see Calendar
-	 */
-	@Override
-	public User delete() {
-		for(Calendar c : calendars)
-			c.delete();
-		
-		return super.delete();
 	}
 	
 	/**

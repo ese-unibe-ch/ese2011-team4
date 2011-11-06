@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
 import org.hibernate.annotations.Type;
@@ -35,8 +36,9 @@ import play.db.jpa.Model;
 @Entity
 @DiscriminatorValue("SERIES")
 public class EventSeries extends Event {
+	@ElementCollection
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	private List<DateTime> mutatedEvents;
+	private List<DateTime> mutations;
 	
 	public EventSeries(
 			Calendar calendar, 
@@ -46,7 +48,7 @@ public class EventSeries extends Event {
 			RepeatingType type) {
 		super(calendar, name, startDate, endDate);
 		this.type = type;
-		mutatedEvents = new ArrayList<DateTime>();
+		mutations = new ArrayList<DateTime>();
 	}
 
 	@Override
@@ -73,20 +75,29 @@ public class EventSeries extends Event {
 	}
 
 	public RepeatingEvent createDummyEvent(DateTime day) {
+		assert isThisDay(day);
 		RepeatingEvent event = new RepeatingEvent(this);
 		event.startDate = this.startDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
 		event.endDate = this.endDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
 		return event;
 	}
 	
+	public SingleEvent editSingleEvent(DateTime day) {
+		SingleEvent event = new SingleEvent(this, day);
+		if(event.validateAndSave())
+			return event;
+		else
+			return null;
+	}
+	
 	public void mutate(DateTime start) {
-		mutatedEvents.add(start);
+		mutations.add(start);
 	}
 	
 	private boolean isMutated(DateTime day) {
-		/*for(DateTime mutatedDate : mutatedEvents)
+		for(DateTime mutatedDate : mutations)
 			if(day.getDayOfYear() == mutatedDate.getDayOfYear() && day.getYear() == mutatedDate.getYear())
-				return true;*/
+				return true;
 		return false;
 	}
 }

@@ -35,8 +35,8 @@ public class SingleEvent extends Event {
 		super(calendar, name, startDate, endDate);
 	}
 	
-	public SingleEvent(RepeatingEvent event) {
-		super(event.origin, event.name, event.startDate, event.endDate);
+	public SingleEvent(EventSeries event, DateTime day) {
+		super(event.origin, event.name, day, day.plusHours(1));
 	}
 
 	/**

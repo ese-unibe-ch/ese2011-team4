@@ -28,6 +28,15 @@ public class CalendarTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
 		assertEquals(4, Calendar.count());
 	}
 	
@@ -59,15 +68,14 @@ public class CalendarTest extends UnitTest {
 		assertTrue(cal.events.isEmpty());
 	}
 	
-	@Ignore
 	@Test
 	public void delete() {
 		// Get a calendar
-		Calendar calendar = Calendar.find("byName", "Jacks Secret Agenda").first();
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, Event.count());
 		
 		// Delete it
 		calendar.delete();
@@ -77,7 +85,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(3, Calendar.count());
 		
 		// Count events
-		assertEquals(6, SingleEvent.count());
+		assertEquals(5, Event.count());
 		
 		// Count comments
 		assertEquals(0, Comment.count());
@@ -106,6 +114,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
 	}
 	
+	@Ignore("relies on system date")
 	@Test
 	public void visibleEvents() {
 		// Get a calendar
@@ -116,7 +125,7 @@ public class CalendarTest extends UnitTest {
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
 		// Test method
-		assertEquals(4, calendar.visibleEvents(jack));
-		assertEquals(2, calendar.visibleEvents(bud));
+		assertEquals(4, calendar.visibleEvents(jack).size());
+		assertEquals(2, calendar.visibleEvents(bud).size());
 	}
 }

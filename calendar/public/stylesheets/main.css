@@ -119,25 +119,30 @@ header nav li a:hover {
 /** Message **/
 
 .error {
+	display: block;
 	background-color: #c00;
 	display: inline-block;
 	color: #fff;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
 }
 
 .warning {
+	display: block;
 	background-color: #ff8000;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
 }
 
 .success {
+	display: block;
 	background-color: #67AD10;
 	color: #fff;
 	padding: 10px;
+	margin-bottom: 10px;
 	border-radius: 16px;
-}
 }
 
 form p {
@@ -148,7 +153,6 @@ form p {
 /** Main content **/
 
 #main {
-	overflow: auto;
 	padding-bottom: 32px;
 	display: inline-block;
 	width: 100%;
@@ -170,6 +174,7 @@ form p {
 	background: #93B4FA;
 	padding: 20px;
 	margin-right: 10px;
+	margin-bottom: 50px;
 	border-radius: 16px;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
@@ -185,7 +190,7 @@ form p {
 }
 
 #main-right {
-	position: fixed;
+	position: absolute;
 	float: left;
 	width: 260px;
 	background: #93B4FA;

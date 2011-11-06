@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" type="text/css" media="screen" 
             href="@{'/public/stylesheets/main.css'}" />
+        <link rel="stylesheet" media="print" type="text/css" href="@{'/public/stylesheets/print.css'}" /> 
         #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" 
             href="@{'/public/images/favicon.png'}" />
@@ -54,3 +55,14 @@
         </div>
     </body>
 </html>
+
+<script>$(document).ready(function () {  
+	var el = $('#main-right');
+	var elpos_original = el.offset().top - parseFloat($('#main-right').css('margin-top').replace(/auto/,0));
+
+	$(window).scroll(function(){
+    	var y=$(this).scrollTop();
+   		if(y<elpos_original){el.stop().animate({'top':119});}
+    	else{el.stop().animate({'top':y-elpos_original+135});}
+	});
+});</script>
