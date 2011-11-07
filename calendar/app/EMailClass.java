@@ -1,8 +1,11 @@
 
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import javax.management.timer.Timer;
 
 import models.Calendar;
 import models.Email;
@@ -29,11 +32,14 @@ import play.libs.Mail;
 public class EMailClass extends Job {
 	    
 		    public void doJob() {
-		      
+		    	
+		    	Date now = new Date();
+		    	Date nowplus = new Date(now.getTime() + 10L * Timer.ONE_MINUTE);
+		    	DateTime remindTime = new DateTime(nowplus);
 		      List<User> users = User.findAll(); 
 		      for(User each:users){
 		      List<Calendar> calendars = Calendar.find("owner", each).fetch();
-		      List<SingleEvent> events = calendars.get(0).events(each,new DateTime());
+		      List<SingleEvent> events = calendars.get(0).events(each,remindTime);
 		      if (!events.isEmpty()) {
 		    	  for(Event ea:events){
 		    	  Email newmail = new Email();
