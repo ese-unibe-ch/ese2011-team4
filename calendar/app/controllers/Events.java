@@ -21,12 +21,7 @@ import models.*;
 @With(Secure.class)
 public class Events extends Controller {
 	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
-	
-	private static void add(Long calendarId) {
-		DateTime dt = new DateTime();
-		add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
-	}
-	
+		
     public static void add(Long calendarId, Integer year, Integer month, Integer day) {
     	DateTime dt = new DateTime();
     	if(year != null && month != null && day != null)
@@ -40,7 +35,54 @@ public class Events extends Controller {
     		forbidden("Not your calendar!");
     }
     
-    public static void edit(Long calendarId, Long eventId) {
+    public static void addEvent(	Long calendarId, 
+									String name,
+									String startDay,
+									String startTime,
+									String endDay, 
+									String endTime,
+									boolean isPrivate, 
+									String description,
+									Long locationId,
+									RepeatingType repeating) {
+		
+		Calendar calendar = Calendar.findById(calendarId);
+		Logger.info(""+repeating);
+		assert calendar != null;
+		DateTime startDate = null;
+		DateTime endDate = null;
+		try {
+			startDate = format.parseDateTime(startDay+startTime);
+			endDate = format.parseDateTime(endDay+endTime);
+		} catch(IllegalArgumentException e) {
+			validation.addError("Start.InvalidDate", "Invalid Date");
+			params.flash();
+	    	validation.keep();
+	    	DateTime dt = new DateTime();
+	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+		}
+		
+		Event event = Event.createEvent(calendar, name, startDate, endDate, repeating);
+		
+		event.isPrivate = isPrivate;
+		event.description = description;
+		
+		Location location = Location.findById(locationId);
+		event.location = location;
+		
+	    if (event.validateAndSave())
+	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+	    else {
+	    	for(play.data.validation.Error e : Validation.errors())
+				Logger.error(e.message());
+	    	params.flash();
+	    	validation.keep();
+	    	DateTime dt = new DateTime();
+	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+	    }
+	}
+
+	public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
     	List<Location> locations = Location.all().fetch();
     	
@@ -51,7 +93,51 @@ public class Events extends Controller {
     		forbidden("Not your event!");
     }
     
-    public static void delete(Long calendarId, Long eventId) {
+    public static void update(	Long calendarId,
+								Long eventId, 
+								String name, 
+								String startDay,
+								String startTime,
+								String endDay, 
+								String endTime,
+								boolean isPrivate, 
+								String description,
+								Long locationId) {
+		
+		Event event = Event.findById(eventId);
+		assert event != null;
+		
+		event.name = name;
+		try {
+			event.startDate = format.parseDateTime(startDay+startTime);
+			event.endDate = format.parseDateTime(endDay+endTime);
+		} catch(IllegalArgumentException e) {
+			validation.addError("Start.InvalidDate", "Invalid Date");
+			params.flash();
+	    	validation.keep();
+	    	Events.edit(calendarId, eventId);
+		}
+		
+		event.isPrivate = isPrivate;
+		event.description = description;
+		
+		Location location = Location.findById(locationId);
+		event.location = location;
+		
+		if(event.validateAndSave()) {
+	    	Calendars.show(calendarId, event.startDate.getYear(), 
+	    							   event.startDate.getMonthOfYear(), 
+	   								   event.startDate.getDayOfMonth());
+		} else {
+	 		for(play.data.validation.Error e : Validation.errors())
+				Logger.error(e.message());
+			params.flash();
+	        validation.keep();
+	        Events.edit(calendarId, eventId);
+		}
+	}
+
+	public static void delete(Long calendarId, Long eventId) {
     	Calendar calendar = Calendar.findById(calendarId);
     	Event event = Event.findById(eventId);
     	if(Security.check(calendar)) {
@@ -72,7 +158,16 @@ public class Events extends Controller {
     		forbidden("Not your calendar!");
     }
     
-    public static void editOfSeries(Long calendarId, Long eventId, int day, int year) {
+    /**
+     * Deataches a repeating event from its series and transforms it to
+     * a single event.
+     * 
+     * @param calendarId	id of the calendar
+     * @param eventId		id of the series
+     * @param day			id of the selected day
+     * @param year			id of the selected year
+     */
+    public static void deatachAndEdit(Long calendarId, Long eventId, int day, int year) {
     	Calendar calendar = Calendar.findById(calendarId);
     	EventSeries series = EventSeries.findById(eventId);
     	assert calendar != null && series != null;
@@ -86,7 +181,15 @@ public class Events extends Controller {
     		forbidden("Not your event!");
     }
     
-    public static void deleteOfSeries(Long calendarId, Long eventId, int day, int year) {
+    /**
+     * Removes a repeating event from its series.
+     * 
+     * @param calendarId	id of the calendar
+     * @param eventId		id of the series
+     * @param day			id of the selected day
+     * @param year			id of the selected year
+     */
+    public static void deatach(Long calendarId, Long eventId, int day, int year) {
     	Calendar calendar = Calendar.findById(calendarId);
     	EventSeries series = EventSeries.findById(eventId);
     	assert calendar != null && series != null;
@@ -109,113 +212,6 @@ public class Events extends Controller {
     	event.joinCalendar(calendar);
     	Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	}
-    
-    public static void update(	Long calendarId,
-    							Long eventId, 
-								String name, 
-								String startDate,
-								String startTime,
-								String endDate, 
-								String endTime,
-								boolean isPrivate, 
-								String description,
-								Long locationId) {
-    	
-    	Event event = Event.findById(eventId);
-    	assert event != null;
-    	
-    	event.name = name;
-    	try {
-    		event.startDate = format.parseDateTime(startDate+startTime);
-    		event.endDate = format.parseDateTime(endDate+endTime);
-    	} catch(IllegalArgumentException e) {
-    		validation.addError("Start.InvalidDate", "Invalid Date");
-			params.flash();
-        	validation.keep();
-        	Events.edit(calendarId, eventId);
-    	}
-    	
-    	event.isPrivate = isPrivate;
-    	event.description = description;
-    	
-    	Location location = Location.findById(locationId);
-    	event.location = location;
-    	
-    	if(event.validateAndSave()) {
-        	Calendars.show(calendarId, event.startDate.getYear(), 
-        							   event.startDate.getMonthOfYear(), 
-       								   event.startDate.getDayOfMonth());
-    	} else {
-     		for(play.data.validation.Error e : Validation.errors())
-    			Logger.error(e.message());
-    		params.flash();
-            validation.keep();
-            Events.edit(calendarId, eventId);
-    	}
-    }
-    
-    public static void addEvent(	Long calendarId, 
-    								String name,
-    								String startDate,
-    								String startTime,
-    								String endDate, 
-    								String endTime,
-    								boolean isPrivate, 
-    								String description,
-    								Long locationId,
-    								String repeat) {
-    	
-    	Calendar calendar = Calendar.findById(calendarId);
-    	assert calendar != null;
-    	
-    	try {
-    		format.parseDateTime(startDate+startTime);
-    		format.parseDateTime(endDate+endTime);
-    	} catch(IllegalArgumentException e) {
-    		validation.addError("Start.InvalidDate", "Invalid Date");
-			params.flash();
-        	validation.keep();
-        	Events.add(calendarId);
-    	}
-    	
-    	RepeatingType type = RepeatingType.NONE;
-    	if(repeat.equals("daily"))
-    		type = RepeatingType.DAILY;
-    	else if(repeat.equals("weekly"))
-    		type = RepeatingType.WEEKLY;
-    	else if(repeat.equals("monthly"))
-    		type = RepeatingType.MONTHLY;
-    	else if(repeat.equals("yearly"))
-    		type = RepeatingType.YEARLY;
-    	
-    	Event event;
-    	if(type == RepeatingType.NONE) {
-    		event = new SingleEvent(	calendar, 
-    									name,format.parseDateTime(startDate+startTime),
-    									format.parseDateTime(endDate+endTime));
-    	} else {
-    		event = new EventSeries(	calendar, 
-    									name,format.parseDateTime(startDate+startTime),
-    									format.parseDateTime(endDate+endTime),
-    									type);
-    	}
-    	
-    	event.isPrivate = isPrivate;
-    	event.description = description;
-    	
-    	Location location = Location.findById(locationId);
-    	event.location = location;
-    	
-        if (event.validateAndSave())
-            Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
-        else {
-        	for(play.data.validation.Error e : Validation.errors())
-    			Logger.error(e.message());
-        	params.flash();
-        	validation.keep();
-        	Events.add(calendarId);
-        }
-    }
     
     public static void checkLocationCollision(String startDate,
 			String startTime,

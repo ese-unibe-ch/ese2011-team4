@@ -225,6 +225,8 @@ form textarea {
 
 form input, form textarea {
 	font-size: 14px;
+	font-family: Helvetica, Arial, Sans;
+	padding: 2px;
 }
 
 form label {

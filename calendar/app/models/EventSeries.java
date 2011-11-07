@@ -45,9 +45,8 @@ public class EventSeries extends Event {
 			String name, 
 			DateTime startDate, 
 			DateTime endDate, 
-			RepeatingType type) {
-		super(calendar, name, startDate, endDate);
-		this.type = type;
+			RepeatingType repeating) {
+		super(calendar, name, startDate, endDate, repeating);
 		mutations = new ArrayList<DateTime>();
 	}
 

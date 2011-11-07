@@ -227,15 +227,6 @@
 	resize: none;
 }
 
-#add-comment form input, form textarea {
-	padding-left: 5px;
-	margin-bottom: 10px;
-	background: #E4EAFF;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-}
-
 #add-comment form label {
 	width: 50%;
 	display: block;
