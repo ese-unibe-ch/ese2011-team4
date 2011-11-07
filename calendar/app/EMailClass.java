@@ -1,6 +1,14 @@
 
+
+
+import java.util.List;
 import java.util.Properties;
+
+import models.Calendar;
 import models.Email;
+import models.Event;
+import models.SingleEvent;
+import models.User;
 
 import javax.mail.Message;
 import javax.mail.Session;
@@ -11,15 +19,39 @@ import javax.mail.internet.MimeMessage;
 import play.jobs.*;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.joda.time.DateTime;
+
 
 import play.libs.Mail;
 
 
-@Every("1min")
+@Every("10min")
 public class EMailClass extends Job {
 	    
 		    public void doJob() {
-		      Email newmail = new Email();
+		      
+		      List<User> users = User.findAll(); 
+		      for(User each:users){
+		      List<Calendar> calendars = Calendar.find("owner", each).fetch();
+		      List<SingleEvent> events = calendars.get(0).events(each,new DateTime());
+		      if (!events.isEmpty()) {
+		    	  for(Event ea:events){
+		    	  Email newmail = new Email();
+			      newmail.setFrom("kumar.simpal.sharma@gmail.com");
+			      newmail.setTo(each.email);
+			      newmail.setCc(each.email);
+			      newmail.setBcc(each.email);
+			      newmail.setSubject(ea.name);
+			      newmail.setText("Reminder mail" + ea.description);
+			      sendMail(newmail.getFrom(),"Ticino123","smtp.gmail.com","465","true",
+			    			 "true",true,"javax.net.ssl.SSLSocketFactory","false",newmail.getTo(),newmail.getCc(),newmail.getBcc(),
+			 			 newmail.getSubject(),newmail.getText());
+		    	  }
+		    	  
+		      }
+		    	  
+		      }
+		     /* Email newmail = new Email();
 		      newmail.setFrom("kumar.simpal.sharma@gmail.com");
 		      newmail.setTo("simpal.kumar@yahoo.com");
 		      newmail.setCc("simpal.kumar@gmail.com");
@@ -28,7 +60,7 @@ public class EMailClass extends Job {
 		      newmail.setText("just a trial mail");
 		      sendMail(newmail.getFrom(),"Ticino123","smtp.gmail.com","465","true",
 		    			 "true",true,"javax.net.ssl.SSLSocketFactory","false",newmail.getTo(),newmail.getCc(),newmail.getBcc(),
-		 			 newmail.getSubject(),newmail.getText());
+		 			 newmail.getSubject(),newmail.getText());*/
 		      
 		    }
 		    
