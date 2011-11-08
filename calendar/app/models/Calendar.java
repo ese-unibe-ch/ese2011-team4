@@ -145,6 +145,26 @@ public class Calendar extends Model implements Printable{
 		DateTime start = day.withTime(0, 0, 0, 0);
 		DateTime end = start.plusDays(1);
 		
+		return events(visitor, start, end);
+	}
+	
+	/**
+	 * Returns a list of all events available in this calendar 
+	 * at a specific day for a certain user.
+	 * <p>
+	 * The event is only visible when the given user is the owner of this event
+	 * or the event itself is public.
+	 * 
+	 * @param 	day			the day to check for events
+	 * @param	start		the start date (with time) to check for events
+	 * @param	end			the end date (with time) to check for events
+	 * @param 	visitor		the user who wants to see the events
+	 * @return	list of available events in this calendar under the defined constrictions
+	 * @see 	Event
+	 * @see		User
+	 * @since 	Iteration-1
+	 */
+	public List<SingleEvent> events(User visitor, DateTime start, DateTime end) {
 		// Get single events
 		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
 				"WHERE ?1 MEMBER OF e.calendars "+
@@ -166,8 +186,8 @@ public class Calendar extends Model implements Printable{
 		query.setParameter(2, visitor);
 		
 		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
-			if(e.isThisDay(day))
-				list.add(e.createDummyEvent(day));
+			if(e.isThisDay(start))
+				list.add(e.createDummyEvent(start));
 		}
 		
 		return list;
