@@ -1,5 +1,9 @@
 package models;
 
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -46,7 +50,7 @@ import play.db.jpa.Model;
  */
 
 @Entity
-public class Calendar extends Model {
+public class Calendar extends Model implements Printable{
 	/**
 	 * This calendar's name.
 	 * 
@@ -71,6 +75,15 @@ public class Calendar extends Model {
 	 */
 	@ManyToMany(mappedBy="calendars")
 	public List<Event> events;
+
+	public boolean printPrivate;
+
+	public int pages;
+
+	public static Font font = new Font("Times New Roman",Font.PLAIN,12);
+
+	public int ind;
+
 	
 	/** 
 	 * Calendar's constructor. The default behavior is:
@@ -87,6 +100,9 @@ public class Calendar extends Model {
 		this.owner = owner;
 		this.name = name;
 		this.events = new LinkedList<Event>();
+		this.pages = 1;
+		this.printPrivate = false;
+		this.ind = 0;
 	}
 	
 	/**
@@ -285,5 +301,70 @@ public class Calendar extends Model {
 				number++;
 		}
 		return number;
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public int print(Graphics gfx, PageFormat pageFormat, int pageIndex) {
+		if ( pageIndex >= pages)
+			return Printable.NO_SUCH_PAGE;
+		else{
+			int x = 10;
+			int y = 50;
+			gfx.setFont(new Font("Times New Roman", Font.BOLD, 20));
+			//Print name
+			gfx.drawString(name, x, y);
+			gfx.setFont(new Font("Times New Roman", Font.PLAIN, 10));
+			//Print date
+			gfx.drawString(new Date().toGMTString().replace("GMT", ""), (int)pageFormat.getWidth()-110, y);
+			gfx.setFont(font);
+			//Print Lines
+			gfx.drawLine(x, y+font.getSize(), (int)pageFormat.getWidth()-x, y+font.getSize());
+			gfx.drawLine(x, (int)pageFormat.getHeight()-50, (int)pageFormat.getWidth()-x, (int)pageFormat.getHeight()-50);
+			//Print PageIndex
+			gfx.drawString(""+pageIndex, (int)pageFormat.getWidth()-50, (int)pageFormat.getHeight()-50+gfx.getFont().getSize()*2);
+			//Print events
+			printEvents(gfx,pageFormat,x+20,y+50,ind,pageIndex);
+			return Printable.PAGE_EXISTS;
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void printEvents(Graphics gfx,PageFormat pageFormat, int x, int y, int index, int pageIndex){
+		int yTemp = y;
+		for(int i = index; i < events.size(); i++){
+    		Event e = events.get(i);
+    		if(printPrivate || !e.isPrivate){
+    			String[] str = new String[6];
+    			Date start = e.startDate.toDate();
+    			Date end = e.endDate.toDate();
+    			if(e.isPrivate)
+    				str[0] = e.name+"(private):";
+    			else
+    				str[0] = e.name+":";
+    			str[1] = "     -Starts: "+start.toGMTString().replace("GMT", "");
+    			str[2] = "     -Ends: "+end.toGMTString().replace("GMT", "");
+    			if(e.location != null)
+    				str[3] = "     -Location: "+e.location;
+    			else
+    				str[3] = "     -Location: -";
+    			str[4] = "     -Cycle: "+e.type.toString().toLowerCase();
+    			str[5] = "     -Description: "+e.description;
+    			gfx.setFont(new Font("Times New Roman", Font.BOLD, 14));
+    			for(int j = 0; j < str.length; j+=1){
+    				gfx.drawString(str[j],x,yTemp);
+    				yTemp += gfx.getFont().getSize();
+    				gfx.setFont(font);
+    			}
+    			yTemp += font.getSize();
+    			if(yTemp >= gfx.getClipBounds().height-50){
+    				yTemp = y;
+    				pages += 1;
+    				this.ind = i;
+    				break;
+    			}
+    		}
+    	}
 	}
 }

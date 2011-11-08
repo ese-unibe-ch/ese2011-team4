@@ -143,7 +143,7 @@ public class Events extends Controller {
     	if(Security.check(calendar)) {
     		if(Security.check(event)) {
     			event.delete();
-    			Calendars.showCurrentMonth(calendarId);
+    			Calendars.showCurrentMonth(calendarId,false);
     		} else {
     			// Delete a joined event
     			assert calendar.events.contains(event);
