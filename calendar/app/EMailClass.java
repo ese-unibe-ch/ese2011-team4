@@ -35,7 +35,7 @@ public class EMailClass extends Job {
 		for (User user : users) {
 			List<Calendar> calendars = Calendar.find("owner", user).fetch();
 			for (Calendar calendar : calendars) {
-				List<SingleEvent> events = calendar.events(user, now, remindTime);
+				List<SingleEvent> events = calendar.eventsRemind(user,remindTime);
 				for (Event event : events) {
 					Email newmail = new Email();
 					newmail.setFrom("kumar.simpal.sharma@gmail.com");

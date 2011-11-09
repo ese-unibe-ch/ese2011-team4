@@ -148,6 +148,31 @@ public class Calendar extends Model implements Printable{
 		return events(visitor, start, end);
 	}
 	
+	public List<SingleEvent> eventsRemind(User visitor, DateTime start) {
+		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
+				"WHERE ?1 MEMBER OF e.calendars "+
+				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
+				"AND e.startDate < ?3");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		query.setParameter(3, start);
+		
+		List<SingleEvent> list = query.getResultList();
+		
+		// Get Repeating events
+		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
+				"WHERE ?1 MEMBER OF e.calendars " +
+				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
+		query.setParameter(1, this);
+		query.setParameter(2, visitor);
+		
+		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
+			if(e.isThisDay(start))
+				list.add(e.createDummyEvent(start));
+		}
+		
+		return list;
+	}
 	/**
 	 * Returns a list of all events available in this calendar 
 	 * at a specific day for a certain user.
