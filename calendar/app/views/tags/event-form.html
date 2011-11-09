@@ -110,7 +110,7 @@ Repeating configuration details
 	<p>
 	#{field 'periodEndDay'}
 		<label for="periodEndDay">Period end</label>
-    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.periodEndDay}#{/ifErrors}#{else}${_event?.periodEnd?.toString('dd.MM.yyyy')}#{/else}"/>
+    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.periodEndDay}#{/ifErrors}#{else}#{if _event?.type != models.RepeatingType.NONE}${_event?.periodEnd?.toString('dd.MM.yyyy')}#{/if}#{/else}"/>
 	#{/field}
 	<span class="hint">(leave empty for infinite repeating)</span>
 	</p>
@@ -118,7 +118,7 @@ Repeating configuration details
 	<p>
 	#{field 'repeatingInterval'}
 		<label for="repeatingInterval">Interval</label>
-    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.repeatingInterval}#{/ifErrors}#{else}${_event?.repeatingInterval}#{/else}"/>
+    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.repeatingInterval}#{/ifErrors}#{else}#{if _event?.type != models.RepeatingType.NONE}${_event?.repeatingInterval}#{/if}#{/else}"/>
 	#{/field}
 	<span class="hint">(e.g. 2 for every second day)</span>
 	</p>

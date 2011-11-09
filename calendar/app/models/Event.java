@@ -187,7 +187,7 @@ public abstract class Event extends Model implements Comparable<Event>{
 										DateTime periodEnd,
 										int repeatingInterval) {
 		if(repeatingInterval == 0) {
-			repeatingInterval =1;
+			repeatingInterval = 1;
 		}
 		if(repeating == RepeatingType.NONE) {
 			return new SingleEvent(calendar, name, startDate, endDate);
