@@ -42,8 +42,8 @@ Location(loc1):
 
 SingleEvent(e0):
     name:           Collections
-    startDate:      2011-10-05 09:00:00 +1
-    endDate:        2011-10-05 12:00:00 +1
+    startDate:      2011-10-05 09:00:00
+    endDate:        2011-10-05 12:00:00
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
     description:    This is a private event from Jack in the past.
@@ -51,8 +51,8 @@ SingleEvent(e0):
 
 SingleEvent(e1):
     name:           Meet Lynn Bracken
-    startDate:      2011-11-05 13:00:00 +1
-    endDate:        2011-11-05 15:00:00 +1
+    startDate:      2011-11-05 13:00:00
+    endDate:        2011-11-05 15:00:00
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
     location:       loc1
@@ -61,8 +61,8 @@ SingleEvent(e1):
     
 SingleEvent(e2):
     name:           Hit Exley
-    startDate:      2011-11-05 17:00:00 +1
-    endDate:        2011-11-05 18:00:00 +1
+    startDate:      2011-11-05 17:00:00
+    endDate:        2011-11-05 18:00:00
     calendars:      firstJackCalendar
     origin:         firstJackCalendar
     description:    This is a private event from Jack.
@@ -70,8 +70,8 @@ SingleEvent(e2):
     
 SingleEvent(e3):
     name:           Work
-    startDate:      2011-11-21 08:00:00 +1
-    endDate:        2011-11-21 11:00:00 +1
+    startDate:      2011-11-21 08:00:00
+    endDate:        2011-11-21 11:00:00
     calendars:      
      - budCalendar
      - firstJackCalendar
@@ -81,8 +81,8 @@ SingleEvent(e3):
     
 SingleEvent(e4):
     name:           Drinking whiskey
-    startDate:      2011-11-06 14:00:00 +1
-    endDate:        2011-11-06 17:00:00 +1
+    startDate:      2011-11-06 14:00:00
+    endDate:        2011-11-06 17:00:00
     calendars:      secondJackCalendar
     origin:         secondJackCalendar
     description:    This is a private event from Jack in his second Calendar.
@@ -90,8 +90,8 @@ SingleEvent(e4):
 
 SingleEvent(e5):
     name:           Observation
-    startDate:      2011-11-04 08:00:00 +1
-    endDate:        2011-11-07 22:00:00 +1
+    startDate:      2011-11-04 08:00:00
+    endDate:        2011-11-07 22:00:00
     calendars:      edCalendar
     origin:         edCalendar
     description:    This is a public event from Ed over three days.
@@ -99,8 +99,8 @@ SingleEvent(e5):
     
 SingleEvent(e6):
     name:           Meeting with the mayor
-    startDate:      2011-11-04 11:00:00 +1
-    endDate:        2011-11-04 13:00:00 +1
+    startDate:      2011-11-04 11:00:00
+    endDate:        2011-11-04 13:00:00
     calendars:      edCalendar
     origin:         edCalendar
     description:    This is public event from Ed.
@@ -108,28 +108,42 @@ SingleEvent(e6):
 
 EventSeries(r1):
     name:           Weekly Meeting
-    startDate:      2011-11-07 14:00:00 +1
-    endDate:        2011-11-07 17:00:00 +1
+    startDate:      2011-11-07 14:00:00
+    endDate:        2011-11-07 17:00:00
     calendars:      budCalendar
     origin:         budCalendar
     description:    This is a weekly repeating event.
     isPrivate:      false
     repeatingType:  WEEKLY
+    periodStart:    2011-11-06 23:00:00
+    repeatingInterval:       1
+
+EventSeries(r2):
+    name:           Breakfast at Tiffany's
+    startDate:      2011-11-10 10:00:00
+    endDate:        2011-11-10 11:00:00
+    calendars:      budCalendar
+    origin:         budCalendar
+    description:    This is a daily repeating event for every second day.
+    isPrivate:      false
+    repeatingType:  DAILY
+    periodStart:    2011-11-10 00:00:00
+    repeatingInterval:       2
     
 Comment(c1):
     author:         Michael
-    postedAt:       2011-11-13 09:00:00 +1
+    postedAt:       2011-11-13 09:00:00
     content:        first post
     event:          e1
     
 Comment(c2):
     author:         Marc
-    postedAt:       2011-11-13 10:00:00 +1
+    postedAt:       2011-11-13 10:00:00
     content:        second post
     event:          e1
     
 Comment(c3):
     author:         Jack Vincennes
-    postedAt:       2011-10-21 11:00:00 +1
+    postedAt:       2011-10-21 11:00:00
     content:        Jack is the owner of this event so he can add comments even if the event is private
     event:          e2

@@ -9,8 +9,14 @@ import javax.persistence.Entity;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Months;
+import org.joda.time.Weeks;
+import org.joda.time.Years;
 
+import play.data.validation.Required;
 import play.db.jpa.Model;
+import play.test.PlayJUnitRunner.StartPlay;
 
 /**
  * The EventSeries class represents not limited series of events on
@@ -40,6 +46,22 @@ public class EventSeries extends Event {
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	private List<DateTime> mutations;
 	
+	@Required
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+	private DateTime periodStart;
+	
+	/**
+	 * The end date for the repetion. If null it is an infinite series.
+	 */
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+	private DateTime periodEnd;
+	
+	/**
+	 * The interval used for repetitions. Default value is 1.
+	 */
+	@Required
+	private int interval;
+	
 	public EventSeries(
 			Calendar calendar, 
 			String name, 
@@ -48,29 +70,33 @@ public class EventSeries extends Event {
 			RepeatingType repeating) {
 		super(calendar, name, startDate, endDate, repeating);
 		mutations = new ArrayList<DateTime>();
+		interval = 1;
+		periodStart = startDate.withTime(0, 0, 0, 0);
 	}
 
 	@Override
 	public boolean isThisDay(DateTime day) {
-		if(!isMutated(day))
-			switch(type) {
-			case WEEKLY:
-				return startDate.getDayOfWeek() == day.getDayOfWeek();
-			case MONTHLY:
-				return startDate.getDayOfMonth() == day.getDayOfMonth();
-			case YEARLY:
-				return startDate.getMonthOfYear() == day.getMonthOfYear() && startDate.getDayOfYear() == day.getDayOfYear();
-			default:
-				return true;
-			}
-		else
-			return false;
+		if(!periodStart.isAfter(day) && (periodEnd == null || day.isBefore(periodEnd)))
+			if(!isMutated(day))
+				switch(type) {
+				case DAILY:
+					return Days.daysBetween(periodStart, day).getDays()%interval == 0;
+				case WEEKLY:
+					return startDate.getDayOfWeek() == day.getDayOfWeek() && 
+					Weeks.weeksBetween(periodStart, day).getWeeks()%interval == 0;
+				case MONTHLY:
+					return startDate.getDayOfMonth() == day.getDayOfMonth() && 
+					Months.monthsBetween(periodStart, day).getMonths()%interval == 0;
+				case YEARLY:
+					return startDate.getMonthOfYear() == day.getMonthOfYear() && startDate.getDayOfYear() == day.getDayOfYear() && 
+					Years.yearsBetween(periodStart, day).getYears()%interval == 0;
+				}
+		return false;
 	}
 
 	@Override
 	public boolean isThisDayandLocation(DateTime day, Location loc) {
-		// TODO Auto-generated method stub
-		return false;
+		return loc == this.location && isThisDay(day);
 	}
 
 	public RepeatingEvent createDummyEvent(DateTime day) {
@@ -98,5 +124,29 @@ public class EventSeries extends Event {
 			if(day.getDayOfYear() == mutatedDate.getDayOfYear() && day.getYear() == mutatedDate.getYear())
 				return true;
 		return false;
+	}
+	
+	public DateTime getPeriodStart() {
+		return periodStart;
+	}
+	
+	public void setPeriodStart(DateTime periodStart) {
+		this.periodStart = periodStart;
+	}
+	
+	public DateTime getPeriodEnd() {
+		return periodEnd;
+	}
+	
+	public void setPeriodEnd(DateTime periodEnd) {
+		this.periodEnd = periodEnd;
+	}
+	
+	public int getRepeatingInterval() {
+		return interval;
+	}
+	
+	public void setRepeatingInterval(int repeatingInterval) {
+		this.interval = repeatingInterval;
 	}
 }

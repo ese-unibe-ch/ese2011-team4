@@ -167,6 +167,16 @@
 	display: inline;
 }
 
+#repeating-details {
+	margin: 10px 30px;
+	padding: 5px;
+	border: solid 0.5px;
+}
+
+#repeating-details .hint {
+	font-size: 0.8em;
+}
+
 /** Comment **/
 
 #event-content {

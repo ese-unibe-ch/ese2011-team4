@@ -179,14 +179,49 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * @see 	Calendar
 	 * @see 	Comment
 	 */
-	public static Event createEvent(Calendar calendar, String name, DateTime startDate, DateTime endDate, RepeatingType repeating) {
+	public static Event createEvent(	Calendar calendar, 
+										String name, 
+										DateTime startDate, 
+										DateTime endDate, 
+										RepeatingType repeating,
+										DateTime periodEnd,
+										int repeatingInterval) {
 		if(repeating == RepeatingType.NONE) {
 			return new SingleEvent(calendar, name, startDate, endDate);
 		} else {
-			return new EventSeries(calendar, name, startDate, endDate, repeating);
+			EventSeries series = new EventSeries(calendar, name, startDate, endDate, repeating);
+			series.setPeriodEnd(periodEnd);
+			series.setRepeatingInterval(repeatingInterval);
+			return series;
 		}
 	}
 	
+	/**
+	 * Converts a single event to an event series and returns the converted event
+	 * 
+	 * @param	
+	 * @return
+	 */
+	public static SingleEvent convertFromSeries(EventSeries series) {
+		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
+		event.calendars = series.calendars;
+		event.description = series.description;
+		event.isPrivate = series.isPrivate;
+		event.location = series.location;
+		event.comments = series.comments;
+		series.delete();
+		return event;
+	}
+	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
+		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
+		series.calendars = event.calendars;
+		series.description = event.description;
+		series.isPrivate = event.isPrivate;
+		series.location = event.location;
+		series.comments = event.comments;
+		event.delete();
+		return series;
+	}
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
 	 * represents all calendars which have joined this event.

@@ -44,16 +44,20 @@ public class Events extends Controller {
 									boolean isPrivate, 
 									String description,
 									Long locationId,
-									RepeatingType repeating) {
+									RepeatingType repeating,
+									String periodEndDay,
+									int repeatingInterval) {
 		
 		Calendar calendar = Calendar.findById(calendarId);
-		Logger.info(""+repeating);
 		assert calendar != null;
 		DateTime startDate = null;
 		DateTime endDate = null;
+		DateTime periodEnd = null;	
 		try {
 			startDate = format.parseDateTime(startDay+startTime);
 			endDate = format.parseDateTime(endDay+endTime);
+			if(!periodEndDay.isEmpty())
+				periodEnd = format.parseDateTime(periodEndDay+"23:59");
 		} catch(IllegalArgumentException e) {
 			validation.addError("Start.InvalidDate", "Invalid Date");
 			params.flash();
@@ -62,7 +66,7 @@ public class Events extends Controller {
 	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		}
 		
-		Event event = Event.createEvent(calendar, name, startDate, endDate, repeating);
+		Event event = Event.createEvent(calendar, name, startDate, endDate, repeating, periodEnd, repeatingInterval);
 		
 		event.isPrivate = isPrivate;
 		event.description = description;
@@ -70,8 +74,9 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-	    if (event.validateAndSave())
+	    if (event.validateAndSave()) {
 	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
+	    }
 	    else {
 	    	for(play.data.validation.Error e : Validation.errors())
 				Logger.error(e.message());
@@ -102,15 +107,28 @@ public class Events extends Controller {
 								String endTime,
 								boolean isPrivate, 
 								String description,
-								Long locationId) {
+								Long locationId,
+								RepeatingType repeating,
+								String periodEndDay,
+								int repeatingInterval) {
+    	
+    	Event event = Event.findById(eventId);
+    	assert event != null;
 		
-		Event event = Event.findById(eventId);
-		assert event != null;
+		if(event.type != RepeatingType.NONE && repeating == RepeatingType.NONE)
+			event = Event.convertFromSeries((EventSeries) event);
+		else if(event.type == RepeatingType.NONE && repeating != RepeatingType.NONE) 
+			event = Event.convertFromSingleEvent((SingleEvent) event, repeating);
 		
+		// Update fields
 		event.name = name;
 		try {
 			event.startDate = format.parseDateTime(startDay+startTime);
 			event.endDate = format.parseDateTime(endDay+endTime);
+			if(repeating != RepeatingType.NONE && periodEndDay != null) {
+				EventSeries series = (EventSeries) event;
+				series.setPeriodEnd(format.parseDateTime(periodEndDay+"23:59"));
+			}
 		} catch(IllegalArgumentException e) {
 			validation.addError("Start.InvalidDate", "Invalid Date");
 			params.flash();
@@ -124,6 +142,12 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
+		if(repeating != RepeatingType.NONE) {
+			EventSeries series = (EventSeries) event;
+			series.setRepeatingInterval(repeatingInterval);
+		}
+		
+		// Validate and save
 		if(event.validateAndSave()) {
 	    	Calendars.show(calendarId, event.startDate.getYear(), 
 	    							   event.startDate.getMonthOfYear(), 

@@ -25,6 +25,10 @@ public class Bootstrap extends Job {
             EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
     		event.type = RepeatingType.WEEKLY;
     		event.save();
+    		
+    		event = EventSeries.find("byName", "Breakfast at Tiffany's").first();
+    		event.type = RepeatingType.DAILY;
+    		event.save();
         }
     }
 }
