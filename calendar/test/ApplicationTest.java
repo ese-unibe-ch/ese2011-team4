@@ -16,9 +16,9 @@ public class ApplicationTest extends FunctionalTest {
 
 
     @Test
-    public void testThatIndexRedirectsToCalendars() {
+    public void testThatIndexRedirectsToLogin() {
         Response response = GET("/");
         assertStatus(302, response);
-        assertHeaderEquals("Location", "/calendars/index", response);
+        assertHeaderEquals("Location", "/login", response);
     }
 }
