@@ -135,6 +135,7 @@ public class Events extends Controller {
 			if(repeating != RepeatingType.NONE) {
 				EventSeries series = (EventSeries) event;
 				series.setPeriodEnd(periodEnd);
+				series.type = repeating;
 			}
 		} catch(IllegalArgumentException e) {
 			validation.addError("Start.InvalidDate", "Invalid Date");
