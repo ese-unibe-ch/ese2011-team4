@@ -112,6 +112,10 @@ public class Events extends Controller {
 								String periodEndDay,
 								int repeatingInterval) {
     	
+		if(repeatingInterval == 0) {
+			repeatingInterval = 1;
+		}
+    	
     	Event event = Event.findById(eventId);
     	assert event != null;
 		
@@ -128,7 +132,7 @@ public class Events extends Controller {
 			event.endDate = format.parseDateTime(endDay+endTime);
 			if(!periodEndDay.isEmpty())
 				periodEnd = format.parseDateTime(periodEndDay+"23:59");
-			if(repeating != RepeatingType.NONE && periodEnd != null) {
+			if(repeating != RepeatingType.NONE) {
 				EventSeries series = (EventSeries) event;
 				series.setPeriodEnd(periodEnd);
 			}

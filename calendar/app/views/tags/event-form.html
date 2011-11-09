@@ -99,10 +99,10 @@ Repeating configuration details
 		<label id="repeating" for="repeat">Type</label>	
 		<select name="${field.name}" id="${field.name}">
 			<option value="${models.RepeatingType.NONE}">No repeat</option>
-			<option value="${models.RepeatingType.DAILY}" #{if _event?.type == models.RepeatingType.DAILY}selected#{/if}>Daily</option>
-			<option value="${models.RepeatingType.WEEKLY}" #{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}>Weekly</option>
-			<option value="${models.RepeatingType.MONTHLY}" #{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}>Monthly</option>
-			<option value="${models.RepeatingType.YEARLY}" #{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}>Yearly</option>
+			<option value="${models.RepeatingType.DAILY}" #{ifErrors}#{if flash.repeating == "DAILY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.DAILY}selected#{/if}#{/else}>Daily</option>
+			<option value="${models.RepeatingType.WEEKLY}" #{ifErrors}#{if flash.repeating == "WEEKLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}#{/else}>Weekly</option>
+			<option value="${models.RepeatingType.MONTHLY}" #{ifErrors}#{if flash.repeating == "MONTHLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}#{/else}>Monthly</option>
+			<option value="${models.RepeatingType.YEARLY}" #{ifErrors}#{if flash.repeating == "YEARLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}#{/else}>Yearly</option>
 		</select>
 	#{/field}
 	</p>
