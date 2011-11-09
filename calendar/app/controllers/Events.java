@@ -122,12 +122,15 @@ public class Events extends Controller {
 		
 		// Update fields
 		event.name = name;
+		DateTime periodEnd = null;	
 		try {
 			event.startDate = format.parseDateTime(startDay+startTime);
 			event.endDate = format.parseDateTime(endDay+endTime);
-			if(repeating != RepeatingType.NONE && periodEndDay != null) {
+			if(!periodEndDay.isEmpty())
+				periodEnd = format.parseDateTime(periodEndDay+"23:59");
+			if(repeating != RepeatingType.NONE && periodEnd != null) {
 				EventSeries series = (EventSeries) event;
-				series.setPeriodEnd(format.parseDateTime(periodEndDay+"23:59"));
+				series.setPeriodEnd(periodEnd);
 			}
 		} catch(IllegalArgumentException e) {
 			validation.addError("Start.InvalidDate", "Invalid Date");
