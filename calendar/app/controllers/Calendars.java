@@ -1,5 +1,7 @@
 package controllers;
 
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Calendars extends Controller {
 	
     public static void index(Long userId) {
     	User connectedUser = User.find("email", Security.connected()).first();
-    	User user = User.findById(userId);
+    	User user = (User) ((userId==null)?connectedUser:User.findById(userId));
     	List<Calendar> calendars = Calendar.find("owner", user).fetch();
         render(calendars, connectedUser, user);
     }
@@ -27,7 +29,9 @@ public class Calendars extends Controller {
 	    render(connectedUser);
     }
 	
-	public static void showCurrentMonth(Long id) {
+	public static void showCurrentMonth(Long id, boolean print) {
+		if(print)
+			print((Calendar)Calendar.findById(id));
 		DateTime dt = new DateTime();
 		show(id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	}
@@ -71,5 +75,22 @@ public class Calendars extends Controller {
     		validation.keep();
     		Calendars.add();
     	}
+    }
+    
+    private static void print(Calendar cal) {
+    	PrinterJob pjob = PrinterJob.getPrinterJob();
+    	pjob.setJobName(cal.name);
+    	PageFormat pf = pjob.defaultPage();
+    	cal.pages = (int) Math.max(Calendar.font.getSize()*cal.events.size()/pf.getHeight(),1);
+    	cal.printPrivate = cal.owner.equals((User)User.find("byEmail", Security.connected()).first());
+	    if ( pjob.printDialog() != false ){
+	    	pjob.setPrintable(cal);
+	    	try{
+	    		pjob.print();
+	    	}
+	    	catch(Exception e){
+	    		e.printStackTrace();
+	    	}
+	    }
     }
 }

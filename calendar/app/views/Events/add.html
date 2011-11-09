@@ -7,16 +7,6 @@
 <div id="main">
 	<div id="main-left">
 		<h2 class="title">Add an event to ${calendar.name}</h2>
-		#{ifErrors}
-   		<span class="error">
-   			Oops...
-   			<ul>
-   			#{errors}
-       		<li>${error}</li>
-   			#{/errors}
-   			</ul>
-		</span>
-		#{/ifErrors}
 		<div id="event-form">
 		#{form @Events.addEvent(calendar.id)}
 			#{event-form calendar:calendar, selected:dt, locations:locations /}

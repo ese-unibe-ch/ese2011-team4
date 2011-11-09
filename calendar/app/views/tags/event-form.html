@@ -1,8 +1,17 @@
 <script type="text/javascript">
 function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDate', ':startTime', ':endDate', ':endTime', ':locationId', ':eventId') /}
-   $('#LocationcollisionResponse').load(
-       action({startDate: document.getElementById('startDate').value, startTime: document.getElementById('startTime').value, endDate: document.getElementById('endDate').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
+   $('#LocationCollisionResponse').load(
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   )
+}
+</script>
+
+<script type="text/javascript">
+function checkEventCollision() {
+   var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
+   $('#EventCollisionResponse').load(
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
    )
 }
 </script>
@@ -12,12 +21,28 @@ function checkLocationCollision() {
    		// Disable caching of AJAX responses
     	cache: false
 	});
-     $(document.getElementById('LocationcollisionResponse')).ready(function() {
+     $(document.getElementById('LocationCollisionResponse')).ready(function() {
      	checkLocationCollision();
+ 	});
+     $(document.getElementById('EventCollisionResponse')).ready(function() {
+     	checkEventCollision();
  	});
 </script>
 
-<div id="LocationcollisionResponse"></div>
+		#{ifErrors}
+   		<span class="error">
+   			Oops...
+   			<ul>
+   			#{errors}
+       		<li>${error}</li>
+   			#{/errors}
+   			</ul>
+		</span>
+		#{/ifErrors}
+
+<div id="LocationCollisionResponse"></div>
+
+<div id="EventCollisionResponse"></div>
 
 <p>
 #{field 'name'}
@@ -25,26 +50,29 @@ function checkLocationCollision() {
     <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
 #{/field}
 </p>
+
 <p>
-#{field 'startDate'}
-    <label for"startDate">Start</label>
-    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startDate}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
+#{field 'startDay'}
+    <label for="startDay">Start</label>
+    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDay}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'startTime'}
-	<label for"startTime" class="time">Time</label>
-    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
+	<label for="startTime" class="time">Time</label>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startTime}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.getHourOfDay())}:${String.format("%02d", _selected.getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
+
 <p>
-#{field 'endDate'}
-	<label for"endDate">End</label>
-	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endDate}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
+#{field 'endDay'}
+	<label for="endDay">End</label>
+	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDay}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'endTime'}
-	<label for"endTime" class="time">Time</label>
-    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision()" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
+	<label for="endTime" class="time">Time</label>
+    <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
 #{/field}
 </p>
+
 <p>
 #{field 'isPrivate'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
@@ -64,18 +92,38 @@ function checkLocationCollision() {
 #{/field}
 </p>
 
-<p>
-#{field 'repeat'}
-	<label for="repeat">Repeat</label>
-	<select name="${field.name}" id="${field.name}">
-		<option value="none">No repeat</option>
-		<option value="daily" #{ifErrors}#{if flash.repeat.toString() == "daily"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "daily"}selected="selected"#{/if}#{/else}*>Daily</option>
-		<option value="weekly" #{ifErrors}#{if flash.repeat.toString() == "weekly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "weekly"}selected="selected"#{/if}#{/else}*>Weekly</option>
-		<option value="monthly" #{ifErrors}#{if flash.repeat.toString() == "monthly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "monthly"}selected="selected"#{/if}#{/else}*>Monthly</option>
-		<option value="yearly" #{ifErrors}#{if flash.repeat.toString() == "yearly"}selected="selected"#{/if}#{/ifErrors}*{else}#{if _event?.repeat?.toString() == "yearly"}selected="selected"#{/if}#{/else}*>Yearly</option>
-	</select>
-#{/field}
-</p>
+<div id="repeating-details">
+Repeating configuration details
+	<p>
+	#{field 'repeating'}
+		<label id="repeating" for="repeat">Type</label>	
+		<select name="${field.name}" id="${field.name}">
+			<option value="${models.RepeatingType.NONE}">No repeat</option>
+			<option value="${models.RepeatingType.DAILY}" #{if _event?.type == models.RepeatingType.DAILY}selected#{/if}>Daily</option>
+			<option value="${models.RepeatingType.WEEKLY}" #{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}>Weekly</option>
+			<option value="${models.RepeatingType.MONTHLY}" #{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}>Monthly</option>
+			<option value="${models.RepeatingType.YEARLY}" #{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}>Yearly</option>
+		</select>
+	#{/field}
+	</p>
+	
+	<p>
+	#{field 'periodEndDay'}
+		<label for="periodEndDay">Period end</label>
+    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.periodEndDay}#{/ifErrors}#{else}${_event?.periodEnd?.toString('dd.MM.yyyy')}#{/else}"/>
+	#{/field}
+	<span class="hint">(leave empty for infinite repeating)</span>
+	</p>
+
+	<p>
+	#{field 'repeatingInterval'}
+		<label for="repeatingInterval">Interval</label>
+    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.repeatingInterval}#{/ifErrors}#{else}${_event?.repeatingInterval}#{/else}"/>
+	#{/field}
+	<span class="hint">(e.g. 2 for every second day)</span>
+	</p>
+	
+</div>
 
 <p class="description">
 #{field 'description'}

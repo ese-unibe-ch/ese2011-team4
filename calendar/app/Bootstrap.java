@@ -1,3 +1,5 @@
+import java.util.List;
+
 import play.Logger;
 import play.Play;
 import play.jobs.Job;
@@ -15,8 +17,17 @@ public class Bootstrap extends Job {
             Fixtures.loadModels("initial-data.yml");
             
             // YAML can't load enum
+            for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+            	e.type = RepeatingType.NONE;
+            	e.save();
+            }
+            
             EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
     		event.type = RepeatingType.WEEKLY;
+    		event.save();
+    		
+    		event = EventSeries.find("byName", "Breakfast at Tiffany's").first();
+    		event.type = RepeatingType.DAILY;
     		event.save();
         }
     }

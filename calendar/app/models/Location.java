@@ -248,14 +248,26 @@ public class Location extends Model{
 	 * @since Iteration-2
 	 */
 	public long numberOfAllEventsByDayAndTime(DateTime start, DateTime end) {		
-		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM Event e "+
+		Long number = (long) 0;
+		Query query = JPA.em().createQuery("SELECT COUNT(*) FROM SingleEvent e "+
 				"WHERE e.location = ?1 " +
 				"AND e.endDate >= ?2 " +
 				"AND e.startDate < ?3");
 		query.setParameter(1, this);
 		query.setParameter(2, start);
 		query.setParameter(3, end);
-		return (Long) query.getSingleResult();
+		number = (Long) query.getSingleResult();
+		
+		// Get Repeating events
+		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
+				"WHERE e.location = ?1");
+		query.setParameter(1, this);	
+		
+		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
+			if(e.isThisDay(start) && start.isBefore(e.endDate.withYear(end.getYear()).withDayOfYear(end.getDayOfYear())) && end.isAfter(e.startDate.withYear(start.getYear()).withDayOfYear(start.getDayOfYear())))
+				number++;
+		}
+		return number;
 	}
 	
 	/**

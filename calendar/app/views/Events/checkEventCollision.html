@@ -1,0 +1,5 @@
+#{if numberOfEvents > 0}
+<span class="warning">
+Warning: ${numberOfEvents} event${numberOfEvents.pluralize()} in this calendar ${numberOfEvents>1 ? 'are' : 'is'} at the same time!
+</span>
+#{/if}

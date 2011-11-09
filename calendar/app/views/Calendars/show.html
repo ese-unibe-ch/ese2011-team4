@@ -65,23 +65,24 @@
 				#{/if}		
 			</tr>
 		</table>
-
-		<div id="events">
-			#{if events.size() > 0}
-				<ul>
+	</div>
+	
+	<div id="events">
+		#{if events.size() > 0}
+			<ul>
+				<hr />
+				#{list items:events, as:'event'}
+					#{event calendar:calendar, event:event, connectedUser:connectedUser /}
 					<hr />
-					#{list items:events, as:'event'}
-						#{event calendar:calendar, event:event, connectedUser:connectedUser /}
-					#{/list}
-				</ul>
-			#{/if}
+				#{/list}
+			</ul>
+		#{/if}
 		
-			#{else}
-				<div class="empty">
-	        		There are no events for the selected date.
-	    		</div>
-			#{/else}
-		</div>
+		#{else}
+			<div class="empty">
+	       		There are no events for the selected date.
+	   		</div>
+		#{/else}
 	</div>
 </div>
 
@@ -89,8 +90,9 @@
 	<h2 class="title">Options</h2>
 	<div class="navigation">
 		<ul>
-			<li><a class="navigation" href="@{Calendars.index}">Go back</a></li>
-			<li><a class="navigation" href="@{Calendars.showCurrentMonth(calendar.id)}">Today</a></li>
+			<li><a class="navigation" href="@{Calendars.showCurrentMonth(calendar.id,true)}">Print this calendar</a></li>
+			<li><a class="navigation" href="@{Calendars.index(connectedUser.id)}">Go back</a></li>
+			<li><a class="navigation" href="@{Calendars.showCurrentMonth(calendar.id,false)}">Today</a></li>
 			#{secure.check calendar}
 				<li><a class="navigation" href="@{Events.add(calendar.id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth())}">Add an event</a></li>
 			#{/secure.check}

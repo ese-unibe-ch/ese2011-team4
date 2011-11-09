@@ -30,7 +30,9 @@ import play.db.jpa.Model;
 
 /**
  * The Event class represents a temporary and scheduled happening with a defined 
- * goal or intention, which can be added to calendars.
+ * goal or intention, which can be added to calendars. The Event class is abstract
+ * and therefor only its implementation can be used, which are {@link SingleEvent}
+ * and {@link EventSeries}.
  * <p>
  * An event includes the following informations:
  * <ul>
@@ -38,6 +40,7 @@ import play.db.jpa.Model;
  * <li>The event's name</li>
  * <li>A list of zero or more calendars in which the event occurs</li>
  * <li>A start and an end time between which the event takes place</li>
+ * <li>A {@link RepeatingType} which is used by the {@link EventSeries}</li>
  * <li>An event can be public or private. A private event is only visible to its owner</li>
  * <li>A {@link Location} at which the event takes place</li>
  * <li>A description</li>
@@ -54,6 +57,8 @@ import play.db.jpa.Model;
  * </ul>
  * 
  * @since Iteration-1
+ * @see SingleEvent
+ * @see EventSeries
  * @see User
  * @see Location
  * @see Comment
@@ -135,13 +140,18 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * <li>Event has zero or more comments</li>
 	 * <li>Event belongs to a calendar</li>
 	 * <li>Event has zero or more other calendars which joined it</li>
+	 * <li>Event has a repeating type.
 	 * </ul>
 	 * 
-	 * @param 	calendar	calendar to which this event belongs
+	 * @param 	calendar		calendar to which this event belongs
+	 * @param	name			name of the event
+	 * @param	startDate		startDate of the event
+	 * @param	endDate			endDate of the event
+	 * @param	repeatingType	Type of the repeating rule if any
 	 * @see 	Calendar
 	 * @see 	Comment
 	 */
-	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate) {
+	public Event(Calendar calendar, String name, DateTime startDate, DateTime endDate, RepeatingType repeating) {
 		this.comments = new LinkedList<Comment>();
 		this.origin = calendar;
 		this.startDate = startDate;
@@ -150,9 +160,68 @@ public abstract class Event extends Model implements Comparable<Event>{
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
 		this.isPrivate = false;
-		this.type = RepeatingType.NONE;
+		this.type = repeating;
+	}
+	/**
+	 * Static method to generate events depending on the type. The default behaviour is:
+	 * <ul>
+	 * <li>Event has zero or more comments</li>
+	 * <li>Event belongs to a calendar</li>
+	 * <li>Event has zero or more other calendars which joined it</li>
+	 * <li>Event has a repeating type.
+	 * </ul>
+	 * 
+	 * @param 	calendar		calendar to which this event belongs
+	 * @param	name			name of the event
+	 * @param	startDate		startDate of the event
+	 * @param	endDate			endDate of the event
+	 * @param	repeatingType	Type of the repeating rule if any
+	 * @see 	Calendar
+	 * @see 	Comment
+	 */
+	public static Event createEvent(	Calendar calendar, 
+										String name, 
+										DateTime startDate, 
+										DateTime endDate, 
+										RepeatingType repeating,
+										DateTime periodEnd,
+										int repeatingInterval) {
+		if(repeating == RepeatingType.NONE) {
+			return new SingleEvent(calendar, name, startDate, endDate);
+		} else {
+			EventSeries series = new EventSeries(calendar, name, startDate, endDate, repeating);
+			series.setPeriodEnd(periodEnd);
+			series.setRepeatingInterval(repeatingInterval);
+			return series;
+		}
 	}
 	
+	/**
+	 * Converts a single event to an event series and returns the converted event
+	 * 
+	 * @param	
+	 * @return
+	 */
+	public static SingleEvent convertFromSeries(EventSeries series) {
+		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
+		event.calendars = series.calendars;
+		event.description = series.description;
+		event.isPrivate = series.isPrivate;
+		event.location = series.location;
+		event.comments = series.comments;
+		series.delete();
+		return event;
+	}
+	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
+		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
+		series.calendars = event.calendars;
+		series.description = event.description;
+		series.isPrivate = event.isPrivate;
+		series.location = event.location;
+		series.comments = event.comments;
+		event.delete();
+		return series;
+	}
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
 	 * represents all calendars which have joined this event.
@@ -230,7 +299,6 @@ public abstract class Event extends Model implements Comparable<Event>{
 		return origin.owner.equals(visitor) || !isPrivate;
 	}
 	
-	
 	/**
 	 * Returns true if the given date is the start date of this event and
 	 * if the given location equals the event's location.
@@ -243,7 +311,6 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * @see 	Location
 	 */
 	public abstract boolean isThisDayandLocation(DateTime day, Location loc);
-
 
 	/**
 	 * Checks if the argument event's start date equals this event's start date.
@@ -274,6 +341,21 @@ public abstract class Event extends Model implements Comparable<Event>{
 				parts.add(cal.owner);
 		return parts;
 	}	
+	
+	/**
+	 * 
+	 * Deletes the event
+	 * 
+	 * @return 	the object deleted
+	 * @since	Iteration-1
+	 */
+	@Override
+	public Event delete() {
+		for(Comment p : Comment.find("byEvent", this).<Comment>fetch()) {
+		    p.delete();
+		}
+		return super.delete();
+	}
 	
 	/**
 	 * Returns this event's name.

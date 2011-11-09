@@ -36,12 +36,12 @@
 						</div>
 							<table>
 								<tr>
-									<th class="comment-content">${comment.content}</th>
-									<th class="deleteComment">
+									<td class="comment-content">${comment.content}</td>
+									<td class="deleteComment">
 										#{if _connectedUser.fullname.equals(comment.author)}
 											<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
 										#{/if}
-									</th>
+									</td>
 								</tr>
 							</table>
 					</div>

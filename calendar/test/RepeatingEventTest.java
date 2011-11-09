@@ -18,7 +18,21 @@ public class RepeatingEventTest extends UnitTest {
 	public void setup() {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("initial-data.yml");
-		assertEquals(1, EventSeries.count());
+        // YAML can't load enum
+        for(Event e : SingleEvent.all().<SingleEvent>fetch()) {
+        	e.type = RepeatingType.NONE;
+        	e.save();
+        }
+        
+        EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		event.type = RepeatingType.WEEKLY;
+		event.save();
+		
+		event = EventSeries.find("byName", "Breakfast at Tiffany's").first();
+		event.type = RepeatingType.DAILY;
+		event.save();
+		
+		assertEquals(2, EventSeries.count());
 	}
 	
 	@After
@@ -41,7 +55,7 @@ public class RepeatingEventTest extends UnitTest {
 				RepeatingType.DAILY);
 		
 		assertTrue(event.validateAndSave());
-		assertEquals(2, EventSeries.count());
+		assertEquals(3, EventSeries.count());
 		
 		// Retrieve data
 		EventSeries e = EventSeries.findById(event.id);
@@ -54,13 +68,28 @@ public class RepeatingEventTest extends UnitTest {
 	public void testWeeklyEvent() {
 		// Get a calendar
 		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
-		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
-		event.type = RepeatingType.WEEKLY;
 		
 		List<SingleEvent> list = budCalendar.events(budCalendar.owner, new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011));
 		
 		assertEquals(1, list.size());
 		assertEquals("Weekly Meeting", list.get(0).name);
+	}
+	
+	@Test
+	public void testDailyEvent() {
+		// Get a calendar
+		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
+		
+		// Does not repeating, as it has an interval of 2
+		List<SingleEvent> list = budCalendar.events(budCalendar.owner, new DateTime().withDayOfMonth(12).withMonthOfYear(11).withYear(2011));
+		
+		assertEquals(0, list.size());		
+		
+		// Repeats every second day
+		list = budCalendar.events(budCalendar.owner, new DateTime().withDayOfMonth(13).withMonthOfYear(11).withYear(2011));
+		
+		assertEquals(1, list.size());
+		assertEquals("Breakfast at Tiffany's", list.get(0).name);
 	}
 	
 	@Test
@@ -74,6 +103,20 @@ public class RepeatingEventTest extends UnitTest {
 		
 		assertEquals(event.name, dummy.name);
 		assertEquals(event.comments, dummy.comments);
+		assertEquals(event.startDate.withDayOfMonth(7).withMonthOfYear(11).withYear(2011), dummy.startDate);
 		assertEquals(RepeatingType.WEEKLY, dummy.type);
+	}
+	
+	@Test
+	public void mutateEvent() {
+		// Get a event
+		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
+		Calendar calendar = event.origin;
+		
+		DateTime dt = new DateTime().withDayOfMonth(7).withMonthOfYear(11).withYear(2011);		
+		
+		event.mutate(dt);
+		List<SingleEvent> list = calendar.events(calendar.owner, dt);
+		assertEquals(0, list.size());
 	}
 }
