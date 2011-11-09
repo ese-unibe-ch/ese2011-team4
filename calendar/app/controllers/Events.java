@@ -112,6 +112,10 @@ public class Events extends Controller {
 								String periodEndDay,
 								int repeatingInterval) {
     	
+		if(repeatingInterval == 0) {
+			repeatingInterval = 1;
+		}
+    	
     	Event event = Event.findById(eventId);
     	assert event != null;
 		
@@ -122,12 +126,16 @@ public class Events extends Controller {
 		
 		// Update fields
 		event.name = name;
+		DateTime periodEnd = null;	
 		try {
 			event.startDate = format.parseDateTime(startDay+startTime);
 			event.endDate = format.parseDateTime(endDay+endTime);
-			if(repeating != RepeatingType.NONE && periodEndDay != null) {
+			if(!periodEndDay.isEmpty())
+				periodEnd = format.parseDateTime(periodEndDay+"23:59");
+			if(repeating != RepeatingType.NONE) {
 				EventSeries series = (EventSeries) event;
-				series.setPeriodEnd(format.parseDateTime(periodEndDay+"23:59"));
+				series.setPeriodEnd(periodEnd);
+				series.type = repeating;
 			}
 		} catch(IllegalArgumentException e) {
 			validation.addError("Start.InvalidDate", "Invalid Date");
