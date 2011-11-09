@@ -112,6 +112,8 @@ public class Events extends Controller {
 								String periodEndDay,
 								int repeatingInterval) {
     	
+    	if(repeatingInterval==0) repeatingInterval=1;
+    	
     	Event event = Event.findById(eventId);
     	assert event != null;
 		
