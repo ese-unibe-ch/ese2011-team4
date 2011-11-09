@@ -75,7 +75,7 @@ public class CalendarTest extends UnitTest {
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(8, Event.count());
+		assertEquals(9, Event.count());
 		
 		// Delete it
 		calendar.delete();
@@ -85,7 +85,7 @@ public class CalendarTest extends UnitTest {
 		assertEquals(3, Calendar.count());
 		
 		// Count events
-		assertEquals(5, Event.count());
+		assertEquals(6, Event.count());
 		
 		// Count comments
 		assertEquals(0, Comment.count());

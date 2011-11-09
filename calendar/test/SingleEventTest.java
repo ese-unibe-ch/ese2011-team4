@@ -142,7 +142,7 @@ public class SingleEventTest extends UnitTest {
 	public void joinCalendar() {
 		// Get a calendar
 		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
-		assertEquals(2, budCalendar.events.size());
+		assertEquals(3, budCalendar.events.size());
 		
 		// Get a event
 		SingleEvent event = SingleEvent.find("byName", "Observation").first();
@@ -150,7 +150,7 @@ public class SingleEventTest extends UnitTest {
 		
 		// Join the calendar
 		event.joinCalendar(budCalendar);
-		assertEquals(3, budCalendar.events.size());
+		assertEquals(4, budCalendar.events.size());
 		assertTrue(event.calendars.contains(budCalendar));
 				
 		// Make sure there weren't created any objects
