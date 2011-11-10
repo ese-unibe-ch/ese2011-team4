@@ -19,6 +19,8 @@ import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import controllers.Events;
 
@@ -83,6 +85,8 @@ public class Calendar extends Model implements Printable{
 	public static Font font = new Font("Times New Roman",Font.PLAIN,12);
 
 	public int ind;
+	
+	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 
 	
 	/** 
@@ -148,17 +152,25 @@ public class Calendar extends Model implements Printable{
 		return events(visitor, start, end);
 	}
 	
-	public List<SingleEvent> eventsRemind(User visitor, DateTime start) {
+	public List<SingleEvent> eventsRemind(User visitor) {
+		DateTime now= new DateTime();
+		DateTime remindTime = now.plusMinutes(10);
+		
+		
 		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
 				"WHERE ?1 MEMBER OF e.calendars "+
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
-				"AND e.startDate == ?3");
+				"AND e.startDate >= ?3");
 		query.setParameter(1, this);
 		query.setParameter(2, visitor);
-		query.setParameter(3, start);
+		query.setParameter(3, remindTime);
 		
+	    System.out.print(remindTime.toString());
+	    
 		List<SingleEvent> list = query.getResultList();
-		
+		for(SingleEvent each:list){
+			System.out.print(each.startDate.toString());
+		}
 		// Get Repeating events
 		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
 				"WHERE ?1 MEMBER OF e.calendars " +
@@ -167,8 +179,8 @@ public class Calendar extends Model implements Printable{
 		query.setParameter(2, visitor);
 		
 		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
-			if(e.isThisDay(start))
-				list.add(e.createDummyEvent(start));
+			if(e.isThisDay(remindTime))
+				list.add(e.createDummyEvent(remindTime));
 		}
 		
 		return list;

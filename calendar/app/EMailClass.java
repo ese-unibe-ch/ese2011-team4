@@ -23,19 +23,18 @@ import org.joda.time.DateTime;
 
 import play.libs.Mail;
 
-@Every("10min")
+@Every("5min")
 public class EMailClass extends Job {
 
 	public void doJob() {
 
-		DateTime now = new DateTime();
-		DateTime remindTime = now.plusMinutes(10);
+	
 
 		List<User> users = User.findAll();
 		for (User user : users) {
 			List<Calendar> calendars = Calendar.find("owner", user).fetch();
 			for (Calendar calendar : calendars) {
-				List<SingleEvent> events = calendar.eventsRemind(user,remindTime);
+				List<SingleEvent> events = calendar.eventsRemind(user);
 				for (Event event : events) {
 					Email newmail = new Email();
 					newmail.setFrom("kumar.simpal.sharma@gmail.com");
