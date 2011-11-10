@@ -73,7 +73,7 @@ public class Calendar extends Model implements Printable{
 	 * 
 	 * @see models.Calendar#Calendar(User, String)
 	 */
-	@ManyToMany(mappedBy="calendars")
+	@ManyToMany(mappedBy="calendars", cascade=CascadeType.ALL)
 	public List<Event> events;
 
 	public boolean printPrivate;
