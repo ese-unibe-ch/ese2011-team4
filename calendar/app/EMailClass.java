@@ -28,13 +28,11 @@ public class EMailClass extends Job {
 
 	public void doJob() {
 
-	
-
 		List<User> users = User.findAll();
 		for (User user : users) {
 			List<Calendar> calendars = Calendar.find("owner", user).fetch();
 			for (Calendar calendar : calendars) {
-				List<SingleEvent> events = calendar.eventsRemind(user);
+				List<SingleEvent> events = calendar.eventsRemind();
 				for (Event event : events) {
 					Email newmail = new Email();
 					newmail.setFrom("kumar.simpal.sharma@gmail.com");
