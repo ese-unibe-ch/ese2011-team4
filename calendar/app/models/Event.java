@@ -222,7 +222,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		// Deep copy of comments and calendars
 		event.comments = (List<Comment>)ObjectCloner.deepCopy(series.comments);
 		event.calendars = (List<Calendar>)ObjectCloner.deepCopy(series.calendars);
-
+		
+		JPA.em().remove(series);
 		JPA.em().persist(event);
 		
 		return event;
@@ -239,6 +240,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.comments = (List<Comment>) (ObjectCloner.deepCopy(event.comments));
 		series.calendars = (List<Calendar>) (ObjectCloner.deepCopy(event.calendars));
 		
+		JPA.em().remove(event);
 		JPA.em().persist(series);
 		
 		return series;
