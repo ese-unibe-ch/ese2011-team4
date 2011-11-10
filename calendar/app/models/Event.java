@@ -1,5 +1,10 @@
 package models;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,7 +73,7 @@ import play.db.jpa.Model;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
-public abstract class Event extends Model implements Comparable<Event>{
+public abstract class Event extends Model implements Comparable<Event>, Serializable{
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -204,27 +209,38 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * 
 	 * @param	
 	 * @return
+	 * @throws Exception 
 	 */
-	public static SingleEvent convertFromSeries(EventSeries series) {
+	public static SingleEvent convertFromSeries(EventSeries series) throws Exception {
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
-		event.comments = series.comments;
-		event.calendars = series.calendars;
-		event.save();
-		series.delete();
+		
+		JPA.em().merge(series);
+		
+		// Deep copy of comments and calendars
+		event.comments = (List<Comment>)ObjectCloner.deepCopy(series.comments);
+		event.calendars = (List<Calendar>)ObjectCloner.deepCopy(series.calendars);
+
+		JPA.em().persist(event);
+		
 		return event;
 	}
-	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
+	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) throws Exception {
 		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
-		series.comments = event.comments;
-		series.calendars = event.calendars;
-		series.save();
-		event.delete();
+		
+		JPA.em().merge(event);
+		
+		// Deep copy of comments and calendars
+		series.comments = (List<Comment>) (ObjectCloner.deepCopy(event.comments));
+		series.calendars = (List<Calendar>) (ObjectCloner.deepCopy(event.calendars));
+		
+		JPA.em().persist(series);
+		
 		return series;
 	}
 	/**
@@ -373,6 +389,39 @@ public abstract class Event extends Model implements Comparable<Event>{
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	private static class ObjectCloner{
+		// so that nobody can accidentally create an ObjectCloner object
+		private ObjectCloner(){}
+		// returns a deep copy of an object
+		static public Object deepCopy(Object oldObj) throws Exception
+		{
+			ObjectOutputStream oos = null;
+		    ObjectInputStream ois = null;
+		    try
+		    {
+		        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		        oos = new ObjectOutputStream(bos); 
+		         // serialize and pass the object
+		        oos.writeObject(oldObj);
+		        oos.flush();
+		        ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+		        ois = new ObjectInputStream(bin);
+		        // return the new object
+		        return ois.readObject();
+		    }
+		    catch(Exception e)
+		    {
+		    	System.out.println("Exception in ObjectCloner = " + e);
+		        throw(e);
+		    }
+		    finally
+		    {
+		    	oos.close();
+		        ois.close();
+		    }
+		}
 	}
 
 	private static class EndAfterBeginCheck extends Check {

@@ -112,7 +112,7 @@ public class Events extends Controller {
 								Long locationId,
 								RepeatingType repeating,
 								String periodEndDay,
-								int repeatingInterval) {
+								int repeatingInterval) throws Exception {
     	
 		if(repeatingInterval == 0) {
 			repeatingInterval = 1;
