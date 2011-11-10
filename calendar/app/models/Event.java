@@ -210,12 +210,10 @@ public abstract class Event extends Model implements Comparable<Event>{
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
-		List<Calendar> calendars = series.calendars;
-		List<Comment> comments = series.comments;
-		series.delete();
-		event.calendars = calendars;
-		event.comments = comments;
+		event.comments = series.comments;
+		event.calendars = series.calendars;
 		event.save();
+		series.delete();
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
@@ -223,12 +221,10 @@ public abstract class Event extends Model implements Comparable<Event>{
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
-		List<Calendar> calendars = event.calendars;
-		List<Comment> comments = event.comments;
-		event.delete();
-		series.calendars = calendars;
-		series.comments = comments;
+		series.comments = event.comments;
+		series.calendars = event.calendars;
 		series.save();
+		event.delete();
 		return series;
 	}
 	/**
