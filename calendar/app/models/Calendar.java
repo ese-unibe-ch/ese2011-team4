@@ -152,9 +152,6 @@ public class Calendar extends Model implements Printable{
 	/**
 	 * Returns a list of all events starting between (now + 10min) and (now + 15min)
 	 * <p>
-	 * The event is only visible when the given user is the owner of this event
-	 * or the event itself is public.
-	 * 
 	 * @return	list of events in this calendar starting between (now + 10min) and (now + 15min)
 	 * @see 	Event
 	 * @since 	Iteration-5
