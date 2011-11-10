@@ -155,15 +155,17 @@ public class Calendar extends Model implements Printable{
 	public List<SingleEvent> eventsRemind(User visitor) {
 		DateTime now= new DateTime();
 		DateTime remindTime = now.plusMinutes(10);
+		DateTime tillTime = now.plusMinutes(15);
 		
 		
 		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
 				"WHERE ?1 MEMBER OF e.calendars "+
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
-				"AND e.startDate >= ?3");
+				"AND (e.startDate >= ?3 AND e.startDate < ?4)");
 		query.setParameter(1, this);
 		query.setParameter(2, visitor);
 		query.setParameter(3, remindTime);
+		query.setParameter(4, tillTime);
 		
 	    System.out.print(remindTime.toString());
 	    
