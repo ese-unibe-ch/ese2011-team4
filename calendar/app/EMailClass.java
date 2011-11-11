@@ -28,8 +28,6 @@ public class EMailClass extends Job {
 
 	public void doJob() {
 
-	
-
 		List<User> users = User.findAll();
 		for (User user : users) {
 			List<Calendar> calendars = Calendar.find("owner", user).fetch();

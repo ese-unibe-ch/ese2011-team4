@@ -19,8 +19,6 @@ import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import controllers.Events;
 
@@ -85,8 +83,6 @@ public class Calendar extends Model implements Printable{
 	public static Font font = new Font("Times New Roman",Font.PLAIN,12);
 
 	public int ind;
-	
-	private static DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
 
 	
 	/** 
@@ -152,40 +148,30 @@ public class Calendar extends Model implements Printable{
 		return events(visitor, start, end);
 	}
 	
+	
+	/**
+	 * Returns a list of all events starting between (now + 10min) and (now + 15min)
+	 * <p>
+	 * @return	list of events in this calendar starting between (now + 10min) and (now + 15min)
+	 * @see 	Event
+	 * @since 	Iteration-5
+	 */
 	public List<SingleEvent> eventsRemind(User visitor) {
 		DateTime now= new DateTime();
 		DateTime remindTime = now.plusMinutes(10);
 		DateTime tillTime = now.plusMinutes(15);
 		
-		
 		Query query = JPA.em().createQuery("SELECT e FROM SingleEvent e " +
-				"WHERE ?1 MEMBER OF e.calendars "+
+				"WHERE ?1 MEMBER OF e.calendars " +
 				"AND (e.isPrivate = false OR e.origin.owner = ?2) " +
-				"AND (e.startDate >= ?3 AND e.startDate < ?4)");
+				"AND (e.startDate >= ?3 " +
+				"AND e.startDate < ?4)");
 		query.setParameter(1, this);
 		query.setParameter(2, visitor);
 		query.setParameter(3, remindTime);
 		query.setParameter(4, tillTime);
 		
-	    System.out.print(remindTime.toString());
-	    
-		List<SingleEvent> list = query.getResultList();
-		for(SingleEvent each:list){
-			System.out.print(each.startDate.toString());
-		}
-		// Get Repeating events
-		query = JPA.em().createQuery("SELECT e FROM EventSeries e " +
-				"WHERE ?1 MEMBER OF e.calendars " +
-				"AND (e.isPrivate = false OR e.origin.owner = ?2)");
-		query.setParameter(1, this);
-		query.setParameter(2, visitor);
-		
-		for(EventSeries e : (List<EventSeries>) query.getResultList()) {
-			if(e.isThisDay(remindTime))
-				list.add(e.createDummyEvent(remindTime));
-		}
-		
-		return list;
+		return query.getResultList();
 	}
 	/**
 	 * Returns a list of all events available in this calendar 

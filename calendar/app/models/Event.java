@@ -207,21 +207,23 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 */
 	public static SingleEvent convertFromSeries(EventSeries series) {
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
-		event.calendars = series.calendars;
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
 		event.comments = series.comments;
+		event.calendars = series.calendars;
+		event.save();
 		series.delete();
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
 		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
-		series.calendars = event.calendars;
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
 		series.comments = event.comments;
+		series.calendars = event.calendars;
+		series.save();
 		event.delete();
 		return series;
 	}
