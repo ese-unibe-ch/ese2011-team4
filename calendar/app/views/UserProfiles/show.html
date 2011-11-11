@@ -1,0 +1,27 @@
+#{extends 'main.html' /}
+#{set title:'UserProfiles'/}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+<div id="main-right">
+	<h2 class="title">Actions</h2>
+	<ul>
+		<li><a class="navigation" href="@{UserProfiles.add()}">Add a Profile</a></li>
+		<li><a class="navigation" href="@{UserProfiles.edit(profile.id)}">Edit the Profile</a></li>
+		<li><a href="@{UserProfiles.delete(profile.id)}">Delete this Profile</a></li>
+	</ul>
+</div>	
+<div id="main-left">
+	<h2 class="title">Profile Details</h2>
+    	<div id="location">
+			<p>
+				<ul>
+					<li>${profile.useremail} ${profile.name}</li>
+					<li>${profile.gender} ${profile.birthday}</li>
+					<li>${profile.address} </li>
+				</ul>
+			</p>
+		</div>
+		
+		

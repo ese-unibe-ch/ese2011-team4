@@ -1,0 +1,7 @@
+#{extends 'home-view.html' /}
+#{set title: 'UserProfiles' /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+#{users-list profiles:profiles, connectedUser:connectedUser /}

@@ -1,0 +1,11 @@
+<div id="lusers-list">
+	<h2 class="title">
+		User Profiles
+	</h2>
+	<ul>
+		#{list items:_profiles, as:'profile'}
+			<li><a href="@{UserProfiles.show(profile.id)}">${profile.toString()}</a>
+		    </li>
+		#{/list}
+	</ul>
+</div>

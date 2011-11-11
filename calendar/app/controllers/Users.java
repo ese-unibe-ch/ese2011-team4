@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.joda.time.DateTime;
+
 import models.*;
 import play.db.jpa.JPA;
 import play.Logger;
@@ -35,5 +37,12 @@ public class Users extends Controller {
 		connectedUser.save();
 		flash.success("You removed %s from your favorite contacts.", favorite);
 		index();
+	}
+	
+	public static void showUserProfile(Long id){
+		User connectedUser = User.findById(id);
+		UserProfile conUserProfile = UserProfile.findById(connectedUser.id);
+		render(connectedUser,conUserProfile);
+		
 	}
 }

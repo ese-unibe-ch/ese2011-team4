@@ -1,0 +1,13 @@
+#{extends 'home-view.html' /}
+#{set title:'Add a Profile'/}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+<h2 class="title">Add a profile</h2>
+
+<div id="edit-user">
+	#{form @UserProfiles.addUserProfile()}
+		#{edit-user /}
+	#{/form}
+</div>

@@ -81,6 +81,8 @@ public class User extends Model {
 	 */
 	public boolean isAdmin;
 	
+	
+	
 	/**
 	 * User's constructor. The default behaviour is:
 	 * <ul>
