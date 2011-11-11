@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -217,14 +218,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
-		
-		JPA.em().merge(series);
-		
-		// Deep copy of comments and calendars
-		event.comments = (List<Comment>)ObjectCloner.deepCopy(series.comments);
-		event.calendars = (List<Calendar>)ObjectCloner.deepCopy(series.calendars);
-		series.delete();
-		JPA.em().persist(event);
+		event.comments = (List<Comment>) ObjectCloner.deepCopy(series.comments);
+		JPA.em().remove(series);
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) throws Exception {
@@ -232,14 +227,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
-		
-		JPA.em().merge(event);
-		
-		// Deep copy of comments and calendars
-		series.comments = (List<Comment>) (ObjectCloner.deepCopy(event.comments));
-		series.calendars = (List<Calendar>) (ObjectCloner.deepCopy(event.calendars));
-		event.delete();
-		JPA.em().persist(series);
+		series.comments = (List<Comment>) ObjectCloner.deepCopy(event.comments);
+		JPA.em().remove(event);
 		return series;
 	}
 	/**
