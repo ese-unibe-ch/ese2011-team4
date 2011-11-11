@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
@@ -136,7 +137,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	/**
 	 * Comments added to this event.
 	 */
-	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="event")
 	public List<Comment> comments;
 	
 	/**
@@ -222,10 +223,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		// Deep copy of comments and calendars
 		event.comments = (List<Comment>)ObjectCloner.deepCopy(series.comments);
 		event.calendars = (List<Calendar>)ObjectCloner.deepCopy(series.calendars);
-		
-		JPA.em().remove(series);
+		series.delete();
 		JPA.em().persist(event);
-		
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) throws Exception {
@@ -239,10 +238,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		// Deep copy of comments and calendars
 		series.comments = (List<Comment>) (ObjectCloner.deepCopy(event.comments));
 		series.calendars = (List<Calendar>) (ObjectCloner.deepCopy(event.calendars));
-		
-		JPA.em().remove(event);
+		event.delete();
 		JPA.em().persist(series);
-		
 		return series;
 	}
 	/**
