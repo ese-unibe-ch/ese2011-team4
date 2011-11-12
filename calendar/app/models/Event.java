@@ -220,24 +220,28 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @return
 	 * @throws Exception 
 	 */
-	public static SingleEvent convertFromSeries(EventSeries series) throws Exception {
+	public static SingleEvent convertFromSeries(EventSeries series){
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
-		event.description = series.description;
-		event.isPrivate = series.isPrivate;
-		event.location = series.location;
-		for(Comment com : series.comments)
-			event.comments.add(com);
-		for(Calendar cal : series.calendars)
-			event.calendars.add(cal);
-		event.save();
+		for(Comment comment : Comment.find("byEvent", (Event)series).<Comment>fetch()){
+			event.comments.add(comment);
+		}
+		for(Calendar calendar : series.calendars){
+			event.calendars.add(calendar);
+		}
+		JPA.em().flush();
+		JPA.em().persist(event);
 		return event;
 	}
-	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) throws Exception {
+	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType){
 		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
-		series.description = event.description;
-		series.isPrivate = event.isPrivate;
-		series.location = event.location;
-		series.save();
+		for (Comment comment : Comment.find("byEvent", event).<Comment>fetch()){
+			series.comments.add(comment);
+		}
+		for (Calendar calendar : event.calendars){
+			series.calendars.add(calendar);
+		}
+		JPA.em().flush();
+		JPA.em().persist(series);
 		return series;
 	}
 	
@@ -389,39 +393,6 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		return name;
 	}
 	
-	private static class ObjectCloner{
-		// so that nobody can accidentally create an ObjectCloner object
-		private ObjectCloner(){}
-		// returns a deep copy of an object
-		static public Object deepCopy(Object oldObj) throws Exception
-		{
-			ObjectOutputStream oos = null;
-		    ObjectInputStream ois = null;
-		    try
-		    {
-		        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		        oos = new ObjectOutputStream(bos); 
-		         // serialize and pass the object
-		        oos.writeObject(oldObj);
-		        oos.flush();
-		        ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
-		        ois = new ObjectInputStream(bin);
-		        // return the new object
-		        return ois.readObject();
-		    }
-		    catch(Exception e)
-		    {
-		    	System.out.println("Exception in ObjectCloner = " + e);
-		        throw(e);
-		    }
-		    finally
-		    {
-		    	oos.close();
-		        ois.close();
-		    }
-		}
-	}
-
 	private static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
