@@ -220,18 +220,18 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		event.isPrivate = series.isPrivate ? true: false;
 		event.location = (Location) ObjectCloner.deepCopy(series.location);
 		for (Comment comment : series.comments){
-			Comment commentCopy = new Comment(	"",
+			Comment commentCopy = new Comment(	(String) ObjectCloner.deepCopy(comment.author),
 												event);
-			commentCopy.author = (String) ObjectCloner.deepCopy(comment.author);
 			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
-			comment.save();
-			commentCopy.save();
 			event.comments.add(commentCopy);
 		}
-		for (Calendar calendar : series.calendars){
-			event.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
-		}
-		series.delete();
+		/*for (Calendar calendar : series.calendars){
+			Calendar calendarCopy = new Calendar(	(User) ObjectCloner.deepCopy(calendar.owner), 
+													(String) ObjectCloner.deepCopy(calendar.name));
+			calendarCopy.events.add(event);
+			event.calendars.add(calendarCopy);
+		}*/
+		JPA.em().persist(event);
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
@@ -244,18 +244,18 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.isPrivate = event.isPrivate ? true: false;
 		series.location = (Location) ObjectCloner.deepCopy(event.location);
 		for (Comment comment : event.comments){
-			Comment commentCopy = new Comment(	"", 
+			Comment commentCopy = new Comment(	(String) ObjectCloner.deepCopy(comment.author),
 												series);
-			commentCopy.author = (String) ObjectCloner.deepCopy(comment.author);
 			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
-			comment.save();
-			commentCopy.save();
 			series.comments.add(commentCopy);
 		}
-		for (Calendar calendar : event.calendars){
-			series.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
-		}
-		event.delete();
+		/*for (Calendar calendar : event.calendars){
+			Calendar calendarCopy = new Calendar(	(User) ObjectCloner.deepCopy(calendar.owner),
+													(String) ObjectCloner.deepCopy(calendar.name));
+			calendarCopy.events.add(series);
+			series.calendars.add(calendarCopy);
+		}*/
+		JPA.em().persist(series);
 		return series;
 	}
 	/**
