@@ -114,9 +114,8 @@ public class CalendarTest extends UnitTest {
 		assertEquals(0, jacks.events(jack, new DateTime().withDayOfMonth(4).withMonthOfYear(11).withYear(2011)).size());
 	}
 	
-	@Ignore("relies on system date")
 	@Test
-	public void visibleEvents() {
+	public void visibleEventsInNext30Days() {
 		// Get a calendar
 		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
 				
@@ -124,9 +123,39 @@ public class CalendarTest extends UnitTest {
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		User bud = User.find("byEmail", "bud.white@lapd.com").first();
 		
+		int numJack = calendar.visibleEvents(jack).size();
+		int numBud = calendar.visibleEvents(bud).size();
+		
+		// Create events
+		SingleEvent event1 = new SingleEvent(	calendar, 
+												"Test1", 
+												new DateTime().plusDays(6), 
+												new DateTime().plusDays(7));
+		
+		assertTrue(event1.validateAndSave());
+		
+		SingleEvent event2 = new SingleEvent(	calendar, 
+												"Test2", 
+												new DateTime().plusDays(21), 
+												new DateTime().plusDays(35));
+		event2.isPrivate = true;
+
+		assertTrue(event2.validateAndSave());
+
+		SingleEvent event3 = new SingleEvent(	calendar, 
+												"Test3", 
+												new DateTime().plusDays(33), 
+												new DateTime().plusDays(35));
+
+		assertTrue(event3.validateAndSave());
+
 		// Test method
-		assertEquals(4, calendar.visibleEvents(jack).size());
-		assertEquals(2, calendar.visibleEvents(bud).size());
+		assertEquals(numJack+2, calendar.visibleEvents(jack).size());
+		assertTrue(calendar.visibleEvents(jack).contains(event1));
+		assertTrue(calendar.visibleEvents(jack).contains(event2));
+		
+		assertEquals(numBud+1, calendar.visibleEvents(bud).size());
+		assertTrue(calendar.visibleEvents(bud).contains(event1));
 	}
 	
 	@Test
@@ -136,6 +165,8 @@ public class CalendarTest extends UnitTest {
 				
 		// Get a user
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		int num = calendar.eventsRemind(jack).size();
 		
 		// Create events
 		SingleEvent event1 = new SingleEvent(	calendar, 
@@ -153,15 +184,15 @@ public class CalendarTest extends UnitTest {
 		assertTrue(event2.validateAndSave());
 
 		SingleEvent event3 = new SingleEvent(	calendar, 
-												"ReminderTes3t", 
+												"ReminderTest3", 
 												new DateTime().plusMinutes(16), 
 												new DateTime().plusMinutes(123));
 
 		assertTrue(event3.validateAndSave());
 
 		// Test method
-		assertEquals(1, calendar.eventsRemind(jack).size());
-		assertEquals(calendar.eventsRemind(jack).get(0), event2);
+		assertEquals(num+1, calendar.eventsRemind(jack).size());
+		assertTrue(calendar.eventsRemind(jack).contains(event2));
 	}
 	
 	@Test
@@ -190,8 +221,40 @@ public class CalendarTest extends UnitTest {
 		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
 		
 		assertEquals(1, calendar.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), loc).size());
+		loc = null;
+		assertEquals(0, calendar.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), loc).size());
+		
 	}
 	
+	@Test
+	public void getDaysInMonth() {
+		DateTime date1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(13).withMinuteOfHour(10);
+		DateTime date2 = new DateTime().withDayOfMonth(8).withMonthOfYear(12).withYear(2011).withHourOfDay(5).withMinuteOfHour(42);
+		DateTime date3 = new DateTime().withDayOfMonth(20).withMonthOfYear(2).withYear(2012).withHourOfDay(8).withMinuteOfHour(24);
+		
+		assertEquals(30, Calendar.getDaysInMonth(date1).size());
+		assertEquals(date1.withDayOfMonth(1), Calendar.getDaysInMonth(date1).get(0));
+		assertEquals(31, Calendar.getDaysInMonth(date2).size());
+		assertTrue(Calendar.getDaysInMonth(date2).contains(date2.withDayOfMonth(31)));
+		assertEquals(29, Calendar.getDaysInMonth(date3).size());
+		assertEquals(date1.withDayOfMonth(29), Calendar.getDaysInMonth(date1).get(28));
+	}
+	
+//	@Test
+//	public void numberOfAllEventsInCalendarByDayAndTime() {
+//		// Get a calendar
+//		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+//		
+//		DateTime start1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(13).withMinuteOfHour(10);
+//		DateTime end1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(30);
+//		
+//		DateTime start2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(10);
+//		DateTime end2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(19).withMinuteOfHour(30);
+//		
+//		assertEquals(2, calendar.numberOfAllEventsInCalendarByDayAndTime(start1, end1));
+//		assertEquals(1, calendar.numberOfAllEventsInCalendarByDayAndTime(start2, end2));
+//	}
+//	
 	@Test
 	public void numberOfAllEventsInCalendarByDayAndTime() {
 		// Get a calendar
@@ -200,10 +263,24 @@ public class CalendarTest extends UnitTest {
 		DateTime start1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(13).withMinuteOfHour(10);
 		DateTime end1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(30);
 		
-		DateTime start2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(10);
-		DateTime end2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(19).withMinuteOfHour(30);
+		DateTime start2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(14).withMinuteOfHour(30);
+		DateTime end2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(17).withMinuteOfHour(30);
 		
-		assertEquals(2, calendar.numberOfAllEventsInCalendarByDayAndTime(start1, end1));
-		assertEquals(1, calendar.numberOfAllEventsInCalendarByDayAndTime(start2, end2));
+		DateTime start3 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(10);
+		DateTime end3 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(19).withMinuteOfHour(30);
+		
+		// Create events
+		EventSeries event1 = new EventSeries(	calendar, 
+				"Repeating1", 
+				start2, 
+				end2,
+				RepeatingType.WEEKLY);
+		
+		assertTrue(event1.validateAndSave());
+		
+		assertEquals(3, calendar.numberOfAllEventsInCalendarByDayAndTime(start1, end1));
+		assertEquals(2, calendar.numberOfAllEventsInCalendarByDayAndTime(start2, end2));
+		assertEquals(1, calendar.numberOfAllEventsInCalendarByDayAndTime(start3, end3));
+		assertEquals(0, calendar.numberOfAllEventsInCalendarByDayAndTime(start1.withHourOfDay(1), start1.withHourOfDay(2)));
 	}
 }
