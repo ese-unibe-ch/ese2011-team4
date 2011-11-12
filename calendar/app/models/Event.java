@@ -1,11 +1,5 @@
 package models;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
@@ -75,7 +68,7 @@ import play.db.jpa.Model;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
-public abstract class Event extends Model implements Comparable<Event>, Serializable{
+public abstract class Event extends Model implements Comparable<Event>{
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -138,7 +131,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	/**
 	 * Comments added to this event.
 	 */
-	@OneToMany(mappedBy="event")
+	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
 	public List<Comment> comments;
 	
 	/**
@@ -211,40 +204,33 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * 
 	 * @param	
 	 * @return
-	 * @throws Exception 
 	 */
-	/**
-	 * Converts a single event to an event series and returns the converted event
-	 * 
-	 * @param	
-	 * @return
-	 * @throws Exception 
-	 */
-	public static SingleEvent convertFromSeries(EventSeries series){
+	public static SingleEvent convertFromSeries(EventSeries series) {
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
-		for(Comment comment : Comment.find("byEvent", (Event)series).<Comment>fetch()){
+		event.description = series.description;
+		event.isPrivate = series.isPrivate;
+		event.location = series.location;
+		for (Comment comment : series.comments)
 			event.comments.add(comment);
-		}
-		for(Calendar calendar : series.calendars){
+		for (Calendar calendar : series.calendars)
 			event.calendars.add(calendar);
-		}
-		JPA.em().flush();
-		JPA.em().persist(event);
+		event.save();
+		JPA.em().remove(series);
 		return event;
 	}
-	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType){
+	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
 		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
-		for (Comment comment : Comment.find("byEvent", event).<Comment>fetch()){
+		series.description = event.description;
+		series.isPrivate = event.isPrivate;
+		series.location = event.location;
+		for (Comment comment : Comment.find("byEvent", event).<Comment>fetch())
 			series.comments.add(comment);
-		}
-		for (Calendar calendar : event.calendars){
+		for (Calendar calendar : event.calendars)
 			series.calendars.add(calendar);
-		}
-		JPA.em().flush();
-		JPA.em().persist(series);
+		series.save();
+		JPA.em().remove(event);
 		return series;
 	}
-	
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
 	 * represents all calendars which have joined this event.
@@ -392,7 +378,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	public String toString() {
 		return name;
 	}
-	
+
 	private static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
