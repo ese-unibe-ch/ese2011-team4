@@ -1,5 +1,10 @@
 package models;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,7 +73,7 @@ import play.db.jpa.Model;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
-public abstract class Event extends Model implements Comparable<Event>{
+public abstract class Event extends Model implements Comparable<Event>, Serializable{
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -206,29 +211,39 @@ public abstract class Event extends Model implements Comparable<Event>{
 	 * @return
 	 */
 	public static SingleEvent convertFromSeries(EventSeries series) {
-		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
-		event.description = series.description;
-		event.isPrivate = series.isPrivate;
-		event.location = series.location;
-		for (Comment comment : series.comments)
-			event.comments.add(comment);
-		for (Calendar calendar : series.calendars)
-			event.calendars.add(calendar);
-		event.save();
-		JPA.em().remove(series);
+		Calendar origin = (Calendar) ObjectCloner.deepCopy(series.origin);
+		String name = (String) ObjectCloner.deepCopy(series.name);
+		DateTime startDate = (DateTime) ObjectCloner.deepCopy(series.startDate);
+		DateTime endDate = (DateTime) ObjectCloner.deepCopy(series.endDate);
+		SingleEvent event = new SingleEvent(origin, name, startDate, endDate);
+		event.description = (String) ObjectCloner.deepCopy(series.description);
+		event.isPrivate = series.isPrivate ? true: false;
+		event.location = (Location) ObjectCloner.deepCopy(series.location);
+		/*for (Comment comment : series.comments){
+			event.comments.add((Comment) ObjectCloner.deepCopy(comment));
+		}
+		for (Calendar calendar : series.calendars){
+			event.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
+		}*/
+		series.delete();
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
-		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
-		series.description = event.description;
-		series.isPrivate = event.isPrivate;
-		series.location = event.location;
-		for (Comment comment : Comment.find("byEvent", event).<Comment>fetch())
-			series.comments.add(comment);
-		for (Calendar calendar : event.calendars)
-			series.calendars.add(calendar);
-		series.save();
-		JPA.em().remove(event);
+		Calendar origin = (Calendar) ObjectCloner.deepCopy(event.origin);
+		String name = (String) ObjectCloner.deepCopy(event.name);
+		DateTime startDate = (DateTime) ObjectCloner.deepCopy(event.startDate);
+		DateTime endDate = (DateTime) ObjectCloner.deepCopy(event.endDate);
+		EventSeries series = new EventSeries(origin, name, startDate, endDate, repeatingType);
+		series.description = (String) ObjectCloner.deepCopy(event.description);
+		series.isPrivate = event.isPrivate ? true: false;
+		series.location = (Location) ObjectCloner.deepCopy(event.location);
+		/*for (Comment comment : event.comments){
+			series.comments.add((Comment) ObjectCloner.deepCopy(comment));
+		}
+		for (Calendar calendar : event.calendars){
+			series.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
+		}*/
+		event.delete();
 		return series;
 	}
 	/**
@@ -379,6 +394,65 @@ public abstract class Event extends Model implements Comparable<Event>{
 		return name;
 	}
 
+	private static class ObjectCloner {
+
+        /**
+         * Perform a deep copy.
+         * 
+         * @param oldObj
+         *            The old object.
+         * @return The new object.
+         */
+        public static Object deepCopy(Object oldObj) {
+            ObjectOutputStream oos = null;
+            ObjectInputStream ois = null;
+            try {
+                final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                oos = new ObjectOutputStream(bos);
+                
+                // serialize and pass the object
+                oos.writeObject(oldObj);
+                oos.flush();
+                
+                final ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+                ois = new ObjectInputStream(bin);
+                
+                // return the new object
+                return ois.readObject();
+                
+            } catch (final Exception e) {
+                try {
+					throw new Exception(e);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+            } finally {
+                try {
+                    if (oos != null) {
+                        oos.close();
+                    }
+                    if (ois != null) {
+                        ois.close();
+                    }
+                } catch (final Exception e) {
+                    try {
+						throw new Exception(e);
+					} catch (Exception e1) {
+						
+						e1.printStackTrace();
+					}
+                }
+            }
+			return ois;
+        }
+
+        /**
+         * Private constructor.
+         */
+        private ObjectCloner() {
+        }
+    }
+	
 	private static class EndAfterBeginCheck extends Check {
 		public boolean isSatisfied(Object event_, Object end_) {
 			Event event = (Event) event_;
