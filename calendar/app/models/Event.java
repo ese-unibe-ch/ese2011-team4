@@ -231,7 +231,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			calendarCopy.events.add(event);
 			event.calendars.add(calendarCopy);
 		}*/
-		JPA.em().persist(event);
+		//JPA.em().persist(event);
+		series.delete();
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
@@ -255,7 +256,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			calendarCopy.events.add(series);
 			series.calendars.add(calendarCopy);
 		}*/
-		JPA.em().persist(series);
+		//JPA.em().persist(series);
+		event.delete();
 		return series;
 	}
 	/**
@@ -389,6 +391,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	public Event delete() {
 		for(Comment p : Comment.find("byEvent", this).<Comment>fetch()) {
 		    p.delete();
+		    JPA.em().merge(this);
 		}
 		return super.delete();
 	}
