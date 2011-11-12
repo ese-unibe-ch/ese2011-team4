@@ -213,13 +213,23 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @return
 	 * @throws Exception 
 	 */
+	/**
+	 * Converts a single event to an event series and returns the converted event
+	 * 
+	 * @param	
+	 * @return
+	 * @throws Exception 
+	 */
 	public static SingleEvent convertFromSeries(EventSeries series) throws Exception {
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
-		event.comments = (List<Comment>) ObjectCloner.deepCopy(series.comments);
-		JPA.em().remove(series);
+		for(Comment com : series.comments)
+			event.comments.add(com);
+		for(Calendar cal : series.calendars)
+			event.calendars.add(cal);
+		event.save();
 		return event;
 	}
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) throws Exception {
@@ -227,10 +237,10 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
-		series.comments = (List<Comment>) ObjectCloner.deepCopy(event.comments);
-		JPA.em().remove(event);
+		series.save();
 		return series;
 	}
+	
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
 	 * represents all calendars which have joined this event.
