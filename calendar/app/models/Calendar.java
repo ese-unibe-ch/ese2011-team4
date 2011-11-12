@@ -234,9 +234,10 @@ public class Calendar extends Model implements Printable{
 	 */
 	public List<Event> events(User visitor, Location loc) {
 		Query query = JPA.em().createQuery("SELECT e FROM Event e "+
-				"WHERE (e.isPrivate = false OR e.creator = ?1)" +
-				"AND e.location.getLocation().contains(loc.getLocation())");
+				"WHERE (e.isPrivate = false OR e.origin.owner = ?1) " +
+				"AND e.location = ?2");
 		query.setParameter(1, visitor);
+		query.setParameter(2, loc);
 		return query.getResultList();
 	}
 
@@ -260,7 +261,7 @@ public class Calendar extends Model implements Printable{
 		List<SingleEvent> list = events(visitor, day);
 		List<SingleEvent> copy = new LinkedList<SingleEvent>();
 		for(SingleEvent e : list)
-			if(e.location.equals(location))
+			if(location != null && location.equals(e.location))
 				copy.add(e);
 		return copy;
 	}

@@ -128,4 +128,82 @@ public class CalendarTest extends UnitTest {
 		assertEquals(4, calendar.visibleEvents(jack).size());
 		assertEquals(2, calendar.visibleEvents(bud).size());
 	}
+	
+	@Test
+	public void eventsForReminder() {
+		// Get a calendar
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+				
+		// Get a user
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		// Create events
+		SingleEvent event1 = new SingleEvent(	calendar, 
+												"ReminderTest1", 
+												new DateTime().plusMinutes(8), 
+												new DateTime().plusMinutes(123));
+		
+		assertTrue(event1.validateAndSave());
+		
+		SingleEvent event2 = new SingleEvent(	calendar, 
+												"ReminderTest2", 
+												new DateTime().plusMinutes(12), 
+												new DateTime().plusMinutes(123));
+
+		assertTrue(event2.validateAndSave());
+
+		SingleEvent event3 = new SingleEvent(	calendar, 
+												"ReminderTes3t", 
+												new DateTime().plusMinutes(16), 
+												new DateTime().plusMinutes(123));
+
+		assertTrue(event3.validateAndSave());
+
+		// Test method
+		assertEquals(1, calendar.eventsRemind(jack).size());
+		assertEquals(calendar.eventsRemind(jack).get(0), event2);
+	}
+	
+	@Test
+	public void eventsByLocation() {
+		// Get a calendar
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get a user
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		// Get a location
+		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
+		
+		assertEquals(1, calendar.events(jack, loc).size());
+	}
+	
+	@Test
+	public void eventsByDayAndLocation() {
+		// Get a calendar
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get a user
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		// Get a location
+		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
+		
+		assertEquals(1, calendar.events(jack, new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011), loc).size());
+	}
+	
+	@Test
+	public void numberOfAllEventsInCalendarByDayAndTime() {
+		// Get a calendar
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		DateTime start1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(13).withMinuteOfHour(10);
+		DateTime end1 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(30);
+		
+		DateTime start2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(18).withMinuteOfHour(10);
+		DateTime end2 = new DateTime().withDayOfMonth(5).withMonthOfYear(11).withYear(2011).withHourOfDay(19).withMinuteOfHour(30);
+		
+		assertEquals(2, calendar.numberOfAllEventsInCalendarByDayAndTime(start1, end1));
+		assertEquals(1, calendar.numberOfAllEventsInCalendarByDayAndTime(start2, end2));
+	}
 }
