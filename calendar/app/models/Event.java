@@ -420,13 +420,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
                 // return the new object
                 return ois.readObject();
                 
-            } catch (final Exception e) {
-                try {
-					throw new Exception(e);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-            } finally {
+            } catch (final Exception e) {} 
+            finally {
                 try {
                     if (oos != null) {
                         oos.close();
@@ -434,14 +429,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
                     if (ois != null) {
                         ois.close();
                     }
-                } catch (final Exception e) {
-                    try {
-						throw new Exception(e);
-					} catch (Exception e1) {
-						
-						e1.printStackTrace();
-					}
-                }
+                } catch (final Exception e) {}
             }
 			return ois;
         }
