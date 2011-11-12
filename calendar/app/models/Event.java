@@ -219,12 +219,18 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		event.description = (String) ObjectCloner.deepCopy(series.description);
 		event.isPrivate = series.isPrivate ? true: false;
 		event.location = (Location) ObjectCloner.deepCopy(series.location);
-		/*for (Comment comment : series.comments){
-			event.comments.add((Comment) ObjectCloner.deepCopy(comment));
+		for (Comment comment : series.comments){
+			Comment commentCopy = new Comment(	"",
+												event);
+			commentCopy.author = (String) ObjectCloner.deepCopy(comment.author);
+			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
+			comment.save();
+			commentCopy.save();
+			event.comments.add(commentCopy);
 		}
 		for (Calendar calendar : series.calendars){
 			event.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
-		}*/
+		}
 		series.delete();
 		return event;
 	}
@@ -237,12 +243,18 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.description = (String) ObjectCloner.deepCopy(event.description);
 		series.isPrivate = event.isPrivate ? true: false;
 		series.location = (Location) ObjectCloner.deepCopy(event.location);
-		/*for (Comment comment : event.comments){
-			series.comments.add((Comment) ObjectCloner.deepCopy(comment));
+		for (Comment comment : event.comments){
+			Comment commentCopy = new Comment(	"", 
+												series);
+			commentCopy.author = (String) ObjectCloner.deepCopy(comment.author);
+			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
+			comment.save();
+			commentCopy.save();
+			series.comments.add(commentCopy);
 		}
 		for (Calendar calendar : event.calendars){
 			series.calendars.add((Calendar) ObjectCloner.deepCopy(calendar));
-		}*/
+		}
 		event.delete();
 		return series;
 	}
