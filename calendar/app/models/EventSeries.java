@@ -21,11 +21,11 @@ import play.test.PlayJUnitRunner.StartPlay;
 /**
  * The EventSeries class represents not limited series of events on
  * a regular basis, specified through the {@link RepeatingType}.
- * It's a concerte implementation of {@link Event}.
+ * It's a concrete implementation of {@link Event}.
  * <p>
  * An EventSeries includes the following informations:
  * <ul>
- * <li>A list of mutated events, which are aren't any longer part of
+ * <li>A list of mutated events, which aren't any longer part of
  * the series, because they were either deleted or edited.
  * </ul>
  * <p>
@@ -42,16 +42,23 @@ import play.test.PlayJUnitRunner.StartPlay;
 @Entity
 @DiscriminatorValue("SERIES")
 public class EventSeries extends Event {
+	
+	/**
+	 * List of mutated events.
+	 */
 	@ElementCollection
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	private List<DateTime> mutations;
 	
+	/**
+	 * The start date for the repetition.
+	 */
 	@Required
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	private DateTime periodStart;
 	
 	/**
-	 * The end date for the repetion. If null it is an infinite series.
+	 * The end date for the repetition. If null it is an infinite series.
 	 */
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	private DateTime periodEnd;
@@ -62,12 +69,12 @@ public class EventSeries extends Event {
 	@Required
 	private int interval;
 	
-	public EventSeries(
-			Calendar calendar, 
-			String name, 
-			DateTime startDate, 
-			DateTime endDate, 
-			RepeatingType repeating) {
+	public EventSeries(	Calendar calendar, 
+						String name, 
+						DateTime startDate, 
+						DateTime endDate, 
+						RepeatingType repeating) {
+		
 		super(calendar, name, startDate, endDate, repeating);
 		mutations = new ArrayList<DateTime>();
 		interval = 1;

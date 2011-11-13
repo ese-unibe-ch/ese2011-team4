@@ -50,9 +50,14 @@ import play.db.jpa.Model;
  * @see Location
  * @see User
  */
+
 @Entity
+<<<<<<< HEAD
+public class Calendar extends Model implements Printable {
+=======
 public class Calendar extends Model implements Printable{
 	
+>>>>>>> updated javadoc
 	/**
 	 * This calendar's name.
 	 * 
@@ -363,7 +368,11 @@ public class Calendar extends Model implements Printable{
 		return number;
 	}
 	
-
+<<<<<<< HEAD
+	
+=======
+	@SuppressWarnings("deprecation")
+>>>>>>> updated javadoc
 	@Override
 	public int print(Graphics gfx, PageFormat pageFormat, int pageIndex) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat();

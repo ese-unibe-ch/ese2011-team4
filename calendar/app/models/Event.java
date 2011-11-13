@@ -36,7 +36,7 @@ import play.db.jpa.Model;
 /**
  * The Event class represents a temporary and scheduled happening with a defined 
  * goal or intention, which can be added to calendars. The Event class is abstract
- * and therefor only its implementation can be used, which are {@link SingleEvent}
+ * and therefore only its implementation can be used, which are {@link SingleEvent}
  * and {@link EventSeries}.
  * <p>
  * An event includes the following informations:
@@ -140,7 +140,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	public List<Comment> comments;
 	
 	/**
-	 * Event's constructor. The default behaviour is:
+	 * Event's constructor. The default behavior is:
 	 * <ul>
 	 * <li>Event has zero or more comments</li>
 	 * <li>Event belongs to a calendar</li>
@@ -167,8 +167,9 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		this.isPrivate = false;
 		this.type = repeating;
 	}
+	
 	/**
-	 * Static method to generate events depending on the type. The default behaviour is:
+	 * Static method to generate events depending on the type. The default behavior is:
 	 * <ul>
 	 * <li>Event has zero or more comments</li>
 	 * <li>Event belongs to a calendar</li>
@@ -183,6 +184,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @param	repeatingType	Type of the repeating rule if any
 	 * @see 	Calendar
 	 * @see 	Comment
+	 * @since	Iteration-4
 	 */
 	public static Event createEvent(	Calendar calendar, 
 										String name, 
@@ -205,10 +207,11 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	}
 	
 	/**
-	 * Converts a single event to an event series and returns the converted event
+	 * Converts an event series to a single event and returns the converted event.
 	 * 
-	 * @param	
-	 * @return
+	 * @param series : event series to be converted	
+	 * @return <code>SingleEvent event</code>: The converted event
+	 * @since Iteration-4
 	 */
 	public static SingleEvent convertFromSeries(EventSeries series) {
 		SingleEvent event = new SingleEvent(series.origin, series.name, series.startDate, series.endDate);
@@ -228,6 +231,15 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.delete();
 		return event;
 	}
+	
+	/**
+	 * Converts a single event to an event series and returns the converted event.
+	 * 
+	 * @param event : single event to be converted
+	 * @param repeatingType : type of the converted event series
+	 * @return <code>EventSeries series</code>: The converted event
+	 * @since Iteration-4
+	 */
 	public static Event convertFromSingleEvent(SingleEvent event, RepeatingType repeatingType) {
 		EventSeries series = new EventSeries(event.origin, event.name, event.startDate, event.endDate, repeatingType);
 		series.description = event.description;
@@ -246,6 +258,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		event.delete();
 		return series;
 	}
+	
 	/**
 	 * Adds the given calendar to this event's calendar list. The calendar list
 	 * represents all calendars which have joined this event.
@@ -388,7 +401,6 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @return this event's name
 	 * @since Iteration-1
 	 * @return	a list of all users that contain this event in one of their calendars
-	 * @since	Iteration-2
 	 */
 	@Override
 	public String toString() {
