@@ -215,14 +215,15 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		event.description = series.description;
 		event.isPrivate = series.isPrivate;
 		event.location = series.location;
-		for (Comment comment : series.comments){
+		for (Comment comment : series.comments) {
 			Comment commentCopy = new Comment(comment.author, event);
 			commentCopy.content = comment.content;
 			commentCopy.postedAt = comment.postedAt;
 			event.comments.add(commentCopy);
 		}
-		for (Calendar calendar : series.calendars){
-			event.calendars.add(calendar);
+		for (Calendar calendar : series.calendars) {
+			if(!calendar.equals(event.origin))
+				event.calendars.add(calendar);
 		}
 		series.delete();
 		return event;
@@ -232,14 +233,15 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		series.description = event.description;
 		series.isPrivate = event.isPrivate;
 		series.location = event.location;
-		for (Comment comment : event.comments){
+		for (Comment comment : event.comments) {
 			Comment commentCopy = new Comment(comment.author, series);
 			commentCopy.content = comment.content;
 			commentCopy.postedAt = comment.postedAt;
 			series.comments.add(commentCopy);
 		}
-		for (Calendar calendar : event.calendars){
-			series.calendars.add(calendar);
+		for (Calendar calendar : event.calendars) {
+			if(!calendar.equals(event.origin))
+				series.calendars.add(calendar);
 		}
 		event.delete();
 		return series;

@@ -91,7 +91,6 @@ public class EventTest extends UnitTest {
 		assertEquals(2, e2.getRepeatingInterval());
 	}
 	
-	@Ignore("not working yet because the method is not fixed yet")
 	@Test
 	public void convertFromSeries() {
 		EventSeries serie = EventSeries.find("byName", "Weekly Meeting").first();
@@ -106,12 +105,15 @@ public class EventTest extends UnitTest {
 		assertEquals(serie.isPrivate, singleEvent.isPrivate);
 		assertEquals(serie.location, singleEvent.location);
 		assertEquals(serie.comments.size(), singleEvent.comments.size());
-		assertEquals(serie.comments, singleEvent.comments);
+		for(int i=0; i<serie.comments.size(); i++) {
+			assertEquals(serie.comments.get(i).author, singleEvent.comments.get(i).author);
+			assertEquals(serie.comments.get(i).content, singleEvent.comments.get(i).content);
+			assertEquals(serie.comments.get(i).postedAt, singleEvent.comments.get(i).postedAt);
+		}
 		assertEquals(serie.calendars.size(), singleEvent.calendars.size());
-		assertEquals(serie.calendars, singleEvent.calendars);
+		assertArrayEquals(serie.calendars.toArray(), singleEvent.calendars.toArray());
 	}
 	
-	@Ignore("not working yet because the method is not fixed yet")
 	@Test
 	public void convertFromSingleEvent() {
 		SingleEvent singleEvent = SingleEvent.find("byName", "Meet Lynn Bracken").first();
@@ -126,9 +128,13 @@ public class EventTest extends UnitTest {
 		assertEquals(singleEvent.isPrivate, serie.isPrivate);
 		assertEquals(singleEvent.location, serie.location);
 		assertEquals(singleEvent.comments.size(), serie.comments.size());
-		assertEquals(singleEvent.comments, serie.comments);
+		for(int i=0; i<singleEvent.comments.size(); i++) {
+			assertEquals(singleEvent.comments.get(i).author, serie.comments.get(i).author);
+			assertEquals(singleEvent.comments.get(i).content, serie.comments.get(i).content);
+			assertEquals(singleEvent.comments.get(i).postedAt, serie.comments.get(i).postedAt);
+		}
 		assertEquals(singleEvent.calendars.size(), serie.calendars.size());
-		assertEquals(singleEvent.calendars, serie.calendars);
+		assertArrayEquals(singleEvent.calendars.toArray(), serie.calendars.toArray());
 		assertEquals(RepeatingType.WEEKLY, serie.type);
 	}
 
