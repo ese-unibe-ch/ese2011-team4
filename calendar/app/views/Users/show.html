@@ -1,0 +1,22 @@
+#{extends 'main.html' /}
+#{set title:'UserProfile'/}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+<div id="main-left">
+	<h2 class="title">Profile Details</h2>
+    	<div id="location">
+			<p>
+				<ul>
+   					<li><label for="name">Full Name : </label>${connectedUser.fullname}</li>
+				    <li><label for="nickname">Nick Name: </label>${connectedUser.nickname}</li>
+				    <li><label for="gender">Gender : </label>${connectedUser.gender}</li>
+				    <li><label for="birthday">Birth Day : </label>${connectedUser.birthday}</li>
+				    <li><label for="address">Address : </label>${connectedUser.address}</li>
+				    <li><label for="description">About Me: </label>${connectedUser.descriptionUser}</li>
+				</ul>
+			</p>
+		</div>
+		
+		
