@@ -223,6 +223,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			Comment commentCopy = new Comment(	(String) ObjectCloner.deepCopy(comment.author),
 												event);
 			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
+			commentCopy.postedAt = (DateTime) ObjectCloner.deepCopy(comment.postedAt);
 			event.comments.add(commentCopy);
 		}
 		for (Calendar calendar : series.calendars){
@@ -244,6 +245,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			Comment commentCopy = new Comment(	(String) ObjectCloner.deepCopy(comment.author),
 												series);
 			commentCopy.content = (String) ObjectCloner.deepCopy(comment.content);
+			commentCopy.postedAt = (DateTime) ObjectCloner.deepCopy(comment.postedAt);
 			series.comments.add(commentCopy);
 		}
 		for (Calendar calendar : event.calendars){
