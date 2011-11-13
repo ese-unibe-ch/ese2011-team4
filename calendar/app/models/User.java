@@ -81,6 +81,22 @@ public class User extends Model {
 	 */
 	public boolean isAdmin;
 	
+    public String nickname;
+	
+	public String gender;
+	public boolean visiblegender;
+	
+	
+	public DateTime birthday;
+	public boolean visiblebirthday;
+	
+	public Location address;
+	public boolean visibleaddress;
+	
+	public String telephone;
+	public boolean visibletelephone;
+	
+	public String descriptionUser;
 	
 	
 	/**
@@ -177,6 +193,83 @@ public class User extends Model {
 	@Override
 	public String toString() {
 		return fullname;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public boolean getGenderVisibility() {
+		return visiblegender;
+	}
+
+	public void setGender(String gen){
+		this.gender=gen;
+	}
+	
+	public void setGenderVisibility(boolean isVisible) {
+		this.visiblegender = isVisible;
+	}
+	
+	public DateTime getBirthday() {
+		return birthday;
+	}
+
+	public boolean getBirthdayVisibility() {
+		return visiblebirthday;
+	}
+
+	public void setBirthday(DateTime birthday){
+		this.birthday=birthday;
+	}
+	
+	public void setBirthdayVisibility(boolean isVisible) {
+		this.visiblebirthday = isVisible;
+	}
+	public Location getAddress() {
+		return address;
+	}
+
+	public boolean getAddressVisibility() {
+		return visibleaddress;
+	}
+
+	public void setAddress(Location loc){
+		this.address=loc;
+	}
+	
+	public void setAddressVisibility(boolean isVisible) {
+		this.visibleaddress = isVisible;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public boolean getTelephoneVisibility() {
+		return visibletelephone;
+	}
+
+	public void setTelephone(String tele){
+		this.telephone=tele;
+	}
+	
+	public void setTelephoneVisibility(boolean isVisible) {
+		this.visibletelephone = isVisible;
+	}
+	public String getNickName() {
+		return nickname;
+	}
+
+	public void setNickName(String nick){
+		this.nickname=nick;
+	}
+	public String getDescription() {
+		return descriptionUser;
+	}
+
+	public void setDescripton(String desc){
+		this.descriptionUser=desc;
 	}
 	
 	static class uniqueMailCheck extends Check {
