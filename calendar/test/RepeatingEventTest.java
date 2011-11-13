@@ -119,4 +119,75 @@ public class RepeatingEventTest extends UnitTest {
 		List<SingleEvent> list = calendar.events(calendar.owner, dt);
 		assertEquals(0, list.size());
 	}
+	
+	@Test
+	public void isThisDayandLocation() {
+		// Get a calendar
+		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
+		
+		// Get location
+		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
+		
+		// Create a location
+		Location loc2 = new Location();
+		loc2.street = "Teststrasse";
+		loc2.num = "123";
+		loc2.city = "Test";
+		loc2.country = "Test";
+		loc2.pincode = "12345";
+		
+		DateTime start = new DateTime();
+		DateTime end = start.plusHours(2);
+		
+		// Create an event
+		EventSeries event = new EventSeries(budCalendar, "Test1", start, end, RepeatingType.MONTHLY);
+		event.location = loc;
+		EventSeries event2 = new EventSeries(budCalendar, "Test2", start, end, RepeatingType.YEARLY);
+		event2.location = loc;
+		
+		assertTrue(event.isThisDayandLocation(start, loc));
+		assertFalse(event.isThisDayandLocation(start.plusDays(2), loc));
+		assertFalse(event.isThisDayandLocation(start, loc2));
+		assertFalse(event.isThisDayandLocation(start.plusDays(2), loc2));
+		assertFalse(event2.isThisDayandLocation(start.plusDays(2), loc));
+	}
+	
+	@Test
+	public void editSingleEvent() {
+		// Get a calendar
+		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
+		
+		DateTime start = new DateTime();
+		DateTime end = start.plusHours(2);
+		
+		// Create an event
+		EventSeries serie = new EventSeries(budCalendar, "Test", start, end, RepeatingType.YEARLY);
+		EventSeries serie2 = new EventSeries(budCalendar, "", start, end, RepeatingType.YEARLY);
+		
+		SingleEvent singleEvent = serie.editSingleEvent(start.plusYears(2));
+		SingleEvent singleEvent2 = serie2.editSingleEvent(start.plusYears(2));
+		
+		assertNotNull(singleEvent);
+		assertEquals(serie.origin, singleEvent.origin);
+		assertEquals(serie.name, singleEvent.name);
+		assertEquals(start.plusYears(2), singleEvent.startDate);
+		assertEquals(start.plusYears(2).plusHours(1), singleEvent.endDate);
+		assertEquals(RepeatingType.NONE, singleEvent.type);
+		assertNull(singleEvent2);
+	}
+	
+	@Test
+	public void getPeroidStart() {
+		// Get a calendar
+		Calendar budCalendar = Calendar.find("byName", "Buds Schedule").first();
+		
+		DateTime start = new DateTime();
+		DateTime end = start.plusHours(2);
+		
+		// Create an event
+		EventSeries serie = new EventSeries(budCalendar, "Test", start, end, RepeatingType.WEEKLY);
+		serie.setPeriodStart(start);
+		
+		assertEquals(start, serie.getPeriodStart());
+	}
 }

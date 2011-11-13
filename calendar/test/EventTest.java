@@ -93,7 +93,13 @@ public class EventTest extends UnitTest {
 	
 	@Test
 	public void convertFromSeries() {
+		// Get a calendar
+		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
+		
+		// Get an event
 		EventSeries serie = EventSeries.find("byName", "Weekly Meeting").first();
+		serie.addComment("autor", "test");
+		serie.calendars.add(eds);
 		
 		SingleEvent singleEvent = Event.convertFromSeries(serie);
 
@@ -116,7 +122,13 @@ public class EventTest extends UnitTest {
 	
 	@Test
 	public void convertFromSingleEvent() {
+		// Get a calendar
+		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
+		
+		// Get an event
 		SingleEvent singleEvent = SingleEvent.find("byName", "Meet Lynn Bracken").first();
+		singleEvent.addComment("autor", "test");
+		singleEvent.calendars.add(eds);
 		
 		Event serie = Event.convertFromSingleEvent(singleEvent, RepeatingType.WEEKLY);
 
@@ -137,5 +149,22 @@ public class EventTest extends UnitTest {
 		assertArrayEquals(singleEvent.calendars.toArray(), serie.calendars.toArray());
 		assertEquals(RepeatingType.WEEKLY, serie.type);
 	}
-
+	
+	@Test
+	public void compareTo() {
+		// Get some calendars
+		Calendar jacks = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get an event
+		SingleEvent singleEvent = SingleEvent.find("byName", "Meet Lynn Bracken").first();
+		
+		// Create events
+		SingleEvent event1 = new SingleEvent(jacks, "Test1", singleEvent.startDate, singleEvent.endDate);
+		SingleEvent event2 = new SingleEvent(jacks, "Test2", singleEvent.startDate.plusHours(1), singleEvent.endDate);
+		SingleEvent event3 = new SingleEvent(jacks, "Test3", singleEvent.startDate.minusHours(1), singleEvent.endDate);
+		
+		assertEquals(0, singleEvent.compareTo(event1));
+		assertEquals(-1, singleEvent.compareTo(event2));
+		assertEquals(1, singleEvent.compareTo(event3));
+	}
 }

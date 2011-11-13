@@ -196,4 +196,30 @@ public class SingleEventTest extends UnitTest {
 		
 		assertTrue(event.isThisDay(new DateTime().withDayOfMonth(5).withMonthOfYear(10).withYear(2011)));
 	}
+	
+	@Test
+	public void isThisDayandLocation() {
+		// Get location
+		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
+		
+		DateTime day = new DateTime();
+		
+		// Get an event
+		SingleEvent event = SingleEvent.find("byName", "Collections").first();
+		event.startDate = day;
+		event.location = loc;
+		
+		// Create a location
+		Location loc2 = new Location();
+		loc2.street = "Teststrasse";
+		loc2.num = "123";
+		loc2.city = "Test";
+		loc2.country = "Test";
+		loc2.pincode = "12345";
+		
+		assertTrue(event.isThisDayandLocation(day, loc));
+		assertFalse(event.isThisDayandLocation(day.plusDays(2), loc));
+		assertFalse(event.isThisDayandLocation(day, loc2));
+		assertFalse(event.isThisDayandLocation(day.plusDays(2), loc2));
+	}
 }

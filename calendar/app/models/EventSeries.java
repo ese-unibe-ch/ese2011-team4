@@ -88,8 +88,7 @@ public class EventSeries extends Event {
 					return startDate.getDayOfMonth() == day.getDayOfMonth() && 
 					Months.monthsBetween(periodStart, day).getMonths()%interval == 0;
 				case YEARLY:
-					return startDate.getMonthOfYear() == day.getMonthOfYear() && startDate.getDayOfYear() == day.getDayOfYear() && 
-					Years.yearsBetween(periodStart, day).getYears()%interval == 0;
+					return startDate.getMonthOfYear() == day.getMonthOfYear() && startDate.getDayOfYear() == day.getDayOfYear() && Years.yearsBetween(periodStart, day).getYears()%interval == 0;
 				}
 		return false;
 	}
