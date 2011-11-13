@@ -22,7 +22,6 @@ public class Users extends Controller {
 	    render(users, connectedUser);
 	}
 	public static void edit(Long userId) {
-		List<User> users = User.all().fetch();
 		User  connectedUser = User.findById(userId);
     	List<Location> locations = Location.all().fetch();
 	    	render(connectedUser, locations);

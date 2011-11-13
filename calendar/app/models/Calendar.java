@@ -4,10 +4,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -50,7 +52,7 @@ import play.db.jpa.Model;
  */
 
 @Entity
-public class Calendar extends Model implements Printable{
+public class Calendar extends Model implements Printable {
 	/**
 	 * This calendar's name.
 	 * 
@@ -350,9 +352,12 @@ public class Calendar extends Model implements Printable{
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public int print(Graphics gfx, PageFormat pageFormat, int pageIndex) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat();
+		dateFormat.setTimeZone(new SimpleTimeZone(0, "GMT"));
+		dateFormat.applyPattern("d MMM yyyy HH:mm:ss");
+		
 		if ( pageIndex >= pages)
 			return Printable.NO_SUCH_PAGE;
 		else{
@@ -363,7 +368,7 @@ public class Calendar extends Model implements Printable{
 			gfx.drawString(name, x, y);
 			gfx.setFont(new Font("Times New Roman", Font.PLAIN, 10));
 			//Print date
-			gfx.drawString(new Date().toGMTString().replace("GMT", ""), (int)pageFormat.getWidth()-110, y);
+			gfx.drawString(dateFormat.format(new Date()), (int)pageFormat.getWidth()-110, y);
 			gfx.setFont(font);
 			//Print Lines
 			gfx.drawLine(x, y+font.getSize(), (int)pageFormat.getWidth()-x, y+font.getSize());
@@ -376,8 +381,11 @@ public class Calendar extends Model implements Printable{
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void printEvents(Graphics gfx,PageFormat pageFormat, int x, int y, int index, int pageIndex){
+		SimpleDateFormat dateFormat = new SimpleDateFormat();
+		dateFormat.setTimeZone(new SimpleTimeZone(0, "GMT"));
+		dateFormat.applyPattern("d MMM yyyy HH:mm:ss");
+		
 		int yTemp = y;
 		for(int i = index; i < events.size(); i++){
     		Event e = events.get(i);
@@ -389,8 +397,8 @@ public class Calendar extends Model implements Printable{
     				str[0] = e.name+"(private):";
     			else
     				str[0] = e.name+":";
-    			str[1] = "     -Starts: "+start.toGMTString().replace("GMT", "");
-    			str[2] = "     -Ends: "+end.toGMTString().replace("GMT", "");
+    			str[1] = "     -Starts: "+dateFormat.format(start);
+    			str[2] = "     -Ends: "+dateFormat.format(end);
     			if(e.location != null)
     				str[3] = "     -Location: "+e.location;
     			else
