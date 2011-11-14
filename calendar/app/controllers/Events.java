@@ -193,7 +193,7 @@ public class Events extends Controller {
     }
     
     /**
-     * Deataches a repeating event from its series and transforms it to
+     * Detaches a repeating event from its series and transforms it to
      * a single event.
      * 
      * @param calendarId	id of the calendar

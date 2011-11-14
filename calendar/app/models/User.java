@@ -29,6 +29,17 @@ import play.db.jpa.Model;
  * every user has a full name, zero or more calendars and a favorite list. A user can also be 
  * administrator of the calendar application.
  * <p>
+ * A User has a user profile in which he optionally can add information about himself. The user
+ * profile contains following informations:
+ * <ul>
+ * <li>This user's full name</li>
+ * <li>This user's nickname</li>
+ * <li>This user's gender</li>
+ * <li>This user's birthday</li>
+ * <li>This usre's address</li>
+ * <li>This user's description.</li>
+ * </ul>
+ * <p>
  * The class User includes methods for
  * <ul>
  * <li>connecting this user to the calendar application</li>
@@ -39,10 +50,11 @@ import play.db.jpa.Model;
  * </ul>
  * 
  * @since Iteration-1
- * @see Calendarw
+ * @see Calendar
  */
 @Entity
 public class User extends Model {
+	
 	/**
 	 * This user's email address.
 	 */
@@ -81,26 +93,63 @@ public class User extends Model {
 	 */
 	public boolean isAdmin;
 	
+	/**
+	 * This user's nickname.
+	 */
     public String nickname;
 	
+    /**
+     * This user's gender.
+     */
 	public String gender;
+	
+	/**
+	 * If <code>true</code> then this user's gender is shown in his user profile, otherwise
+	 * not.
+	 */
 	public boolean visiblegender;
 	
-	
+	/**
+	 * This user's birthday.
+	 */
 	public DateTime birthday;
+	
+	/**
+	 * If <code>true</code> then this user's birthday is shown in his user profile, otherwise
+	 * not.
+	 */
 	public boolean visiblebirthday;
 	
+	/**
+	 * This user's address.
+	 */
 	public Location address;
+	
+	/**
+	 * If <code>true</code> then this user's address is shown in his user profile, otherwise
+	 * not.
+	 */
 	public boolean visibleaddress;
 	
+	/**
+	 * This user's telephone number.
+	 */
 	public String telephone;
+	
+	/**
+	 * If <code>true</code> then this user's telephone number is shown in his user profile, otherwise
+	 * not.
+	 */
 	public boolean visibletelephone;
 	
+	/**
+	 * Text which describes this user.
+	 */
 	public String descriptionUser;
 	
 	
 	/**
-	 * User's constructor. The default behaviour is:
+	 * User's constructor. The default behavior is:
 	 * <ul>
 	 * <li>User has an email address</li>
 	 * <li>User has a password</li>
@@ -195,79 +244,207 @@ public class User extends Model {
 		return fullname;
 	}
 	
+	/**
+	 * Returns this user's gender.
+	 * 
+	 * @return <code>String gender</code>: This user's gender
+	 * @since Iteration-5
+	 */
 	public String getGender() {
 		return gender;
 	}
 
+	/**
+	 * Returns <code>true</code> if this user's gender is visible, otherwise
+	 * <code>false</code>.
+	 * 
+	 * @return <code>boolean</code>: <code>true</code> if this user's gender is visible, otherwise
+	 * false
+	 * @since Iteration-5
+	 */
 	public boolean getGenderVisibility() {
 		return visiblegender;
 	}
 
+	/**
+	 * Sets this user's gender to the argument gender.
+	 * 
+	 * @param gen : This user's gender
+	 * @since Iteration-5
+	 */
 	public void setGender(String gen){
 		this.gender=gen;
 	}
 	
+	/**
+	 * Sets this user's gender visibility to the argument visibility.
+	 * 
+	 * @param isVisible : This user's gender visibility
+	 * @since Iteration-5
+	 */
 	public void setGenderVisibility(boolean isVisible) {
 		this.visiblegender = isVisible;
 	}
 	
+	/**
+	 * Returns this user's birthday.
+	 * 
+	 * @return <code>DateTime birthday</code>: This user's birthday
+	 * @since Iteration-5
+	 */
 	public DateTime getBirthday() {
 		return birthday;
 	}
 
+	/**
+	 * Returns this user's birthday visibility.
+	 * 
+	 * @return <code>boolean</code>: <code>true</code> if this user's birthday is visible, otherwise
+	 * <code>false</code>
+	 * @since Iteration-5
+	 */
 	public boolean getBirthdayVisibility() {
 		return visiblebirthday;
 	}
 
+	/**
+	 * Sets this user's birthday to the argument birthday date.
+	 * 
+	 * @param birthday : This user's birthday date
+	 * @since Iteration-5
+	 */
 	public void setBirthday(DateTime birthday){
 		this.birthday=birthday;
 	}
 	
+	/**
+	 * Sets this user's birthday visibility to the argument visibility.
+	 * 
+	 * @param isVisible : This user's birthday visibility
+	 * @since Iteration-5
+	 */
 	public void setBirthdayVisibility(boolean isVisible) {
 		this.visiblebirthday = isVisible;
 	}
+	
+	/**
+	 * Returns this user's address.
+	 * 
+	 * @return <code>Location address</code>: This user's address
+	 * @since Iteration-5
+	 */
 	public Location getAddress() {
 		return address;
 	}
 
+	/**
+	 * Returns this user's address visibility.
+	 * 
+	 * @return <code>boolean</code>: <code>true</code> if this user's address is visible, 
+	 * otherwise <code>false</code>
+	 * @since Iteration-5
+	 */
 	public boolean getAddressVisibility() {
 		return visibleaddress;
 	}
 
+	/**
+	 * Sets this user's address to the argument address.
+	 * 
+	 * @param loc : This user's address
+	 * @since Iteration-5
+	 */
 	public void setAddress(Location loc){
 		this.address=loc;
 	}
 	
+	/**
+	 * Sets this user's address visibility to the argument visibility
+	 * 
+	 * @param isVisible : This user's address visibility
+	 * @since Iteration-5
+	 */
 	public void setAddressVisibility(boolean isVisible) {
 		this.visibleaddress = isVisible;
 	}
 
+	/**
+	 * Returns this user's telephone number.
+	 * 
+	 * @return <code>String telephone</code>: This user's telephone number
+	 * @since Iteration-5
+	 */
 	public String getTelephone() {
 		return telephone;
 	}
 
+	/**
+	 * Returns this user's telephone number visibility.
+	 * 
+	 * @return <code>boolean</code>: <code>true</code> if this user's telephone number is visible,
+	 * otherwise <code>false</code>
+	 * @since Iteration-5
+	 */
 	public boolean getTelephoneVisibility() {
 		return visibletelephone;
 	}
 
+	/**
+	 * Sets this user's telephone number to the argument telephone number.
+	 * 
+	 * @param tele : This user's telephone number
+	 * @since Iteration-5
+	 */
 	public void setTelephone(String tele){
 		this.telephone=tele;
 	}
 	
+	/**
+	 * Sets this user's telephone number visibility to the argument visibility.
+	 * 
+	 * @param isVisible : This user's telephone visibility
+	 * @since Iteration-5
+	 */
 	public void setTelephoneVisibility(boolean isVisible) {
 		this.visibletelephone = isVisible;
 	}
+	
+	/**
+	 * Returns this user's nickname.
+	 * 
+	 * @return <code>String nickname</code>: This user's nickname
+	 * @since Iteration-5
+	 */
 	public String getNickName() {
 		return nickname;
 	}
 
+	/**
+	 * Sets this user's nickname to the argument nickname.
+	 * 
+	 * @param nick : This user's nickname
+	 * @since Iteration-5
+	 */
 	public void setNickName(String nick){
 		this.nickname=nick;
 	}
+	
+	/**
+	 * Returns this user's description.
+	 * 
+	 * @return <code>String descriptionUser</code>: This user's description
+	 * @since Iteration-5
+	 */
 	public String getDescription() {
 		return descriptionUser;
 	}
 
+	/**
+	 * Sets this user's description to the argument description.
+	 * 
+	 * @param desc : This user's description
+	 * @since Iteration-5
+	 */
 	public void setDescripton(String desc){
 		this.descriptionUser=desc;
 	}

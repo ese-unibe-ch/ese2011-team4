@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import models.*;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.After;
@@ -118,5 +119,60 @@ public class UserTest extends UnitTest{
 		assertFalse(ed.isFavorite(bud));
 		
 		assertEquals(3, User.count());
+	}
+	
+	
+	@Test
+	public void GetAndSetProfileEntries() {
+		// Get a user
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		// Get location
+		Location loc = Location.find("Bernstrasse", "1", "Bern", "Switzerland", "3000");
+		
+		DateTime day = new DateTime();
+		
+		// Reset values
+		jack.address = null;
+		jack.birthday = null;
+		jack.descriptionUser = "";
+		jack.gender = "";
+		jack.nickname = "";
+		jack.telephone = "";
+		
+		// Set values
+		jack.setAddress(loc);
+		jack.setAddressVisibility(true);
+		jack.setBirthday(day);
+		jack.setBirthdayVisibility(true);
+		jack.setDescripton("abc");
+		jack.setGender("male");
+		jack.setGenderVisibility(true);
+		jack.setNickName("Jacky");
+		jack.setTelephone("12345");
+		jack.setTelephoneVisibility(true);
+		
+		// Get values
+		Location address = jack.getAddress();
+		boolean addressVisibility = jack.getAddressVisibility();
+		DateTime birthday = jack.getBirthday();
+		boolean birthdayVisibility = jack.getBirthdayVisibility();
+		String description = jack.getDescription();
+		String gender = jack.getGender();
+		boolean genderVisibility = jack.getGenderVisibility();
+		String nickName = jack.getNickName();
+		String telephone = jack.getTelephone();
+		boolean telephoneVisibility = jack.getTelephoneVisibility();
+		
+		assertEquals(loc, address);
+		assertTrue(addressVisibility);
+		assertEquals(day, birthday);
+		assertTrue(birthdayVisibility);
+		assertEquals("abc", description);
+		assertEquals("male", gender);
+		assertTrue(genderVisibility);
+		assertEquals("Jacky", nickName);
+		assertEquals("12345", telephone);
+		assertTrue(telephoneVisibility);		
 	}
 }
