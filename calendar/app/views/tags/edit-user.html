@@ -10,8 +10,8 @@ function date_populate(dayfield, monthfield, yearfield){
         dayfield.options[i]=new Option(i+1, i+1)
     dayfield.options[today.getDate()]=new Option(today.getDate(), today.getDate(), true, true) //select today's day
     for (var m=0; m<12; m++)
-        monthfield.options[m]=new Option(monthtext[m], monthtext[m])
-    monthfield.options[today.getMonth()]=new Option(monthtext[today.getMonth()], monthtext[today.getMonth()], true, true) //select today's month
+        monthfield.options[m]=new Option(m+1, m+1)
+    monthfield.options[today.getMonth()]=new Option(today.getMonth(), today.getMonth(), true, true) //select today's month
     var thisyear=today.getFullYear()
     for (var y=0; y<100; y++){
         yearfield.options[y]=new Option(thisyear, thisyear)
@@ -21,15 +21,9 @@ function date_populate(dayfield, monthfield, yearfield){
 }
 </script>
 <p>
-#{field 'email'}
-   	<label for="name">EmailAddress</label>
-    <input type="text" name="${field.name}" id="email" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
-#{/field}
-</p>
-<p>
 #{field 'fullname'}
    	<label for="name">Name</label>
-    <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <input type="text" name="${field.name}" id="fullname" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
 #{/field}
 </p>
 <p>
@@ -39,19 +33,40 @@ function date_populate(dayfield, monthfield, yearfield){
 #{/field}
 </p>
 <p class ="box">
-<label>Search for:</label>
 #{field 'gender'}
+<label>Gender</label>
 	<input type="radio" name="${field.name}" value="Male" checked="1">Male
 	<input type="radio" name="${field.name}" value="Female">Female
 #{/field}
 <p>
-#{field 'birthday'}
-	<label for="name">BirthDay</label>
-	  <SELECT id ="date" name = "dd"></SELECT>
-      <SELECT id ="month" name = "mm"></SELECT>
-      <SELECT id ="year" name = "yyyy"></SELECT>
-	<script type="text/javascript">date_populate("date", "month", "year");</script>
+#{field 'visiblegender'}
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblegender}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblegender}checked="checked"#{/if}#{/else}/>
+	<label for="visiblegender" id="visiblegender">Visibility</label>
 #{/field}
+</p>
+</p>
+<p>
+
+	<label for="name">BirthDay</label>
+	#{field 'birthday'}
+	<select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
+	  
+	#{/field}  
+	#{field 'birthmonth'}
+     <select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
+     
+      #{/field}
+      #{field 'birthyear'}
+      <select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
+      #{/field}
+	<script type="text/javascript">date_populate("birthday", "birthmonth", "birthyear");</script>
+	
+<p>
+#{field 'visiblebirthday'}
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblebirthday}checked="checked"#{/if}#{/else}/>
+	<label for="visiblebirthday" id="visiblebirthday">Visibility</label>
+#{/field}
+</p>
 </p>
 <p>
 #{field 'locationId'}
@@ -62,6 +77,24 @@ function date_populate(dayfield, monthfield, yearfield){
 		#{/list}
 	</select>
 #{/field}
+<p>
+#{field 'visibleaddress'}
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
+	<label for="visibleaddress" id="visibleaddress">Visibility</label>
+#{/field}
+</p>
+</p>
+<p>
+#{field 'telephone'}
+   	<label for="name">Mobile Number</label>
+    <input type="text" name="${field.name}" id="telephone" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+<p>
+#{field 'visibletelephone'}
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibletelephone}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibletelephone}checked="checked"#{/if}#{/else}/>
+	<label for="visibletelephone" id="visibletelephone">Visibility</label>
+#{/field}
+</p>
 </p>
 <p>
 #{field 'descriptionUser'}
