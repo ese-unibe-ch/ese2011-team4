@@ -453,7 +453,7 @@ public class User extends Model {
 		public boolean isSatisfied(Object user_, Object mail_) {
 			String mail = (String) mail_;
 			setMessage("validation.uniqueMailCheck");
-			return User.find("byEmail", mail).fetch().size() == 0;
+			return (User.find("byEmail", mail).fetch().size() == 0 || (User.find("byEmail", mail).fetch().size() == 1 && User.find("byEmail", mail).first().equals(user_)));
 		}
 	}
 }
