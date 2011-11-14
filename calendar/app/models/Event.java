@@ -336,8 +336,8 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	}
 	
 	/**
-	 * Returns true if the given date is the start date of this event and
-	 * if the given location equals the event's location.
+	 * Returns <code>true</code> if the given date is the start date of this event and
+	 * if the given location equals the event's location, otherwise <code>false</code>.
 	 * 
 	 * @param 	day		date to check whether it's equal to this event's start date or not
 	 * @param 	loc		location to check whether it's equal to this event's location
