@@ -313,13 +313,12 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	}
 	
 	/**
-	 *
-	 * Returns a list of users participating this event
+	 * Returns <code>true</code> if the argument date equals this event's start date, otherwise
+	 * <code>false</code>.
 	 * 
-	 * @param	day 	The day to test
-	 * @return	<code>true</code> if the start date of the event is at this day, otherwise <code>false</code>
-	 * @see		models.Event#isThisDayandLocation(DateTime day, Location loc)
-	 * @since	Beta-v1.2
+	 * @param day	date to check whether it's equal to this event's start date or not
+	 * @return <code>true</code> if day equals this event's start date, otherwise <code>false</code>
+	 * @since Iteration-2
 	 */
 	public abstract boolean isThisDay(DateTime day);
 	
