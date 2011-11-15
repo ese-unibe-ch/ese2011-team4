@@ -2,12 +2,16 @@
 
 #user-list .user-name {
 	display: inline-block;
-	width: 40%;
+	width: 30%;
 }
 
+#user-list .user-profile {
+	display: inline-block;
+	width: 20%;
+}
 #user-list .user-calendars {
 	display: inline-block;
-	width: 40%;
+	width: 20%;
 }
 
 #user-list .add {
