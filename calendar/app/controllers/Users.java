@@ -65,6 +65,7 @@ public class Users extends Controller {
 				connectedUser.visiblebirthday = visiblebirthday;
 				connectedUser.visibletelephone = visibletelephone;
 				connectedUser.visiblegender = visiblegender;
+				
 				if(connectedUser.validateAndSave()) {
 
 		        	show(userId);
