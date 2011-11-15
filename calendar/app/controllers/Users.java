@@ -47,18 +47,31 @@ public class Users extends Controller {
 				User connectedUser=User.findById(userId);
 				assert connectedUser != null;
 				Location location = Location.findById(locationId);
-				connectedUser.setAddress(location);
+			/*	connectedUser.setAddress(location);
 				connectedUser.setBirthday(format.parseDateTime(birthday+ "."+birthmonth+"."+birthyear));
 				connectedUser.setAddressVisibility(visibleaddress);
 				connectedUser.setDescripton(descriptionUser);
-				connectedUser.setGender(gender);
+				connectedUser.setGender("Male");
 				connectedUser.setNickName(nickname);
 				connectedUser.fullname=fullname;
 				connectedUser.setTelephone(telephone);
 				connectedUser.setBirthdayVisibility(visiblebirthday);
 				connectedUser.setTelephoneVisibility(visibletelephone);
-				connectedUser.setGenderVisibility(visiblegender);
-				if(connectedUser.validateAndSave()) {
+				connectedUser.setGenderVisibility(visiblegender);*/
+				connectedUser.edit("connectedUser", params.all());
+				connectedUser.address=location;
+				connectedUser.birthday=format.parseDateTime(birthday+ "."+birthmonth+"."+birthyear);
+				connectedUser.visibleaddress=visibleaddress;
+				connectedUser.descriptionUser=descriptionUser;
+				connectedUser.gender=gender;
+				connectedUser.nickname=nickname;
+				connectedUser.fullname=fullname;
+				connectedUser.telephone=telephone;
+				connectedUser.visiblebirthday=visiblebirthday;
+				connectedUser.visibletelephone=visibletelephone;
+				connectedUser.visiblegender=visiblegender;
+				
+				if(connectedUser.save().isPersistent()) {
 		        	show(userId);
 		    	} else {
 		     		for(play.data.validation.Error e : Validation.errors())
