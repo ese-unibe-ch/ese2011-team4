@@ -8,11 +8,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import play.data.validation.Check;
@@ -112,6 +115,7 @@ public class User extends Model {
 	/**
 	 * This user's birthday.
 	 */
+	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
 	public DateTime birthday;
 	
 	/**
@@ -123,6 +127,7 @@ public class User extends Model {
 	/**
 	 * This user's address.
 	 */
+	@OneToOne
 	public Location address;
 	
 	/**
@@ -145,6 +150,7 @@ public class User extends Model {
 	/**
 	 * Text which describes this user.
 	 */
+	@Lob
 	public String descriptionUser;
 	
 	
@@ -453,7 +459,7 @@ public class User extends Model {
 		public boolean isSatisfied(Object user_, Object mail_) {
 			String mail = (String) mail_;
 			setMessage("validation.uniqueMailCheck");
-			return User.find("byEmail", mail).fetch().size() == 0;
+			return (User.find("byEmail", mail).fetch().size() == 0 || (User.find("byEmail", mail).fetch().size() == 1 && User.find("byEmail", mail).first().equals(user_)));
 		}
 	}
 }
