@@ -14,6 +14,8 @@ GET		/calendars/index/{userId}						Calendars.index
 GET		/register										Users.register
 GET		/users/favorite/add/{userId}					Users.addContact
 GET		/users/favorite/delete/{userId}					Users.deleteContact
+GET		/user/{id}										Users.show
+GET		/user/{userId}/edit                    			Users.edit
 GET     /event/{id}/comments                   			Comments.show
 GET     /event/{id}/comment	                   			Comments.add
 POST	/comment/{id}/update							Comments.update

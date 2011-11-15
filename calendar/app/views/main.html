@@ -22,7 +22,7 @@
         	    <div id="tools">
         	    <ol>
 					#{if session.username}
-						<li><span id="username">${session.username}</span></li>
+        	    		<li><a href="@{Users.show(models.User.find("email", controllers.Security.connected()).first()?.id)}">${session.username}</a>
         	    		<li><a href="@{Secure.logout()}">Log out</a>
 					#{/if}
 					#{else}
