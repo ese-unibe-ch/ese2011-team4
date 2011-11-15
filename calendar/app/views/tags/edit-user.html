@@ -3,40 +3,57 @@
 
 function date_populate(dayfield, monthfield, yearfield){
     var today=new Date();
+    #{ifErrors}
+    	#{ifError 'birthday.InvalidDate'}
+    		#{if _connectedUser?.birthday?.getYear() > 0}today.setYear(${_connectedUser?.birthday?.getYear()});#{/if}
+    		#{if _connectedUser?.birthday?.getMonthOfYear() > 0}today.setMonth(${_connectedUser?.birthday?.getMonthOfYear()}-1);#{/if}
+    		#{if _connectedUser?.birthday?.getDayOfMonth() > 0}today.setDate(${_connectedUser?.birthday?.getDayOfMonth()});#{/if}
+    	#{/ifError}
+    	#{else}
+    		today.setYear(${flash.birthyear});
+    		today.setMonth((${flash.birthmonth})-1);
+    		today.setDate(${flash.birthday});
+        #{/else}
+    #{/ifErrors}
+    #{else}
+    	#{if _connectedUser?.birthday?.getYear() > 0}today.setYear(${_connectedUser?.birthday?.getYear()});#{/if}
+    	#{if _connectedUser?.birthday?.getMonthOfYear() > 0}today.setMonth(${_connectedUser?.birthday?.getMonthOfYear()}-1);#{/if}
+    	#{if _connectedUser?.birthday?.getDayOfMonth() > 0}today.setDate(${_connectedUser?.birthday?.getDayOfMonth()});#{/if}
+    #{/else}
     var dayfield=document.getElementById(dayfield)
     var monthfield=document.getElementById(monthfield)
     var yearfield=document.getElementById(yearfield)
     for (var i=0; i<31; i++)
         dayfield.options[i]=new Option(i+1, i+1)
-  //  dayfield.options[today.getDate()]=new Option(today.getDate(), today.getDate(), true, true) //select today's day
+    dayfield.options[today.getDate()-1]=new Option(today.getDate(), today.getDate(), true, true) //select today's day
     for (var m=0; m<12; m++)
         monthfield.options[m]=new Option(m+1, m+1)
-   // monthfield.options[today.getMonth()]=new Option(today.getMonth(), today.getMonth(), true, true) //select today's month
-    var thisyear=today.getFullYear()
+    monthfield.options[today.getMonth()]=new Option(today.getMonth()+1, today.getMonth()+1, true, true) //select today's month
+    var thisyear=new Date().getFullYear()
     for (var y=0; y<100; y++){
         yearfield.options[y]=new Option(thisyear, thisyear)
         thisyear-=1
     }
-    //yearfield.options[0]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+    yearfield.options[new Date().getFullYear()-today.getFullYear()]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
 }
 </script>
 <p>
 #{field 'fullname'}
    	<label for="fullname">Name</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.fullname}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.fullname}#{/ifErrors}#{else}${_connectedUser?.fullname}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'nickname'}
    	<label for="nickname">Nick Name</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.nickname}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.nickname}#{/ifErrors}#{else}${_connectedUser?.nickname}#{/else}"/>
 #{/field}
 </p>
 <p class ="box">
 #{field 'gender'}
 <label for="gender">Gender</label>
-	<input type="radio" name="${field.name}" value="Male" #{if _connectedUser.gender=="Male"}checked="checked"#{/if}>Male
-	<input type="radio" name="${field.name}" value="Female" #{if _connectedUser.gender=="Female"}checked="checked"#{/if}>Female
+	<input type="radio" name="${field.name}" value="Male" #{ifErrors}#{if flash.gender=="Male"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Male"}checked="checked"#{/if}#{/else}>Male
+	<input type="radio" name="${field.name}" value="Female" #{ifErrors}#{if flash.gender=="Female"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Female"}checked="checked"#{/if}#{/else}>Female
 #{/field}
 
 #{field 'visiblegender'}
@@ -88,7 +105,7 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'telephone'}
    	<label for="telephone">Mobile Number</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.telephone}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.telephone}#{/ifErrors}#{else}${_connectedUser?.telephone}#{/else}"/>
 #{/field}
 
 #{field 'visibletelephone'}
@@ -99,8 +116,8 @@ function date_populate(dayfield, monthfield, yearfield){
 </p>
 <p>
 #{field 'descriptionUser'}
-   	<label for="descriptionUser">About Me </label>
-    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.name}#{/ifErrors} #{else}${_connectedUser?.descriptionUser}#{/else}</textarea>
+   	<label for="descriptionUser">About Me</label>
+    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.descriptionUser}#{/ifErrors}#{else}${_connectedUser?.descriptionUser}#{/else}</textarea>
 #{/field}
 </p>
 <p class="button">

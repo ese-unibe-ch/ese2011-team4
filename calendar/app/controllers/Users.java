@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
+import org.joda.time.IllegalFieldValueException;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -49,13 +50,16 @@ public class Users extends Controller {
 				assert connectedUser != null;
 
 				Location location = Location.findById(locationId);
-
-			
 				connectedUser.address = location;
 				
-				DateTime birth = new DateTime().withYear(birthyear).withMonthOfYear(birthmonth).withDayOfMonth(birthday);
-				connectedUser.birthday = birth;
-				System.out.println(connectedUser.birthday);
+				DateTime birth = null;
+				
+				try {
+					birth = new DateTime().withYear(birthyear).withMonthOfYear(birthmonth).withDayOfMonth(birthday);
+					connectedUser.birthday = birth;
+				} catch (IllegalFieldValueException e) {
+					validation.addError("birthday.InvalidDate", "Invalid Birthday");
+				}
 				connectedUser.visibleaddress = visibleaddress;
 				connectedUser.descriptionUser = descriptionUser;
 				connectedUser.gender = gender;
@@ -65,8 +69,10 @@ public class Users extends Controller {
 				connectedUser.visiblebirthday = visiblebirthday;
 				connectedUser.visibletelephone = visibletelephone;
 				connectedUser.visiblegender = visiblegender;
-				
-				if(connectedUser.validateAndSave()) {
+
+
+
+				if(Validation.errors().isEmpty() && connectedUser.validateAndSave()) {
 
 		        	show(userId);
 		    	} else {
