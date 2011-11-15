@@ -21,6 +21,7 @@ import org.joda.time.DateTime;
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
 import play.data.validation.Email;
+import play.data.validation.Phone;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
@@ -139,7 +140,7 @@ public class User extends Model {
 	/**
 	 * This user's telephone number.
 	 */
-	public String telephone;
+	@Phone public String telephone;
 	
 	/**
 	 * If <code>true</code> then this user's telephone number is shown in his user profile, otherwise
