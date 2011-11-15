@@ -48,9 +48,14 @@ public class Locations extends Controller {
     public static void delete(Long locationId) {
     	Location location = Location.findById(locationId);
     	List<Event> events = location.getAllEvents();
+    	List<User> users = User.find("byAddress", location).fetch();
     	for(Event event: events) {
     		event.location = null;
     		event.validateAndSave();
+    	}
+    	for(User user: users) {
+    		user.address = null;
+    		user.validateAndSave();
     	}
     	location.delete();
     	index();    	
