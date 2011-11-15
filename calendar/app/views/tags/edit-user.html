@@ -22,21 +22,21 @@ function date_populate(dayfield, monthfield, yearfield){
 </script>
 <p>
 #{field 'fullname'}
-   	<label for="name">Name</label>
-    <input type="text" name="${field.name}" id="fullname" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+   	<label for="fullname">Name</label>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.fullname}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'nickname'}
-   	<label for="name">Nick Name</label>
-    <input type="text" name="${field.name}" id="nickname" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+   	<label for="nickname">Nick Name</label>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.nickname}#{/else}"/>
 #{/field}
 </p>
 <p class ="box">
 #{field 'gender'}
-<label>Gender</label>
-	<input type="radio" name="${field.name}" value="Male" checked="1">Male
-	<input type="radio" name="${field.name}" value="Female">Female
+<label for="gender">Gender</label>
+	<input type="radio" name="${field.name}" value="Male" #{if _connectedUser.gender=="Male"}checked="checked"#{/if}>Male
+	<input type="radio" name="${field.name}" value="Female" #{if _connectedUser.gender=="Female"}checked="checked"#{/if}>Female
 #{/field}
 
 #{field 'visiblegender'}
@@ -46,25 +46,25 @@ function date_populate(dayfield, monthfield, yearfield){
 
 </p>
 <p>
-
-	<label for="name">BirthDay</label>
 	#{field 'birthday'}
-	<select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
-	  
+	<label for="birthday">BirthDay</label>
+		<select name="${field.name}" id="${field.name}"></select> 
 	#{/field}  
+	
 	#{field 'birthmonth'}
-     <select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
-     
-      #{/field}
-      #{field 'birthyear'}
-      <select name="${field.name}" id="${field.name}" onblur="edit-user.submit()"></SELECT>
-      #{/field}
+     <select name="${field.name}" id="${field.name}"></select>
+    #{/field}
+    
+    #{field 'birthyear'}
+     <select name="${field.name}" id="${field.name}"></select>
+    #{/field}
+    
 	<script type="text/javascript">date_populate("birthday", "birthmonth", "birthyear");</script>
 	
 
 #{field 'visiblebirthday'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblebirthday}checked="checked"#{/if}#{/else}/>
-	<label for="visiblebirthday" id="visiblebirthday">Visibility</label>
+	<label for="visiblebirthday" id="${field.name}">Visibility</label>
 #{/field}
 
 </p>
@@ -72,34 +72,35 @@ function date_populate(dayfield, monthfield, yearfield){
 #{field 'locationId'}
 	<label for="locationId">Location</label>
 	<select name="${field.name}" id="${field.name}"">
+	<option value="-1">No location</option>
 		#{list items:_locations, as:'location'}
-			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _event?.location?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
+			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.address?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
 		#{/list}
 	</select>
 #{/field}
 
 #{field 'visibleaddress'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
-	<label for="visibleaddress" id="visibleaddress">Visibility</label>
+	<label for="visibleaddress" id="${field.name}">Visibility</label>
 #{/field}
 
 </p>
 <p>
 #{field 'telephone'}
-   	<label for="name">Mobile Number</label>
-    <input type="text" name="${field.name}" id="telephone" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+   	<label for="telephone">Mobile Number</label>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_connectedUser?.telephone}#{/else}"/>
 #{/field}
 
 #{field 'visibletelephone'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibletelephone}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibletelephone}checked="checked"#{/if}#{/else}/>
-	<label for="visibletelephone" id="visibletelephone">Visibility</label>
+	<label for="visibletelephone" id="${field.name}">Visibility</label>
 #{/field}
 
 </p>
 <p>
 #{field 'descriptionUser'}
-   	<label for="name">About Me </label>
-    <input type="text" name="${field.name}" id="description" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+   	<label for="descriptionUser">About Me </label>
+    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.name}#{/ifErrors} #{else}${_connectedUser?.descriptionUser}#{/else}</textarea>
 #{/field}
 </p>
 <p class="button">
