@@ -34,10 +34,6 @@ public class Users extends Controller {
 							String nickname,
 							String gender,
 							boolean visiblegender,
-							String birthday,
-							String birthmonth,
-							String birthyear,
-							boolean visiblebirthday,
 							Long locationId,
 							boolean visibleaddress,
 							String telephone,
@@ -60,26 +56,18 @@ public class Users extends Controller {
 				connectedUser.setGenderVisibility(visiblegender);*/
 				connectedUser.edit("connectedUser", params.all());
 				connectedUser.address=location;
-				connectedUser.birthday=format.parseDateTime(birthday+ "."+birthmonth+"."+birthyear);
+				//connectedUser.birthday=format.parseDateTime(birthday);
 				connectedUser.visibleaddress=visibleaddress;
 				connectedUser.descriptionUser=descriptionUser;
 				connectedUser.gender=gender;
 				connectedUser.nickname=nickname;
 				connectedUser.fullname=fullname;
 				connectedUser.telephone=telephone;
-				connectedUser.visiblebirthday=visiblebirthday;
+			//	connectedUser.visiblebirthday=visiblebirthday;
 				connectedUser.visibletelephone=visibletelephone;
 				connectedUser.visiblegender=visiblegender;
 				
-				if(connectedUser.save().isPersistent()) {
-		        	show(userId);
-		    	} else {
-		     		for(play.data.validation.Error e : Validation.errors())
-		    			Logger.error(e.message());
-		    		params.flash();
-		            validation.keep();
-		            edit(userId);
-		    	}
+				show(userId);
 				
 	}
 
