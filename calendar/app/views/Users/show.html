@@ -4,32 +4,34 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
+#{if connectedUser.equals(user)}
 <div id="main-right">
 	<h2 class="title">Actions</h2>
 	<ul>
-		<li><a href="@{Users.edit(connectedUser.id)}">Edit Profile</a>
+		<li><a href="@{Users.edit(user.id)}">Edit Profile</a>
 	</ul>
 </div>
+#{/if}
 <div id="main-left">
 	<h2 class="title">Profile Details</h2>
     	<div id="location">
 			<p>
 				<ul>
-   					<li><label for="name">Full Name : </label>${connectedUser.fullname}</li>
-				    <li><label for="nickname">Nick Name: </label>${connectedUser.nickname}</li>
-				    #{if connectedUser.visiblegender}
-				    <li><label for="gender">Gender : </label>${connectedUser.gender}</li>
+   					<li><label for="name">Full Name : </label>${user.fullname}</li>
+				    <li><label for="nickname">Nick Name: </label>${user.nickname}</li>
+				    #{if user.visiblegender}
+				    <li><label for="gender">Gender : </label>${user.gender}</li>
 				    #{/if}
-				    #{if connectedUser.visiblebirthday}
-				    <li><label for="birthday">Birth Day : </label>${connectedUser.birthday?.toString('dd.MM.yyyy')}</li>
+				    #{if user.visiblebirthday}
+				    <li><label for="birthday">Birth Day : </label>${user.birthday?.toString('dd.MM.yyyy')}</li>
 				    #{/if}
-				    #{if connectedUser.visibleaddress}
-				    <li><label for="address">Address : </label>${connectedUser.address}</li>
+				    #{if user.visibleaddress}
+				    <li><label for="address">Address : </label>${user.address}</li>
 				    #{/if}
-				    #{if connectedUser.visibletelephone}
-				    <li><label for="telephone">Telephone Number: </label>${connectedUser.telephone}</li>
+				    #{if user.visibletelephone}
+				    <li><label for="telephone">Telephone Number: </label>${user.telephone}</li>
 				    #{/if}
-				    <li><label for="description">About Me: </label>${connectedUser.descriptionUser}</li>
+				    <li><label for="description">About Me: </label>${user.descriptionUser}</li>
 				</ul>
 			</p>
 		</div>

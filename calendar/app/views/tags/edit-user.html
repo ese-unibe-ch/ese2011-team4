@@ -4,9 +4,9 @@ function date_populate(dayfield, monthfield, yearfield){
     var today=new Date();
     #{ifErrors}
     	#{ifError 'birthday.InvalidDate'}
-    		#{if _connectedUser?.birthday?.getYear() > 0}today.setYear(${_connectedUser?.birthday?.getYear()});#{/if}
-    		#{if _connectedUser?.birthday?.getMonthOfYear() > 0}today.setMonth(${_connectedUser?.birthday?.getMonthOfYear()}-1);#{/if}
-    		#{if _connectedUser?.birthday?.getDayOfMonth() > 0}today.setDate(${_connectedUser?.birthday?.getDayOfMonth()});#{/if}
+    		#{if _user?.birthday?.getYear() > 0}today.setYear(${_user?.birthday?.getYear()});#{/if}
+    		#{if _user?.birthday?.getMonthOfYear() > 0}today.setMonth(${_user?.birthday?.getMonthOfYear()}-1);#{/if}
+    		#{if _user?.birthday?.getDayOfMonth() > 0}today.setDate(${_user?.birthday?.getDayOfMonth()});#{/if}
     	#{/ifError}
     	#{else}
     		today.setYear(${flash.birthyear});
@@ -15,9 +15,9 @@ function date_populate(dayfield, monthfield, yearfield){
         #{/else}
     #{/ifErrors}
     #{else}
-    	#{if _connectedUser?.birthday?.getYear() > 0}today.setYear(${_connectedUser?.birthday?.getYear()});#{/if}
-    	#{if _connectedUser?.birthday?.getMonthOfYear() > 0}today.setMonth(${_connectedUser?.birthday?.getMonthOfYear()}-1);#{/if}
-    	#{if _connectedUser?.birthday?.getDayOfMonth() > 0}today.setDate(${_connectedUser?.birthday?.getDayOfMonth()});#{/if}
+    	#{if _user?.birthday?.getYear() > 0}today.setYear(${_user?.birthday?.getYear()});#{/if}
+    	#{if _user?.birthday?.getMonthOfYear() > 0}today.setMonth(${_user?.birthday?.getMonthOfYear()}-1);#{/if}
+    	#{if _user?.birthday?.getDayOfMonth() > 0}today.setDate(${_user?.birthday?.getDayOfMonth()});#{/if}
     #{/else}
     var dayfield=document.getElementById(dayfield)
     var monthfield=document.getElementById(monthfield)
@@ -39,27 +39,27 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'fullname'}
    	<label for="fullname">Name</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.fullname}#{/ifErrors}#{else}${_connectedUser?.fullname}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.fullname}#{/ifErrors}#{else}${_user?.fullname}#{/else}"/>
 #{/field}
 </p>
 <p>
 #{field 'nickname'}
    	<label for="nickname">Nick Name</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.nickname}#{/ifErrors}#{else}${_connectedUser?.nickname}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.nickname}#{/ifErrors}#{else}${_user?.nickname}#{/else}"/>
 #{/field}
 </p>
 <p class ="box">
 #{field 'gender'}
 	<label for="gender">Gender</label>
 	<span style="padding-left:60px">
-	<input type="radio" name="${field.name}" value="Male" #{ifErrors}#{if flash.gender=="Male"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Male"}checked="checked"#{/if}#{/else}>Male
-	<input type="radio" name="${field.name}" value="Female" #{ifErrors}#{if flash.gender=="Female"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Female"}checked="checked"#{/if}#{/else}>Female
+	<input type="radio" name="${field.name}" value="Male" #{ifErrors}#{if flash.gender=="Male"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user.gender=="Male"}checked="checked"#{/if}#{/else}>Male
+	<input type="radio" name="${field.name}" value="Female" #{ifErrors}#{if flash.gender=="Female"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user.gender=="Female"}checked="checked"#{/if}#{/else}>Female
 	</span>
 	
 #{/field}
 
 #{field 'visiblegender'}
-	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblegender}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblegender}checked="checked"#{/if}#{/else}/>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblegender}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user?.visiblegender}checked="checked"#{/if}#{/else}/>
 	<label for="visiblegender" id="visiblegender" class="visibility">Visibility</label>
 #{/field}
 
@@ -82,7 +82,7 @@ function date_populate(dayfield, monthfield, yearfield){
 
 
 #{field 'visiblebirthday'}
-	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblebirthday}checked="checked"#{/if}#{/else}/>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user?.visiblebirthday}checked="checked"#{/if}#{/else}/>
 	<label for="visiblebirthday" id="${field.name}" class="visibility">Visibility</label>
 #{/field}
 
@@ -93,13 +93,13 @@ function date_populate(dayfield, monthfield, yearfield){
 	<select name="${field.name}" id="${field.name}"">
 	<option value="-1">No location</option>
 		#{list items:_locations, as:'location'}
-			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.address?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
+			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _user?.address?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
 		#{/list}
 	</select>
 #{/field}
 
 #{field 'visibleaddress'}
-	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user?.visibleaddress}checked="checked"#{/if}#{/else}/>
 	<label for="visibleaddress" id="${field.name}" class="visibility">Visibility</label>
 	
 #{/field}
@@ -108,11 +108,11 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'telephone'}
    	<label for="telephone">Mobile Number</label>
-    <input type="text" name="${field.name}" id="${field.name}" maxlength="13" value="#{ifErrors}${flash.telephone}#{/ifErrors}#{else}${_connectedUser?.telephone}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" maxlength="13" value="#{ifErrors}${flash.telephone}#{/ifErrors}#{else}${_user?.telephone}#{/else}"/>
 #{/field}
 
 #{field 'visibletelephone'}
-	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibletelephone}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibletelephone}checked="checked"#{/if}#{/else}/>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibletelephone}checked="checked"#{/if}#{/ifErrors}#{else}#{if _user?.visibletelephone}checked="checked"#{/if}#{/else}/>
 	<label for="visibletelephone" id="${field.name}" class="visibility">Visibility</label>
 #{/field}
 
@@ -120,7 +120,7 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'descriptionUser'}
    	<label for="descriptionUser">About Me</label>
-    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.descriptionUser}#{/ifErrors}#{else}${_connectedUser?.descriptionUser}#{/else}</textarea>
+    <textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.descriptionUser}#{/ifErrors}#{else}${_user?.descriptionUser}#{/else}</textarea>
 #{/field}
 </p>
 <p class="button">

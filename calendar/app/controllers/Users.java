@@ -27,9 +27,13 @@ public class Users extends Controller {
 	    render(users, connectedUser);
 	}
 	public static void edit(Long userId) {
-		User  connectedUser = User.findById(userId);
-    	List<Location> locations = Location.all().fetch();
-	    	render(connectedUser, locations);
+		User connectedUser = User.find("email", Security.connected()).first();
+		User user=User.findById(userId);
+		if(connectedUser.equals(user)) {
+	    	List<Location> locations = Location.all().fetch();
+		    render(user, locations);
+		} else
+    		forbidden("Not your user profile!");
     }
 	
 
@@ -49,36 +53,32 @@ public class Users extends Controller {
 								boolean visibletelephone,
 								String descriptionUser) {
 		
-
-				User connectedUser=User.findById(userId);
-				assert connectedUser != null;
+				User user=User.findById(userId);
+				assert user != null;
 
 				Location location = Location.findById(locationId);
 
-				connectedUser.address = location;
+				user.address = location;
 				
 				DateTime birth = null;
 				
 				try {
 					birth = new DateTime().withYear(birthyear).withMonthOfYear(birthmonth).withDayOfMonth(birthday);
-					connectedUser.birthday = birth;
+					user.birthday = birth;
 				} catch (IllegalFieldValueException e) {
 					validation.addError("birthday.InvalidDate", "Invalid Birthday");
 				}
-				connectedUser.visibleaddress = visibleaddress;
-				connectedUser.descriptionUser = descriptionUser;
-				connectedUser.gender = gender;
-				connectedUser.nickname = nickname;
-				connectedUser.fullname = fullname;
-				connectedUser.telephone = telephone;
-				connectedUser.visiblebirthday = visiblebirthday;
-				connectedUser.visibletelephone = visibletelephone;
-				connectedUser.visiblegender = visiblegender;
+				user.visibleaddress = visibleaddress;
+				user.descriptionUser = descriptionUser;
+				user.gender = gender;
+				user.nickname = nickname;
+				user.fullname = fullname;
+				user.telephone = telephone;
+				user.visiblebirthday = visiblebirthday;
+				user.visibletelephone = visibletelephone;
+				user.visiblegender = visiblegender;
 
-
-
-				if(Validation.errors().isEmpty() && connectedUser.validateAndSave()) {
-
+				if(Validation.errors().isEmpty() && user.validateAndSave()) {
 		        	show(userId);
 		    	} else {
 		     		for(play.data.validation.Error e : Validation.errors())
@@ -92,8 +92,9 @@ public class Users extends Controller {
 	}
 
 	public static void show(Long id) {
-    	User connectedUser = User.findById(id);
-    	render(connectedUser);
+		User connectedUser = User.find("email", Security.connected()).first();
+    	User user = User.findById(id);
+    	render(connectedUser, user);
     }
 	public static void addFavorite(Long id, Long userId){
 		User connectedUser = User.findById(id);

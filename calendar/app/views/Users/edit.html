@@ -6,7 +6,7 @@
 
 <div id="main">
 	<div id="main-left">
-		<h2 class="title">${connectedUser.email}</h2>
+		<h2 class="title">${user.email}</h2>
 		#{ifErrors}
    		<span class="error">
    			Oops...
@@ -18,8 +18,8 @@
 		</span>
 		#{/ifErrors}
 		<div id="edit">
-		#{form @Users.update(connectedUser.id)}
-			#{edit-user connectedUser:connectedUser, locations:locations /}
+		#{form @Users.update(user.id)}
+			#{edit-user user:user, locations:locations /}
 		#{/form}
 		</div>
 	</div>
