@@ -29,12 +29,12 @@ function date_populate(dayfield, monthfield, yearfield){
     for (var m=0; m<12; m++)
         monthfield.options[m]=new Option(m+1, m+1)
     monthfield.options[today.getMonth()]=new Option(today.getMonth()+1, today.getMonth()+1, true, true) //select today's month
-    var thisyear=today.getFullYear()
+    var thisyear=new Date().getFullYear()
     for (var y=0; y<100; y++){
         yearfield.options[y]=new Option(thisyear, thisyear)
         thisyear-=1
     }
-    yearfield.options[0]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+    yearfield.options[new Date().getFullYear()-today.getFullYear()]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
 }
 </script>
 <p>
