@@ -51,9 +51,12 @@ function date_populate(dayfield, monthfield, yearfield){
 </p>
 <p class ="box">
 #{field 'gender'}
-<label for="gender">Gender</label>
+	<label for="gender">Gender</label>
+	<span style="padding-left:60px">
 	<input type="radio" name="${field.name}" value="Male" #{ifErrors}#{if flash.gender=="Male"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Male"}checked="checked"#{/if}#{/else}>Male
 	<input type="radio" name="${field.name}" value="Female" #{ifErrors}#{if flash.gender=="Female"}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser.gender=="Female"}checked="checked"#{/if}#{/else}>Female
+	</span>
+	
 #{/field}
 
 #{field 'visiblegender'}
@@ -97,8 +100,9 @@ function date_populate(dayfield, monthfield, yearfield){
 #{/field}
 
 #{field 'visibleaddress'}
-	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
 	<label for="visibleaddress" id="${field.name}">Visibility</label>
+	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
+	
 #{/field}
 
 </p>
