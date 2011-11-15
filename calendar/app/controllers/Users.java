@@ -50,32 +50,7 @@ public class Users extends Controller {
 
 				Location location = Location.findById(locationId);
 
-			/*	connectedUser.setAddress(location);
-				connectedUser.setBirthday(format.parseDateTime(birthday+ "."+birthmonth+"."+birthyear));
-				connectedUser.setAddressVisibility(visibleaddress);
-				connectedUser.setDescripton(descriptionUser);
-				connectedUser.setGender("Male");
-				connectedUser.setNickName(nickname);
-				connectedUser.fullname=fullname;
-				connectedUser.setTelephone(telephone);
-				connectedUser.setBirthdayVisibility(visiblebirthday);
-				connectedUser.setTelephoneVisibility(visibletelephone);
-				connectedUser.setGenderVisibility(visiblegender);
-				connectedUser.edit("connectedUser", params.all());
-				connectedUser.address=location;
-				connectedUser.birthday=format.parseDateTime(birthday+ "."+birthmonth+"."+birthyear);
-				connectedUser.visibleaddress=visibleaddress;
-				connectedUser.descriptionUser=descriptionUser;
-				connectedUser.gender=gender;
-				connectedUser.nickname=nickname;
-				connectedUser.fullname=fullname;
-				connectedUser.telephone=telephone;
-				connectedUser.visiblebirthday=visiblebirthday;
-				connectedUser.visibletelephone=visibletelephone;
-				connectedUser.visiblegender=visiblegender;
-				
-				if(connectedUser.save().isPersistent()) {*/
-
+			
 				connectedUser.address = location;
 				
 				DateTime birth = new DateTime().withYear(birthyear).withMonthOfYear(birthmonth).withDayOfMonth(birthday);
