@@ -31,6 +31,9 @@ public class Users extends Controller {
     	List<Location> locations = Location.all().fetch();
 	    	render(connectedUser, locations);
     }
+	
+
+
 	public static void update(	Long userId,
 								String fullname,
 								String nickname,
@@ -46,10 +49,12 @@ public class Users extends Controller {
 								boolean visibletelephone,
 								String descriptionUser) {
 		
+
 				User connectedUser=User.findById(userId);
 				assert connectedUser != null;
 
 				Location location = Location.findById(locationId);
+
 				connectedUser.address = location;
 				
 				DateTime birth = null;
@@ -82,6 +87,7 @@ public class Users extends Controller {
 		            validation.keep();
 		            edit(userId);
 		    	}
+
 				
 	}
 

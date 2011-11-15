@@ -67,7 +67,7 @@ function date_populate(dayfield, monthfield, yearfield){
 	<label for="birthday">BirthDay</label>
 		<select name="${field.name}" id="${field.name}"></select> 
 	#{/field}  
-	
+
 	#{field 'birthmonth'}
      <select name="${field.name}" id="${field.name}"></select>
     #{/field}
@@ -77,7 +77,7 @@ function date_populate(dayfield, monthfield, yearfield){
     #{/field}
     
 	<script type="text/javascript">date_populate("birthday", "birthmonth", "birthyear");</script>
-	
+
 
 #{field 'visiblebirthday'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblebirthday}checked="checked"#{/if}#{/else}/>
