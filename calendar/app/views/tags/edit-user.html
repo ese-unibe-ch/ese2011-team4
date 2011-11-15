@@ -60,7 +60,7 @@ function date_populate(dayfield, monthfield, yearfield){
 
 #{field 'visiblegender'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblegender}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblegender}checked="checked"#{/if}#{/else}/>
-	<label for="visiblegender" id="visiblegender">Visibility</label>
+	<label for="visiblegender" id="visiblegender" class="visibility">Visibility</label>
 #{/field}
 
 </p>
@@ -83,7 +83,7 @@ function date_populate(dayfield, monthfield, yearfield){
 
 #{field 'visiblebirthday'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visiblebirthday}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visiblebirthday}checked="checked"#{/if}#{/else}/>
-	<label for="visiblebirthday" id="${field.name}">Visibility</label>
+	<label for="visiblebirthday" id="${field.name}" class="visibility">Visibility</label>
 #{/field}
 
 </p>
@@ -99,8 +99,8 @@ function date_populate(dayfield, monthfield, yearfield){
 #{/field}
 
 #{field 'visibleaddress'}
-	<label for="visibleaddress" id="${field.name}">Visibility</label>
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibleaddress}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibleaddress}checked="checked"#{/if}#{/else}/>
+	<label for="visibleaddress" id="${field.name}" class="visibility">Visibility</label>
 	
 #{/field}
 
@@ -113,7 +113,7 @@ function date_populate(dayfield, monthfield, yearfield){
 
 #{field 'visibletelephone'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.visibletelephone}checked="checked"#{/if}#{/ifErrors}#{else}#{if _connectedUser?.visibletelephone}checked="checked"#{/if}#{/else}/>
-	<label for="visibletelephone" id="${field.name}">Visibility</label>
+	<label for="visibletelephone" id="${field.name}" class="visibility">Visibility</label>
 #{/field}
 
 </p>
