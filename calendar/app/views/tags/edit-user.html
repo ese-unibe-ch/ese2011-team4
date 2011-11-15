@@ -35,8 +35,8 @@ function date_populate(dayfield, monthfield, yearfield){
 <p class ="box">
 #{field 'gender'}
 <label for="gender">Gender</label>
-	<input type="radio" name="${field.name}" value="Male" #{if _connectedUser.gender="Male"}checked="1"#{/if}>Male
-	<input type="radio" name="${field.name}" value="Female" #{if _connectedUser.gender="Female"}checked="1"#{/if}>Female
+	<input type="radio" name="${field.name}" value="Male" #{if _connectedUser.gender=="Male"}checked="checked"#{/if}>Male
+	<input type="radio" name="${field.name}" value="Female" #{if _connectedUser.gender=="Female"}checked="checked"#{/if}>Female
 #{/field}
 <p>
 #{field 'visiblegender'}
