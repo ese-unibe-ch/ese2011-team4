@@ -1,7 +1,7 @@
 <p>
 #{field 'name'}
    	<label for="name">Name</label>
-    <input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <input type="text" name="${field.name}" id="name" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
 #{/field}
 </p>
 <p class="button">

@@ -47,7 +47,7 @@ function checkEventCollision() {
 <p>
 #{field 'name'}
    	<label for="name">Title</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}#{else}${_event?.name}#{/else}"/>
 #{/field}
 </p>
 

@@ -1,7 +1,7 @@
 <p>
 #{field 'street'}
    	<label for="name">Street</label>
-    <input type="text" name="${field.name}" id="street" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_location?.street}#{/else}"/>
+    <input type="text" name="${field.name}" id="street" autofocus="autofocus" value="#{ifErrors}${flash.street}#{/ifErrors}#{else}${_location?.street}#{/else}"/>
 #{/field}
 </p>
 <p>
