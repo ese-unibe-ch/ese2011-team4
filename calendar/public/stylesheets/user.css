@@ -39,6 +39,7 @@ table a:hover {
 
 #user-profile{
 	margin-top: 10px;
+	border-spacing: 10px;
 }
 
 #user-profile tr #left{
@@ -48,9 +49,9 @@ table a:hover {
 }
 
 #user-profile tr #right{
-	width: 300px;
+	width: 320px;
 	background: #E4EAFF;
-	padding: 3px;
+	padding: 5px;
 	border-radius: 6px;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
