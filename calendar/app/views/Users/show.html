@@ -27,7 +27,9 @@
     	#{/if}
     	<tr>
     		<td id="left">E-Mail:</td>
-    		<td id="right">${user.email}</td>
+    		<td id="right">
+    			<a href="mailto:${user.email}">${user.email}</a>
+    		</td>
     	</tr>
     	#{if user.visiblegender}
     	<tr>
