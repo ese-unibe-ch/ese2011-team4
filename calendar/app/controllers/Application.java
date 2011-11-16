@@ -45,6 +45,7 @@ public class Application extends Controller {
 		User user = new User(email, password, fullname);
 		if(user.validateAndSave()) {
 			Security.authenticate(email, password);
+			session.put("username", email);
 			Cache.delete(randomID);
 			Calendars.index(user.id);
 		} else {
