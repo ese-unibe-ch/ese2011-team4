@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'UserProfile'/}
 #{set 'moreStyles'}
-	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
 #{if connectedUser.equals(user)}
@@ -14,26 +14,53 @@
 #{/if}
 <div id="main-left">
 	<h2 class="title">Profile Details</h2>
-    	<div id="location">
-			<p>
-				<ul>
-   					<li><label for="name">Full Name : </label>${user.fullname}</li>
-				    <li><label for="nickname">Nick Name: </label>${user.nickname}</li>
-				    #{if user.visiblegender}
-				    <li><label for="gender">Gender : </label>${user.gender}</li>
-				    #{/if}
-				    #{if user.visiblebirthday}
-				    <li><label for="birthday">Birth Day : </label>${user.birthday?.toString('dd.MM.yyyy')}</li>
-				    #{/if}
-				    #{if user.visibleaddress}
-				    <li><label for="address">Address : </label>${user.address}</li>
-				    #{/if}
-				    #{if user.visibletelephone}
-				    <li><label for="telephone">Telephone Number: </label>${user.telephone}</li>
-				    #{/if}
-				    <li><label for="description">About Me: </label>${user.descriptionUser}</li>
-				</ul>
-			</p>
-		</div>
-		
+    <table id="user-profile">
+    	<tr>
+    		<td id="left">Full Name:</td>
+    		<td id="right">${user.fullname}</dt>
+    	</tr>
+    	#{if user.nickname!=null}
+    	<tr>
+    		<td id="left">Nick Name:</td>
+    		<td id="right">${user.nickname}</td>
+    	</tr>
+    	#{/if}
+    	#{if user.visiblegender}
+    	<tr>
+    		<td id="left">Gender:</td>
+    		<td id="right">${user.gender}</td>
+    	</tr>
+    	#{/if}
+    	#{if user.visiblebirthday}
+    	<tr>
+    		<td id="left">Birthday:</td>
+    		<td id="right">${user.birthday.toString('dd.MM.yyyy')}</td>
+    	</tr>
+    	#{/if}
+    	#{if user.visibleaddress}
+    	<tr>
+    		<td id="left">Address:</td>
+    		<td id="right">
+    			<a href="@{Locations.show(user.address.id)}">${user.address}</a>
+    		</td>
+    	</tr>
+    	#{/if}
+    	#{if user.visibletelephone}
+    	<tr>
+    		<td id="left">Telephone Number:</td>
+    		<td id="right">${user.telephone}</td>
+    	</tr>
+    	#{/if}
+    	#{if user.descriptionUser!=null}
+    	<tr>
+    		<td id="left">
+    			<div id="about">About Me:</div>
+    		</td>
+    		<td id="right">
+    			<div id="description">${user.descriptionUser}</div>
+    		</td>
+    	</tr>
+    	#{/if}
+	</table>
+</div>
 		
