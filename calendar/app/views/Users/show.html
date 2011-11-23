@@ -19,7 +19,7 @@
     		<td id="left">Full Name:</td>
     		<td id="right">${user.fullname}</dt>
     	</tr>
-    	#{if user.nickname!=null}
+    	#{if user.nickname!=null && user.nickname.trim()!=""}
     	<tr>
     		<td id="left">Nick Name:</td>
     		<td id="right">${user.nickname}</td>
@@ -43,7 +43,7 @@
     		<td id="right">${user.birthday.toString('dd.MM.yyyy')}</td>
     	</tr>
     	#{/if}
-    	#{if user.visibleaddress}
+    	#{if user.visibleaddress && user.address != null}
     	<tr>
     		<td id="left">Address:</td>
     		<td id="right">
@@ -51,13 +51,13 @@
     		</td>
     	</tr>
     	#{/if}
-    	#{if user.visibletelephone}
+    	#{if user.visibletelephone && user.telephone.trim() != ""}
     	<tr>
     		<td id="left">Telephone Number:</td>
     		<td id="right">${user.telephone}</td>
     	</tr>
     	#{/if}
-    	#{if user.descriptionUser!=null}
+    	#{if user.descriptionUser!=null && user.descriptionUser.trim() != ""}
     	<tr>
     		<td id="left">
     			<div id="about">About Me:</div>
