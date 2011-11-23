@@ -43,7 +43,7 @@
     		<td id="right">${user.birthday.toString('dd.MM.yyyy')}</td>
     	</tr>
     	#{/if}
-    	#{if user.visibleaddress}
+    	#{if user.visibleaddress && user.address != null}
     	<tr>
     		<td id="left">Address:</td>
     		<td id="right">
