@@ -1,7 +1,7 @@
 CalPal v1.0
 Please read the following descriptions, before using CalPal!
 
-==Description==
+# Description
 	What is CalPal? CalPal is an calendar application
 	which helps you to plan your day,week, month and year.
 	Basicly it is a calendar, which is able to save
@@ -26,13 +26,13 @@ Please read the following descriptions, before using CalPal!
 		* Reminder, which reminds you of events via e-mail
 		* A complete user profile (user can decide whether everything is public or not)
 
-==Installation==
+# Installation
 	There are no special things to do. Just copy all files in ONE folder.
 	Do not rename anything in these folders! The folder calendar and the 
 	Play! files have to be in the same folder otherwise you can not 
 	start CalPal!
 
-==How to run CalPal?==
+## How to run CalPal?
 	Since CalPal runs with the play! framework (see link below), 
 	you have to run this application via command-lines. So you have to open up the os specific 
 	prompt and switch to the folder, where the application is in (e.g. if your folder is
@@ -71,7 +71,7 @@ Please read the following descriptions, before using CalPal!
 	Now you can register on the page or use our provided demo data (below), to login.
 	After registration you get back to the login page.
 	
-==Test CalPal==
+## Test CalPal
 	If you have logged in successfully, you can test the application.
 	You get redirected to a list of all your calendars (if you did not use the
 	demo data, you will not have any). Here you can see your favorites and your
@@ -83,7 +83,7 @@ Please read the following descriptions, before using CalPal!
 	
 	
 	
-==Demo data==
+## Demo data
 	Jack
     email:          jack.vincennes@lapd.com
     password:       secret
@@ -96,10 +96,10 @@ Please read the following descriptions, before using CalPal!
     email:          ed.exley@lapd.com
     password:       secret
 	
-==play! framework==
+## play! framework
 	http://www.playframework.org/
 
-==Contact us==
+# Contact us
 	--e-mail--
 		ese-team4@iam.unibe.ch
 		michu.baertschi@students.unibe.ch
