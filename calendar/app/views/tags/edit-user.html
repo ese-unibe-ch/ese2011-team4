@@ -39,7 +39,7 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'fullname'}
    	<label for="fullname">Name</label>
-    <input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.fullname}#{/ifErrors}#{else}${_user?.fullname}#{/else}"/>
+    <input type="text" name="${field.name}" id="${field.name}" autofocus="autofocus" value="#{ifErrors}${flash.fullname}#{/ifErrors}#{else}${_user?.fullname}#{/else}"/>
 #{/field}
 </p>
 <p>

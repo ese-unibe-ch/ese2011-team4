@@ -31,7 +31,15 @@
 	
 	#{else}
 	    <div class="empty">
+	    	#{if user.email.equals(session.username)}
+	        <p>
+	    		You don't have any calendars.
+	        	<span class="button"><a href="@{Calendars.add()}">Add a new calendar</a></span>
+	        </p>
+	    	#{/if}
+	    	#{else}
 	        There are no calendars for this user.
+	        #{/else}
 	    </div>
 	#{/else}
 </div>
