@@ -94,8 +94,10 @@ public class Search extends Controller{
 	}
 	
 	private static boolean locationMatches(String location, Event event) {
-		// TODO Auto-generated method stub
-		return true;
+		if (location.isEmpty())
+			return true;
+		Location loc = Location.findById(Long.parseLong(location));
+		return event.location == loc;
 	}
 
 	private static boolean descriptionMatches(String description, Event event) {
@@ -117,28 +119,25 @@ public class Search extends Controller{
 	private static boolean dateMatches(String time, String date,
 
 			DateTime startDate, DateTime endDate) {
-		DateTime compareTime = null;
-		
-		if (!(date+time).isEmpty()) {
-			try {
-				DateTimeFormatter format;
-				String dateTime;
-				if (time.isEmpty()) {
-					dateTime = date+"00:00";
-				} else {
-					dateTime = date+time;
-				}
-				format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
-				compareTime = format.parseDateTime(dateTime);
-			} catch(IllegalArgumentException e) {
-				validation.addError("Start.InvalidDate", "Invalid Date");
-				params.flash();
-		    	validation.keep();
-		    	Search.advanced();
-			}
-		}
-		if (compareTime == null) {
+		if ((date+time).isEmpty())
 			return true;
+		
+		DateTime compareTime = null;
+		try {
+			DateTimeFormatter format;
+			String dateTime;
+			if (time.isEmpty()) {
+				dateTime = date+"00:00";
+			} else {
+				dateTime = date+time;
+			}
+			format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
+			compareTime = format.parseDateTime(dateTime);
+		} catch(IllegalArgumentException e) {
+			validation.addError("Start.InvalidDate", "Invalid Date");
+			params.flash();
+	    	validation.keep();
+	    	Search.advanced();
 		}
 		if (time.isEmpty()) {
 			return (compareTime.compareTo(startDate)<=0 && compareTime.plusHours(24).compareTo(endDate)>=0);
