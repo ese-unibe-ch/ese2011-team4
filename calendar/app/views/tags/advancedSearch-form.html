@@ -1,0 +1,44 @@
+#{extends 'main.html' /}
+#{set title:'advancedSearch-form' /}
+
+<p>
+#{field 'title'}
+   	<label for="title">Title</label>
+    <input type="text" name="${field.name}" id="title" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+
+<p>
+#{field 'description'}
+   	<label for="description">Description</label>
+    <input type="text" name="${field.name}" id="description" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+
+<p>
+#{field 'time'}
+   	<label for="time">Time</label>
+    <input type="text" name="${field.name}" id="time" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+
+<p>
+#{field 'date'}
+   	<label for="date">Date</label>
+    <input type="text" name="${field.name}" id="date" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+
+<p>
+#{field 'location'}
+   	<label for="location">Location</label>
+    <input type="text" name="${field.name}" id="location" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+#{/field}
+</p>
+
+<p class="button">
+	<input type="submit" value="Search" />
+</p>
+<p class="button">
+	<input type="reset" value="Reset" />
+</p>
