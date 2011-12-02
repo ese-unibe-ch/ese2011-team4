@@ -24,7 +24,8 @@ public class Search extends Controller{
 	
 	public static void advanced() {
 		User connectedUser = User.find("email", Security.connected()).first();
-		render(connectedUser);
+		List<Location> locations = Location.all().fetch();
+		render(connectedUser, locations);
 	}
 	
 	public static void search(String name, boolean searchUsers, boolean searchCalendars, boolean searchEvents){
