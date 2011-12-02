@@ -1,5 +1,6 @@
 #{extends 'main.html' /}
 %{ connectedUser = models.User.find("email", session.username).first() }%
+
 <div id="main-left">
 	#{doLayout /} 
 </div>

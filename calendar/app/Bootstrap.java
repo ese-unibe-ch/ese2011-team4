@@ -48,7 +48,7 @@ public class Bootstrap extends Job {
     			query.setParameter(1, u);
     			List<Message> messages = query.getResultList();
     			for(Message msg: messages) {
-    				msg.messageBox = u.messageBox;
+    				msg.inbox = u.messageBox;
     				u.messageBox.inbox.add(msg);
     				if(!msg.read)
     					u.messageBox.unreadMessages++;

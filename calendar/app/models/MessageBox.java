@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.apache.log4j.Logger;
+
 import play.db.jpa.Model;
 
 @Entity
@@ -15,11 +17,11 @@ public class MessageBox extends Model {
 	@OneToOne
 	public User owner;
 	
-	@OneToMany(mappedBy="messageBox", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="inbox", cascade=CascadeType.ALL)
 	public List<Message> inbox;
 	
 	@OneToMany
-	public List<Message> sent;
+	public List<Message> outbox;
 	
 	@OneToMany
 	public List<Message> drafts;
@@ -29,24 +31,25 @@ public class MessageBox extends Model {
 	public MessageBox(User owner) {
 		this.owner = owner;
 		inbox = new ArrayList();
-		sent = new ArrayList();
+		outbox = new ArrayList();
 	}
 	
-	public Message sendMessage(String subject, String content, User recipient) {
-		Message msg = new Message(this, subject, content);
+	public Message sendMessage(Message msg) {
 		try {
-			msg.send(recipient);
+			msg.send(owner);
 		} catch (Exception e) {
 			msg.saveAsDraft(this);
 		}
 		return msg;
 	}
 	
-	public boolean getMessage(Message msg) {
+	public void getMessage(Message msg) {
+		assert msg.recipient == owner;
+		assert msg.sender != null;
+		
 		inbox.add(msg);
 		msg.save();
 		this.save();
-		return true;
 	}
 	
 	public void addToDrafts(Message message) {

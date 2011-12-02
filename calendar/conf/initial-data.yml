@@ -153,5 +153,5 @@ Message(msg1):
     recipient:      jack
     sendDate:       2011-12-02 13:45:14
     subject:        .calpal is awesome!
-    content:        Isn't this applicatiion freaking awesome?!
+    content:        Isn't this application freaking awesome?!
     read:           false

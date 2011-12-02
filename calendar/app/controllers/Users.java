@@ -125,7 +125,49 @@ public class Users extends Controller {
 	}
 	
 	public static void reply(Long id) {
-		Message msg = Message.findById(id);
+		Message original = Message.findById(id);
+		
+		StringBuffer newSubject = new StringBuffer(original.subject);
+		newSubject.insert(0, "Re: ");
+		
+		StringBuffer newContent = new StringBuffer(original.content);
+		newContent.insert(0, "Original message: ");
+		
+		writeMessage(original.sender.id, newSubject.toString(), newContent.toString());
+	}
+	
+	public static void writeMessage(Long id, String subject, String content) {
+		User recipient = User.findById(id);
+		render(recipient, subject, content);
+	}
+	
+	public static void sendMessage(	User recipient,
+									User sender,
+									String subject,
+									String content)
+	{
+		Message message = new Message(recipient);
+		
+		message.subject = subject;
+		message.content = content;
+		try {
+			message.send(sender);
+		} catch (Exception e) {
+			validation.addError("msg.recipient", "Missing recipient");
+			params.flash();
+	    	validation.keep();
+	    	Users.writeMessage(message.recipient.id, message.subject, message.content);
+		}
+		if(message.validateAndSave()) {
+			flash.success("Your message was sent to %s.", message.recipient);
+			messageBox(sender.id);
+		} else {
+			for(play.data.validation.Error e : Validation.errors())
+				Logger.error(e.message());
+	    	params.flash();
+	    	validation.keep();
+	    	Users.writeMessage(message.recipient.id, message.subject, message.content);
+		}
 	}
 	
 	public static void deleteMessage(Long id) {
