@@ -76,32 +76,69 @@ public class Search extends Controller{
 		return match;
 	}
 
-	public static void advancedSearch(String title, String description, String time, String date, String location) {
-		
-		DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
-		DateTime compareTime = format.parseDateTime(date+time);
-		
+	public static void advancedSearch(String name, String description, String time, String date, String location) {	
 		List<Event> match = new LinkedList<Event>();
 		List<Event> events = Event.all().fetch();
 		for(Event event: events){
-			if(event.name.toLowerCase().contains(title.toLowerCase()) 
-					&& event.description.toLowerCase().contains(description.toLowerCase()) 
-					&& dateMatches(compareTime, event.startDate, event.endDate) )
+			if(nameMatches(name, event) 
+					&& descriptionMatches(description, event)
+					&& dateMatches(time, date, event.startDate, event.endDate)
+					&& locationMatches(location, event)) {
 				match.add(event);
+			}
 		}
 		
 		render(match);
 		
 	}
 	
+	private static boolean locationMatches(String location, Event event) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	private static boolean descriptionMatches(String description, Event event) {
+		if (description.isEmpty()) {
+			return true;
+		}
+		return event.description.toLowerCase().contains(description.toLowerCase());
+	}
+
 	private static boolean nameMatches(String name, Event event) {
+		if (name.isEmpty()) {
+			return true;
+		}
 		return event.name.toLowerCase().contains(name.toLowerCase());
 	}
 
-	private static boolean dateMatches(DateTime compareTime,
+	private static boolean dateMatches(String time, String date,
 			DateTime startDate, DateTime endDate) {
-		if (compareTime == null)
+		DateTime compareTime = null;
+		
+		if (!(date+time).isEmpty()) {
+			try {
+				DateTimeFormatter format;
+				String dateTime;
+				if (time.isEmpty()) {
+					dateTime = date+"00:00";
+				} else {
+					dateTime = date+time;
+				}
+				format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
+				compareTime = format.parseDateTime(dateTime);
+			} catch(IllegalArgumentException e) {
+				validation.addError("Start.InvalidDate", "Invalid Date");
+				params.flash();
+		    	validation.keep();
+		    	Search.advanced();
+			}
+		}
+		if (compareTime == null) {
 			return true;
-		return (compareTime.compareTo(startDate)>=0 && compareTime.compareTo(endDate)<=0 );
+		}
+		if (time.isEmpty()) {
+			return (compareTime.compareTo(startDate)<=0 && compareTime.plusHours(24).compareTo(endDate)>=0);
+		}
+		return (compareTime.compareTo(startDate)>=0 && compareTime.compareTo(endDate)<=0);
 	}
 }
