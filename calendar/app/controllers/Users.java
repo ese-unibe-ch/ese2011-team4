@@ -20,12 +20,12 @@ import play.mvc.With;
 @With(Secure.class)
 public class Users extends Controller {
 	
-	
 	public static void index() {
 		List<User> users = User.all().fetch();
 		User connectedUser = User.find("email", Security.connected()).first();
 	    render(users, connectedUser);
 	}
+	
 	public static void edit(Long userId) {
 		User connectedUser = User.find("email", Security.connected()).first();
 		User user=User.findById(userId);
@@ -35,8 +35,6 @@ public class Users extends Controller {
 		} else
     		forbidden("Not your user profile!");
     }
-	
-
 
 	public static void update(	Long userId,
 								String fullname,
@@ -87,8 +85,6 @@ public class Users extends Controller {
 		            validation.keep();
 		            edit(userId);
 		    	}
-
-				
 	}
 
 	public static void show(Long id) {
@@ -96,7 +92,8 @@ public class Users extends Controller {
     	User user = User.findById(id);
     	render(connectedUser, user);
     }
-	public static void addFavorite(Long id, Long userId){
+	
+	public static void addFavorite(Long id, Long userId) {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.addFavorite(favorite);
@@ -105,7 +102,7 @@ public class Users extends Controller {
 	    index();
 	}
 	
-	public static void removeFavorite(Long id, Long userId){
+	public static void removeFavorite(Long id, Long userId) {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.removeFavorite(favorite);
@@ -114,5 +111,26 @@ public class Users extends Controller {
 		index();
 	}
 	
+	public static void messageBox(Long id) {
+		User connectedUser = User.findById(id);
+		MessageBox msgBox = connectedUser.messageBox;
+			
+		render(connectedUser, msgBox);
+	}
 	
+	public static void message(Long id) {
+		Message msg = Message.findById(id);
+		msg.read();
+		render(msg);
+	}
+	
+	public static void reply(Long id) {
+		Message msg = Message.findById(id);
+	}
+	
+	public static void deleteMessage(Long id) {
+		Message msg = Message.findById(id);
+		msg.delete();
+		messageBox(msg.recipient.id);
+	}
 }

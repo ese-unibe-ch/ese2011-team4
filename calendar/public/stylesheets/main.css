@@ -111,6 +111,15 @@ header nav li a {
 	border-radius: 16px;
 }
 
+header #unreadCount {
+	font-size: .9em;
+	color: #fff;
+	background-color: #ff3333;
+	margin-left: 5px;
+	padding: 2px 8px;
+	border-radius: 16px;
+}
+
 header nav li a:hover {
 	background-color: #333;
 	color: #fff;

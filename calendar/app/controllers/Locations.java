@@ -20,13 +20,11 @@ public class Locations extends Controller {
 	
     public static void index() {
     	List<Location> locations = Location.all().fetch();
-    	User connectedUser = User.find("byEmail", Security.connected()).first();
-    	render(connectedUser, locations);
+    	render(locations);
     }
 
     public static void add() {
-    	User connectedUser = User.find("byEmail", Security.connected()).first();
-	    render(connectedUser);
+	    render();
     }
     
     public static void show(Long id) {
@@ -37,7 +35,7 @@ public class Locations extends Controller {
     	List<Event> events = location.getVisibleUpcomingEvents(connectedUser);
     	long numberOfEvents = location.numberOfAllUpcomingEvents();
     	
-    	render(connectedUser, location, events, numberOfEvents);
+    	render(location, events, numberOfEvents);
     }
 
     public static void edit(Long locationId) {
@@ -58,7 +56,7 @@ public class Locations extends Controller {
     		user.validateAndSave();
     	}
     	location.delete();
-    	index();    	
+    	index();	
     }
     
     public static void update(	Long locationId,

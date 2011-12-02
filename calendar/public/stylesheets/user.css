@@ -63,3 +63,31 @@ table a:hover {
 #right #description{
 	font-size: 90%;
 }
+
+/** Message box **/
+
+#message-box th {
+	text-align: left;	
+}
+
+#message-box .unread {
+	font-weight: bold;
+}
+
+#message #message-metadata {
+	width: 80%;
+	font-size: 0.8em;
+	margin-top: 5px;
+	margin-bottom: 15px;
+	display: inline-block;
+}
+
+#message #actions {
+	display: inline-block;
+}
+
+#message #content {
+	background-color: #E4EAFF;
+	padding: 10px;
+	border-radius: 16px;
+}

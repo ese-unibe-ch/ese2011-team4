@@ -147,3 +147,11 @@ Comment(c3):
     postedAt:       2011-10-21 11:00:00
     content:        Jack is the owner of this event so he can add comments even if the event is private
     event:          e2
+
+Message(msg1):
+    sender:         bud
+    recipient:      jack
+    sendDate:       2011-12-02 13:45:14
+    subject:        .calpal is awesome!
+    content:        Isn't this applicatiion freaking awesome?!
+    read:           false
