@@ -69,8 +69,9 @@ public class Search extends Controller{
 		List<Event> match = new LinkedList<Event>();
 		List<Event> events = Event.all().fetch();
 		for(Event event: events){
-			if(event.name.toLowerCase().contains(name.toLowerCase()))
+			if (nameMatches(name, event)) {
 				match.add(event);
+			}
 		}
 		return match;
 	}
@@ -87,11 +88,14 @@ public class Search extends Controller{
 					&& event.description.toLowerCase().contains(description.toLowerCase()) 
 					&& dateMatches(compareTime, event.startDate, event.endDate) )
 				match.add(event);
-			
 		}
 		
 		render(match);
 		
+	}
+	
+	private static boolean nameMatches(String name, Event event) {
+		return event.name.toLowerCase().contains(name.toLowerCase());
 	}
 
 	private static boolean dateMatches(DateTime compareTime,
