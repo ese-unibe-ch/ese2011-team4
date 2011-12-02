@@ -115,8 +115,8 @@ public class Search extends Controller{
 
 
 	private static boolean dateMatches(String time, String date,
-
 			DateTime startDate, DateTime endDate) {
+		
 		DateTime compareTime = null;
 		
 		if (!(date+time).isEmpty()) {
@@ -141,7 +141,8 @@ public class Search extends Controller{
 			return true;
 		}
 		if (time.isEmpty()) {
-			return (compareTime.compareTo(startDate)<=0 && compareTime.plusHours(24).compareTo(endDate)>=0);
+			return (!((compareTime.compareTo(endDate)>=0 && compareTime.plusHours(24).compareTo(endDate)>=0) ||
+			(compareTime.compareTo(startDate)<=0 && compareTime.plusHours(24).compareTo(startDate)<=0)));
 		}
 		return (compareTime.compareTo(startDate)>=0 && compareTime.compareTo(endDate)<=0);
 	}
