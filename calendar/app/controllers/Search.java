@@ -76,15 +76,18 @@ public class Search extends Controller{
 
 	public static void advancedSearch(String title, String description, String time, String date, String location) {
 		
-		DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
-		DateTime compareTime = format.parseDateTime(date+time);
+		DateTime compareTime = null;
+		if(!(date.equals("") || time.equals(""))){
+			DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yyyyHH:mm");
+			compareTime = format.parseDateTime(date+time);
+		}
 		
 		List<Event> match = new LinkedList<Event>();
 		List<Event> events = Event.all().fetch();
 		for(Event event: events){
 			if(event.name.toLowerCase().contains(title.toLowerCase()) 
 					&& event.description.toLowerCase().contains(description.toLowerCase()) 
-					&& dateMatches(compareTime, event.startDate, event.endDate) )
+					&& dateAndTimeMatches(compareTime, event.startDate, event.endDate) )
 				match.add(event);
 			
 		}
@@ -93,7 +96,7 @@ public class Search extends Controller{
 		
 	}
 
-	private static boolean dateMatches(DateTime compareTime,
+	private static boolean dateAndTimeMatches(DateTime compareTime,
 			DateTime startDate, DateTime endDate) {
 		if (compareTime == null)
 			return true;
