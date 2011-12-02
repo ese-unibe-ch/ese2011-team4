@@ -24,7 +24,8 @@ public class Search extends Controller{
 	
 	public static void advanced() {
 		User connectedUser = User.find("email", Security.connected()).first();
-		render(connectedUser);
+		List<Location> locations = Location.all().fetch();
+		render(connectedUser, locations);
 	}
 	
 	public static void search(String name, boolean searchUsers, boolean searchCalendars, boolean searchEvents){
@@ -68,8 +69,9 @@ public class Search extends Controller{
 		List<Event> match = new LinkedList<Event>();
 		List<Event> events = Event.all().fetch();
 		for(Event event: events){
-			if(event.name.toLowerCase().contains(name.toLowerCase()))
+			if (nameMatches(name, event)) {
 				match.add(event);
+			}
 		}
 		return match;
 	}
@@ -89,11 +91,14 @@ public class Search extends Controller{
 					&& event.description.toLowerCase().contains(description.toLowerCase()) 
 					&& dateAndTimeMatches(compareTime, event.startDate, event.endDate) )
 				match.add(event);
-			
 		}
 		
 		render(match);
 		
+	}
+	
+	private static boolean nameMatches(String name, Event event) {
+		return event.name.toLowerCase().contains(name.toLowerCase());
 	}
 
 	private static boolean dateAndTimeMatches(DateTime compareTime,

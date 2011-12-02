@@ -11,28 +11,32 @@
 <p>
 #{field 'description'}
    	<label for="description">Description</label>
-    <input type="text" name="${field.name}" id="description" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <input type="text" name="${field.name}" id="description" value="#{ifErrors}${flash.description}#{/ifErrors}"/>
 #{/field}
 </p>
 
 <p>
 #{field 'time'}
    	<label for="time">Time</label>
-    <input type="text" name="${field.name}" id="time" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <input type="text" name="${field.name}" id="time" value="#{ifErrors}${flash.time}#{/ifErrors}"/>
 #{/field}
 </p>
 
 <p>
 #{field 'date'}
    	<label for="date">Date</label>
-    <input type="text" name="${field.name}" id="date" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <input type="text" name="${field.name}" id="date" value="#{ifErrors}${flash.date}#{/ifErrors}"/>
 #{/field}
 </p>
 
 <p>
 #{field 'location'}
    	<label for="location">Location</label>
-    <input type="text" name="${field.name}" id="location" autofocus="autofocus" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+    <select name="${field.name}" id="location" value="#{ifErrors}${flash.location}#{/ifErrors}"/>
+    	<option>Don't care</option>
+    	#{list items:_locations, as:'location'}
+				<option>${location.toString()}</option>
+		#{/list}
 #{/field}
 </p>
 
