@@ -32,7 +32,7 @@
 *~
 *.tmp
 *.bak
-.orig
+*.orig
 ._*
 
 # OS specifc files

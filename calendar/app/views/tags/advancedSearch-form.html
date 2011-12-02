@@ -33,9 +33,9 @@
 #{field 'location'}
    	<label for="location">Location</label>
     <select name="${field.name}" id="location" value="#{ifErrors}${flash.location}#{/ifErrors}"/>
-    	<option>Don't care</option>
+    	<option></option>
     	#{list items:_locations, as:'location'}
-				<option>${location.toString()}</option>
+				<option value="${location.id}">${location.toString()}</option>
 		#{/list}
 #{/field}
 </p>
