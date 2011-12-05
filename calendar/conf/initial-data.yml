@@ -151,7 +151,7 @@ Comment(c3):
 Message(msg1):
     sender:         bud
     recipient:      jack
-    sendDate:       2011-12-02 13:45:14
+    timeStamp:      2011-12-02 13:45:14
     subject:        .calpal is awesome!
     content:        Isn't this application freaking awesome?!
     read:           false

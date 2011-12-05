@@ -15,6 +15,7 @@ public class Message extends Model {
 	@ManyToOne
 	public MessageBox inbox;
 	
+	@Required
 	@ManyToOne
 	public User sender;
 	
@@ -23,30 +24,38 @@ public class Message extends Model {
 	public User recipient;
 	
 	@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	public DateTime sendDate;
+	public DateTime timeStamp;
 	
-	@Required
 	public String subject;
 	public String content;
 	public boolean read;
 	
-	public Message(User recipient) {
+	public Message(User sender, User recipient) {
+		this.sender = sender;
 		this.recipient = recipient;
 		this.read = false;
 	}
 	
-	public void send(User sender) throws Exception {
-		if(recipient == null) {
-			throw new Exception();
+	public void send() throws Exception {
+		if(recipient == null || sender == null) {
+			throw new Exception(recipient == null ? "recipient missing" : "sender missing");
 		} else {
-			sendDate = new DateTime();
-			this.sender = sender;
+			if(subject.isEmpty()) {
+				subject = "<No subject>";
+			}
+			timeStamp = new DateTime();
 			recipient.messageBox.getMessage(this);
+			this.save();
 		}
 	}
 	
 	public void saveAsDraft(MessageBox messageBox) {
-		messageBox.addToDrafts(this);
+		if(!messageBox.drafts.contains(this)) {
+			messageBox.addToDrafts(this);
+			messageBox.save();
+		}
+		timeStamp = new DateTime();
+		this.save();
 	}
 	
 	public void read() {
@@ -54,9 +63,14 @@ public class Message extends Model {
 		
 		if(read == false) {
 			read = true;
-			inbox.unreadMessages--;
 			inbox.save();
 			this.save();
 		}
+	}
+	
+	public String getHtmlContent() {
+		return content;
+		// TODO doesn't work yet, don't know how it would work. Anybody?
+		// return content.replace("\n", "&#10;");
 	}
 }

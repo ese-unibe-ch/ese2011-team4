@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 
+import javax.mail.Session;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
@@ -22,7 +23,7 @@ public class Users extends Controller {
 	
 	public static void index() {
 		List<User> users = User.all().fetch();
-		User connectedUser = User.find("email", Security.connected()).first();
+		User connectedUser = getConnectedUser();
 	    render(users, connectedUser);
 	}
 	
@@ -111,68 +112,16 @@ public class Users extends Controller {
 		index();
 	}
 	
-	public static void messageBox(Long id) {
-		User connectedUser = User.findById(id);
-		MessageBox msgBox = connectedUser.messageBox;
-			
-		render(connectedUser, msgBox);
-	}
-	
-	public static void message(Long id) {
-		Message msg = Message.findById(id);
-		msg.read();
-		render(msg);
-	}
-	
-	public static void reply(Long id) {
-		Message original = Message.findById(id);
+	public static void write(Long userId) {
+		User sender = getConnectedUser();
+		User recipient = User.findById(userId);
 		
-		StringBuffer newSubject = new StringBuffer(original.subject);
-		newSubject.insert(0, "Re: ");
-		
-		StringBuffer newContent = new StringBuffer(original.content);
-		newContent.insert(0, "Original message: ");
-		
-		writeMessage(original.sender.id, newSubject.toString(), newContent.toString());
+		Message message = new Message(sender, recipient);
+		message.saveAsDraft(sender.messageBox);
+		Messages.writeMessage(message.id);
 	}
 	
-	public static void writeMessage(Long id, String subject, String content) {
-		User recipient = User.findById(id);
-		render(recipient, subject, content);
-	}
-	
-	public static void sendMessage(	User recipient,
-									User sender,
-									String subject,
-									String content)
-	{
-		Message message = new Message(recipient);
-		
-		message.subject = subject;
-		message.content = content;
-		try {
-			message.send(sender);
-		} catch (Exception e) {
-			validation.addError("msg.recipient", "Missing recipient");
-			params.flash();
-	    	validation.keep();
-	    	Users.writeMessage(message.recipient.id, message.subject, message.content);
-		}
-		if(message.validateAndSave()) {
-			flash.success("Your message was sent to %s.", message.recipient);
-			messageBox(sender.id);
-		} else {
-			for(play.data.validation.Error e : Validation.errors())
-				Logger.error(e.message());
-	    	params.flash();
-	    	validation.keep();
-	    	Users.writeMessage(message.recipient.id, message.subject, message.content);
-		}
-	}
-	
-	public static void deleteMessage(Long id) {
-		Message msg = Message.findById(id);
-		msg.delete();
-		messageBox(msg.recipient.id);
+	protected static User getConnectedUser() {
+		return User.find("email", Security.connected()).first();
 	}
 }

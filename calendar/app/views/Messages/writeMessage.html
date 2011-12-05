@@ -5,9 +5,17 @@
 #{/set}
 %{ connectedUser = models.User.find("email", session.username).first() }%
 
-<h2 class="title">Write a message to ${recipient.fullname}</h2>
-<div id="event-form">
-#{form @Users.sendMessage(recipient, connectedUser)}
+<h2 class="title">Write a Message</h2>
+<div id="message-form">
+#{form @Messages.sendMessage(connectedUser.messageBox.id, message.id), id:'writeForm'}
+	<p>
+	#{field 'recipient'}
+   	<label for="recipient">To</label>
+   	<select name="recipient">
+   		<option value="${message?.recipient}">${message?.recipient.fullname}</option>
+   	</select>
+	#{/field}
+	</p>
 	<p>
 	#{field 'subject'}
    	<label for="subject">Subject</label>
@@ -24,7 +32,20 @@
 		<input type="submit" value="Send" />
 	</p>
 	<p class="button">
-		<input type="reset" value="Reset" />
+		<input type="submit" value="Save Draft" id="draft" />
+	</p>
+	<p class="button">
+		<input type="submit" value="Delete Draft" id="cancel" />	
 	</p>
 #{/form}
 </div>
+
+<script type="text/javascript">
+	$('#draft').bind('click', function() {
+		$('#writeForm').attr("action", "/message/save-draft/${connectedUser.messageBox.id}/${message.id}");
+	});
+	
+	$('#cancel').bind('click', function() {
+		$('#writeForm').attr("action", "/message/delete-draft/${connectedUser.messageBox.id}/${message.id}");
+	});
+</script>

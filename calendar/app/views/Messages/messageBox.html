@@ -1,0 +1,59 @@
+#{extends 'home-view.html' /}
+#{set title: Users /}
+
+#{set 'moreStyles'}
+        #{stylesheet 'user.css' /}
+#{/set}
+
+<div id="message">
+	<h2 class="title">
+		Your message box
+	</h2>
+	#{if flash.success}
+    <p class="message success">${flash.success}</p>
+	#{/if}
+	<div class="message-box" id="inbox">
+		<h3 class="title">Inbox</h3>
+		<table width="100%">
+			<tr>		
+				<th class="timestamp">Sent</th>
+				<th class="user">From</th>
+				<th class="subject">Subject</th>
+				<th class="actions">Actions</th>
+			</tr>
+			#{list items:msgBox.inbox, as:'msg'}
+				<tr class="msg-short #{if !msg.read}unread#{/if}" >
+					<td>${msg.timeStamp.toString("dd.MM.yy HH:mm")}</td>
+					<td>#{a @Users.show(msg.sender.id)}${msg.sender}#{/a}</td>
+					<td>#{a @Messages.message(msgBox.id, msg.id)}${msg.subject}#{/a}</td>
+					<td>
+						<span class="button">#{a @Messages.reply(msgBox.id, msg.id)}Reply#{/a}</span>
+						<span class="delete button">#{a @Messages.delete(msgBox.id, msg.id)}Delete#{/a}</span>
+					</td>
+				</tr>
+			#{/list}
+		</table>
+	</div>
+	<div class="message-box" id="drafts">
+		<h3 class="title">Drafts</h3>
+		<table width="100%">
+			<tr>		
+				<th class="timestamp">Saved</th>
+				<th class="user">To</th>
+				<th class="subject">Subject</th>
+				<th class="actions">Actions</th>
+			</tr>
+			#{list items:msgBox.drafts, as:'msg'}
+				<tr>
+					<td>${msg.timeStamp.toString("dd.MM.yy HH:mm")}</td>
+					<td>#{a @Users.show(msg.recipient.id)}${msg.recipient}#{/a}</td>
+					<td>#{a @Messages.message(msgBox.id, msg.id)}${msg.subject}#{/a}</td>
+					<td>
+						<span class="button">#{a @Messages.sendMessage(msgBox.id, msg.id)}Send#{/a}</span>
+						<span class="delete button">#{a @Messages.delete(msgBox.id, msg.id)}Delete#{/a}</span>
+					</td>
+				</tr>
+			#{/list}
+		</table>
+	</div>
+</div>

@@ -13,7 +13,11 @@
 </div>
 #{/if}
 <div id="main-left">
-	<h2 class="title">Profile Details</h2>
+	<h2 class="title withAction">Profile Details
+	<div id="write">
+		#{a @Users.write(user.id)}Message#{/a}
+	</div>
+	</h2>
     <table id="user-profile">
     	<tr>
     		<td id="left">Full Name:</td>

@@ -1,15 +1,15 @@
 <!DOCTYPE html >
 <html>
     <head>
-        	<title>#{get 'title' /}</title>		
+        	<title>#{get 'title' /}</title>	
         	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        	<link rel="stylesheet" type="text/css" media="screen" 
-        	    href="@{'/public/stylesheets/main.css'}" />
+        	<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}" />
         	<link rel="stylesheet" media="print" type="text/css" href="@{'/public/stylesheets/print.css'}" /> 
         	#{get 'moreStyles' /}
+        	
         	<link rel="shortcut icon" type="image/png" 
             href="@{'/public/images/favicon.png'}" />
-       	<script src="@{'/public/javascripts/jquery-1.5.2.min.js'}"></script>
+       	<script src="@{'/public/javascripts/jquery-1.7.1.js'}"></script>
     </head>
     <body>
     	<div id="wrap">
@@ -37,7 +37,7 @@
         	    <ol>
 					<li>#{a @Application.index()}Home#{/a}
 						#{if connectedUser }
-						<li>#{a @Users.messageBox(connectedUser?.id)}Messages#{if connectedUser.messageBox.unreadMessages > 0}<span id="unreadCount">${connectedUser.messageBox.unreadMessages}</span>#{/if}#{/a}
+						<li>#{a @Messages.messageBox(connectedUser?.id)}Messages#{if connectedUser.messageBox.countUnread() > 0}<span id="unreadCount">${connectedUser.messageBox.countUnread()}</span>#{/if}#{/a}
 						#{/if}
 					<li>#{a @Application.index()}Calendars#{/a}
 					<li>#{a @Users.index()}Users#{/a}
@@ -53,14 +53,15 @@
         </div>
         	
         <div id="footer">
-            calpal is the most powerful calendar engine built with the 
+            .calpal is the most powerful calendar engine built with the 
             <a href="http://www.playframework.org">Play framework</a>
             for a task in the software engineering course at <a href="http://www.unibe.ch/">University of Berne</a>.
         </div>
     </body>
 </html>
 
-<script>$(document).ready(function () {  
+<script>
+$(document).ready(function () {  
 	var el = $('#main-right');
 	var elpos_original = el.offset().top - parseFloat($('#main-right').css('margin-top').replace(/auto/,0));
 
@@ -69,4 +70,5 @@
    		if(y<elpos_original){el.stop().animate({'top':119});}
     	else{el.stop().animate({'top':y-elpos_original+135});}
 	});
-});</script>
+});
+</script>

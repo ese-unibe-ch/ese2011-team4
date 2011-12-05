@@ -177,6 +177,10 @@ form p {
 	margin: 0px;
 }
 
+h2.title {
+	margin-bottom: 15px;
+}
+
 #main-left {
 	float: left;
 	width: 560px;
@@ -297,6 +301,7 @@ form p.box label{
 	padding: 0px 4px 0px 4px;
 	font-size: 12px;
 	font-variant: small-caps;
+	font-weight: normal;
 	background: #333;
 	border-radius: 16px;
 }

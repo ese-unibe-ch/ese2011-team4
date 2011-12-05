@@ -1,0 +1,23 @@
+#{extends 'home-view.html' /}
+#{set title: 'Message: '+message.subject /}
+
+#{set 'moreStyles'}
+	#{stylesheet 'user.css' /}
+#{/set}
+
+<div id="message">
+	<h2 class="title">
+		${message.subject}
+	</h2>
+	
+	<div id="message-metadata">
+		Sent on ${message.timeStamp.toString("EEEE, MMMM d")} at ${message.timeStamp.toString("HH:mm:ss")} by #{a @Users.show(message.sender.id)}${message.sender}#{/a} 	
+	</div>
+	<div id="actions">
+		<span class="button">#{a @Messages.reply(message.inbox.id, message.id)}reply#{/a}</span>
+		<span class="delete button">#{a @Messages.delete(message.inbox.id, message.id)}delete#{/a}</span>
+	</div>
+	<div id="content">
+		${message.getHtmlContent()}	
+	</div>
+</div>

@@ -50,8 +50,6 @@ public class Bootstrap extends Job {
     			for(Message msg: messages) {
     				msg.inbox = u.messageBox;
     				u.messageBox.inbox.add(msg);
-    				if(!msg.read)
-    					u.messageBox.unreadMessages++;
     				msg.save();
     				u.messageBox.save();
     			}
