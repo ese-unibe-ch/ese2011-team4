@@ -32,17 +32,15 @@
 <p>
 #{field 'location'}
    	<label for="location">Location</label>
-    <select name="${field.name}" id="location" value="#{ifErrors}${flash.location}#{/ifErrors}"/>
-    	<option></option>
+    <select name="${field.name}" id="location" style="width:370px" value="#{ifErrors}${flash.location}#{/ifErrors}"/>
+    	<option value=""></option>
     	#{list items:_locations, as:'location'}
 				<option value="${location.id}">${location.toString()}</option>
 		#{/list}
 #{/field}
 </p>
-
-<p class="button">
-	<input type="submit" value="Search" />
-</p>
-<p class="button">
+<br/>
+<p class="button" style>
 	<input type="reset" value="Reset" />
+	<input type="submit" value="Search" />
 </p>
