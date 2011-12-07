@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-
-
 import play.Logger;
 import play.cache.Cache;
 import play.data.validation.Check;

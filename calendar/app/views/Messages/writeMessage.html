@@ -7,7 +7,7 @@
 
 <h2 class="title">Write a Message</h2>
 <div id="message-form">
-#{form @Messages.sendMessage(connectedUser.messageBox.id, message.id), id:'writeForm'}
+#{form @Messages.sendMessage(message.id), id:'writeForm'}
 	<p>
 	#{field 'recipient'}
    	<label for="recipient">To</label>

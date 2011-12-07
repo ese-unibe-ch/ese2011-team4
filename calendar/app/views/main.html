@@ -37,7 +37,7 @@
         	    <ol>
 					<li>#{a @Application.index()}Home#{/a}
 						#{if connectedUser }
-						<li>#{a @Messages.messageBox(connectedUser?.id)}Messages#{if connectedUser.messageBox.countUnread() > 0}<span id="unreadCount">${connectedUser.messageBox.countUnread()}</span>#{/if}#{/a}
+						<li>#{a @Messages.messageBox()}Messages#{if connectedUser.messageBox.countUnread() > 0}<span id="unreadCount">${connectedUser.messageBox.countUnread()}</span>#{/if}#{/a}
 						#{/if}
 					<li>#{a @Application.index()}Calendars#{/a}
 					<li>#{a @Users.index()}Users#{/a}

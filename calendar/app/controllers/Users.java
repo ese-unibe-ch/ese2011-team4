@@ -27,14 +27,9 @@ public class Users extends Controller {
 	    render(users, connectedUser);
 	}
 	
-	public static void edit(Long userId) {
-		User connectedUser = User.find("email", Security.connected()).first();
-		User user=User.findById(userId);
-		if(connectedUser.equals(user)) {
-	    	List<Location> locations = Location.all().fetch();
-		    render(user, locations);
-		} else
-    		forbidden("Not your user profile!");
+	public static void edit() {
+		User user = Users.getConnectedUser();
+		render(user);
     }
 
 	public static void update(	Long userId,
@@ -84,14 +79,13 @@ public class Users extends Controller {
 		    			Logger.error(e.message());
 		    		params.flash();
 		            validation.keep();
-		            edit(userId);
+		            edit();
 		    	}
 	}
 
 	public static void show(Long id) {
-		User connectedUser = User.find("email", Security.connected()).first();
     	User user = User.findById(id);
-    	render(connectedUser, user);
+    	render(user);
     }
 	
 	public static void addFavorite(Long id, Long userId) {

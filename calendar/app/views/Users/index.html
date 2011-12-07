@@ -16,9 +16,11 @@
 	
 	#{list items:users, as:'user'}
 	<div class="user">
-		<div class="user-name">${user.fullname}</div>
-		<div class="user-profile">#{a @Users.show(user.id)}Show Profile#{/a}</div>
+		<div class="user-name">#{a @Users.show(user.id)}${user.fullname}#{/a}</div>
 		<div class="user-calendars">#{a @Calendars.index(user.id)}Calendars#{/a}</div>
+		#{if !connectedUser.equals(user)}
+			<div class="button">#{a @Users.write(user.id)}Write#{/a}</div>
+		#{/if}		
 		#{if ( !connectedUser.equals(user) && !connectedUser.isFavorite(user) )}
 			<div class="add button">#{a @Users.addFavorite(connectedUser.id, user.id)}Favorite#{/a}</div>
 		#{/if}

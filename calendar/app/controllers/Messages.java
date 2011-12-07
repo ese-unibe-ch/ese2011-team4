@@ -7,15 +7,15 @@ import play.data.validation.Validation;
 import play.mvc.Controller;
 
 public class Messages extends Controller {
-	public static void messageBox(Long id) {
-		User connectedUser = User.findById(id);
+	public static void messageBox() {
+		User connectedUser = Users.getConnectedUser();
 		MessageBox msgBox = connectedUser.messageBox;
 			
 		render(connectedUser, msgBox);
 	}
 	
-	public static void message(Long boxId, Long msgId) {
-		MessageBox msgBox = MessageBox.findById(boxId);
+	public static void message(Long msgId) {
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		Message message = Message.findById(msgId);
 		if(msgBox.drafts.contains(message)) {
 			writeMessage(msgId);
@@ -32,8 +32,8 @@ public class Messages extends Controller {
 		render(message);
 	}
 	
-	public static void reply(Long boxId, Long msgId) {
-		MessageBox msgBox = MessageBox.findById(boxId);
+	public static void reply(Long msgId) {
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		Message original = Message.findById(msgId);
 		
 		StringBuffer newSubject = new StringBuffer(original.subject);
@@ -50,8 +50,7 @@ public class Messages extends Controller {
 		writeMessage(message.id);
 	}
 	
-	public static void sendMessage(	Long boxId,
-									Long msgId,
+	public static void sendMessage(	Long msgId,
 									String subject,
 									String content)
 	{
@@ -59,7 +58,7 @@ public class Messages extends Controller {
 		message.subject = subject;
 		message.content = content;
 		
-		MessageBox msgBox = MessageBox.findById(boxId);
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		msgBox.drafts.remove(message);
 		msgBox.save();
 		
@@ -67,7 +66,7 @@ public class Messages extends Controller {
 			message.send();
 			Logger.info("Send message \""+message.subject+"\" to "+message.recipient+".");
 			flash.success("Your message was sent to %s.", message.recipient);
-			messageBox(msgBox.id);
+			messageBox();
 		} catch (Exception e) {
 			validation.addError("msg.recipient", "Missing some data");
 			params.flash();
@@ -76,8 +75,7 @@ public class Messages extends Controller {
 		}
 	}
 	
-	public static void saveDraft(	Long boxId,
-									Long msgId,
+	public static void saveDraft(	Long msgId,
 									String subject,
 									String content)
 	{
@@ -89,29 +87,29 @@ public class Messages extends Controller {
 			message.content = content;
 		}
 			
-		MessageBox msgBox = MessageBox.findById(boxId);
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		message.saveAsDraft(msgBox);
 		flash.success("Your message was saved in your drafts.");
-		messageBox(msgBox.id);
+		messageBox();
 	}
 	
-	public static void deleteDraft(Long boxId, Long msgId) {
-		MessageBox msgBox = MessageBox.findById(boxId);
+	public static void deleteDraft(Long msgId) {
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		Message message = Message.findById(msgId);
 		
 		msgBox.drafts.remove(message);
 		msgBox.save();
 		message.delete();
-		messageBox(msgBox.id);
+		messageBox();
 	}
 	
-	public static void delete(Long boxId, Long msgId) {
-		MessageBox msgBox = MessageBox.findById(boxId);
+	public static void delete(Long msgId) {
+		MessageBox msgBox = Users.getConnectedUser().messageBox;
 		Message message = Message.findById(msgId);
 		msgBox.inbox.remove(message);
 		msgBox.drafts.remove(message);
 		msgBox.save();
 		message.delete();
-		messageBox(boxId);
+		messageBox();
 	}
 }

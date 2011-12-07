@@ -14,9 +14,9 @@
 	width: 20%;
 }
 
-#user-list .add {
+#user-list .button {
 	display: inline-block;
-	width: 15%;
+	width: 10%;
 }
 
 #user-nav table{
@@ -43,7 +43,7 @@ h2.withAction {
 	position: relative;
 }
 
-.withAction #write a {
+.withAction #action a {
 	position: absolute;
 	display: inline-block;
 	background-color: #fff;
