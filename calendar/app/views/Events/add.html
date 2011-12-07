@@ -8,7 +8,7 @@
 	<div id="main-left">
 		<h2 class="title">Add an event to ${calendar.name}</h2>
 		<div id="event-form">
-		#{form @Events.addEvent(calendar.id)}
+		#{form @Events.addEvent(calendar.id), id:'event-form'}
 			#{event-form calendar:calendar, selected:dt, locations:locations /}
 		#{/form}
 		</div>

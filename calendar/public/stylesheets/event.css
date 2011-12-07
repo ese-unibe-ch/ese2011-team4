@@ -168,13 +168,18 @@
 }
 
 #repeating-details {
-	margin: 10px 30px;
-	padding: 5px;
-	border: solid 0.5px;
+	margin: 5px 0px 5px 0px;
+	background-color: #E4EAFF;
+	border-radius: 16px;
+	padding: 10px;
 }
 
 #repeating-details .hint {
 	font-size: 0.8em;
+}
+
+.invisible {
+	display: none;
 }
 
 /** Comment **/

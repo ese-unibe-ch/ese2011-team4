@@ -29,16 +29,16 @@ function checkEventCollision() {
  	});
 </script>
 
-		#{ifErrors}
-   		<span class="error">
-   			Oops...
-   			<ul>
-   			#{errors}
-       		<li>${error}</li>
-   			#{/errors}
-   			</ul>
-		</span>
-		#{/ifErrors}
+#{ifErrors}
+	<span class="error">
+   Oops...
+   <ul>
+   #{errors}
+   <li>${error}</li>
+   #{/errors}
+   </ul>
+	</span>
+#{/ifErrors}
 
 <div id="LocationCollisionResponse"></div>
 
@@ -92,21 +92,21 @@ function checkEventCollision() {
 #{/field}
 </p>
 
-<div id="repeating-details">
-Repeating configuration details
-	<p>
+<p>
 	#{field 'repeating'}
-		<label id="repeating" for="repeat">Type</label>	
+		<label for="repeat">Repeating</label>	
 		<select name="${field.name}" id="${field.name}">
-			<option value="${models.RepeatingType.NONE}">No repeat</option>
-			<option value="${models.RepeatingType.DAILY}" #{ifErrors}#{if flash.repeating == "DAILY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.DAILY}selected#{/if}#{/else}>Daily</option>
-			<option value="${models.RepeatingType.WEEKLY}" #{ifErrors}#{if flash.repeating == "WEEKLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}#{/else}>Weekly</option>
-			<option value="${models.RepeatingType.MONTHLY}" #{ifErrors}#{if flash.repeating == "MONTHLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}#{/else}>Monthly</option>
-			<option value="${models.RepeatingType.YEARLY}" #{ifErrors}#{if flash.repeating == "YEARLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}#{/else}>Yearly</option>
+			<option value="NONE">No repeat</option>
+			<option value="DAILY" #{ifErrors}#{if flash.repeating == "DAILY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.DAILY}selected#{/if}#{/else}>Daily</option>
+			<option value="WEEKLY" #{ifErrors}#{if flash.repeating == "WEEKLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.WEEKLY}selected#{/if}#{/else}>Weekly</option>
+			<option value="MONTHLY" #{ifErrors}#{if flash.repeating == "MONTHLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.MONTHLY}selected#{/if}#{/else}>Monthly</option>
+			<option value="YEARLY" #{ifErrors}#{if flash.repeating == "YEARLY"}selected#{/if}#{/ifErrors}#{else}#{if _event?.type == models.RepeatingType.YEARLY}selected#{/if}#{/else}>Yearly</option>
 		</select>
 	#{/field}
-	</p>
-	
+</p>
+
+<div id="repeating-details">
+Repeating configuration details	
 	<p>
 	#{field 'periodEndDay'}
 		<label for="periodEndDay">Period end</label>
@@ -122,7 +122,6 @@ Repeating configuration details
 	#{/field}
 	<span class="hint">(e.g. 2 for every second day)</span>
 	</p>
-	
 </div>
 
 <p class="description">
@@ -138,3 +137,23 @@ Repeating configuration details
 <p class="button">
 	<input type="reset" value="Reset" />
 </p>
+
+<script type="text/javascript" >
+	$('#repeating').ready(function() {
+		if($('#repeating option:selected').attr("value") == 'NONE')
+		{
+			$('#repeating-details').addClass("invisible");
+		}
+	});
+
+	$('#repeating').change(function() {
+		if($('#repeating option:selected').attr("value") == 'NONE')
+		{
+			$('#repeating-details').addClass("invisible");
+		}
+		else
+		{
+			$('#repeating-details').removeClass("invisible");
+		}
+	});
+</script>
