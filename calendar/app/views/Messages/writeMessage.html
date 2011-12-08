@@ -1,0 +1,51 @@
+#{extends 'home-view.html' /}
+#{set title:'New Message'/}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
+<h2 class="title">Write a Message</h2>
+<div id="message-form">
+#{form @Messages.sendMessage(message.id), id:'writeForm'}
+	<p>
+	#{field 'recipient'}
+   	<label for="recipient">To</label>
+   	<select name="recipient">
+   		<option value="${message?.recipient}">${message?.recipient.fullname}</option>
+   	</select>
+	#{/field}
+	</p>
+	<p>
+	#{field 'subject'}
+   	<label for="subject">Subject</label>
+   	<input type="text" name="${field.name}" id="${field.name}" autofocus="autofocus" value="#{ifErrors}${flash.subject}#{/ifErrors}#{else}${message?.subject}#{/else}"/>
+	#{/field}
+	</p>
+	<p>
+	#{field 'content'}
+   	<label for="content">Content</label>
+   	<textarea name="${field.name}" id="${field.name}">#{ifErrors}${flash.content}#{/ifErrors}#{else}${message?.content}#{/else}</textarea>
+	#{/field}
+	</p>
+	<p class="button">
+		<input type="submit" value="Send" />
+	</p>
+	<p class="button">
+		<input type="submit" value="Save Draft" id="draft" />
+	</p>
+	<p class="button">
+		<input type="submit" value="Delete Draft" id="cancel" />	
+	</p>
+#{/form}
+</div>
+
+<script type="text/javascript">
+	$('#draft').bind('click', function() {
+		$('#writeForm').attr("action", "/message/save-draft/${connectedUser.messageBox.id}/${message.id}");
+	});
+	
+	$('#cancel').bind('click', function() {
+		$('#writeForm').attr("action", "/message/delete-draft/${connectedUser.messageBox.id}/${message.id}");
+	});
+</script>

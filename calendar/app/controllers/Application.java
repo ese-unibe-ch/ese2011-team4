@@ -26,8 +26,6 @@ public class Application extends Controller {
     		Calendars.index(connectedUser.id);
     }
    
-    
-   
     public static void register() {
     	String randomID = Codec.UUID();
 		render("/Users/register.html", randomID);

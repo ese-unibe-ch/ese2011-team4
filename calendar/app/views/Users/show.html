@@ -1,19 +1,21 @@
-#{extends 'main.html' /}
+#{extends 'home-view.html' /}
 #{set title:'UserProfile'/}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-#{if connectedUser.equals(user)}
-<div id="main-right">
-	<h2 class="title">Actions</h2>
-	<ul>
-		<li><a href="@{Users.edit(user.id)}">Edit Profile</a>
-	</ul>
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
+<h2 class="title withAction">Profile Details
+<div id="action">
+	#{if connectedUser.equals(user)}
+		#{a @Users.edit()}Edit#{/a}
+	#{/if}
+	#{else}
+		#{a @Users.write(user.id)}Message#{/a}
+	#{/else}
 </div>
-#{/if}
-<div id="main-left">
-	<h2 class="title">Profile Details</h2>
+	</h2>
     <table id="user-profile">
     	<tr>
     		<td id="left">Full Name:</td>
@@ -67,6 +69,5 @@
     		</td>
     	</tr>
     	#{/if}
-	</table>
-</div>
+</table>
 		

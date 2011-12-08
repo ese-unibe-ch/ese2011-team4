@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Query;
 
+
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -154,6 +155,11 @@ public class User extends Model {
 	@Lob
 	public String descriptionUser;
 	
+	/**
+	 * The user's messagebox
+	 */
+	@OneToOne
+	public MessageBox messageBox;
 	
 	/**
 	 * User's constructor. The default behavior is:
@@ -173,6 +179,7 @@ public class User extends Model {
 		this.password = password;
 		this.fullname = fullname;
 		this.favorites = new LinkedList<User>();
+		this.messageBox = new MessageBox(this);
 	}
 	
 	/**

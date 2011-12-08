@@ -111,6 +111,15 @@ header nav li a {
 	border-radius: 16px;
 }
 
+header #unreadCount {
+	font-size: .9em;
+	color: #fff;
+	background-color: #ff3333;
+	margin-left: 5px;
+	padding: 2px 8px;
+	border-radius: 16px;
+}
+
 header nav li a:hover {
 	background-color: #333;
 	color: #fff;
@@ -166,6 +175,10 @@ form p {
 
 .title {
 	margin: 0px;
+}
+
+h2.title {
+	margin-bottom: 15px;
 }
 
 #main-left {
@@ -288,6 +301,7 @@ form p.box label{
 	padding: 0px 4px 0px 4px;
 	font-size: 12px;
 	font-variant: small-caps;
+	font-weight: normal;
 	background: #333;
 	border-radius: 16px;
 }

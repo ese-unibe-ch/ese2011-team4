@@ -13,5 +13,13 @@ package models;
  * </ul>
  */
 public enum RepeatingType {
-	NONE, DAILY, WEEKLY, MONTHLY, YEARLY
+	NONE, DAILY, WEEKLY, MONTHLY, YEARLY;
+	
+	public static RepeatingType parseFromString(String str) {
+		for(RepeatingType e : RepeatingType.values()) {
+			if(str.equalsIgnoreCase(e.toString()))
+				return e;
+		}
+		return null;
+	}
 }

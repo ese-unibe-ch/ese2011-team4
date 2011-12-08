@@ -1,4 +1,6 @@
 #{extends 'main.html' /}
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
 <div id="main-left">
 	#{doLayout /} 
 </div>
@@ -6,13 +8,10 @@
 <div class="navigation">
 	<h2 class="title">Favorite Contacts</h2>
 	<table>
-	<tr>
-		<th class ="fav-name"></th>
-		<th class ="delete"></th>
-	</tr>
 	#{list items:connectedUser.favorites, as:'fav'}
 	<tr>
 		<td class = "fav-name"> #{a @Calendars.index(fav.id)}${fav.fullname}#{/a}</td>
+		<td class="button">#{a @Users.write(fav.id)}Write#{/a}</td>
 		<td class ="delete button">#{a @Users.removeFavorite(connectedUser.id, fav.id)}Delete#{/a}</td>
 	</tr>
 	#{/list}
@@ -21,11 +20,9 @@
 	<ul>
 		<li><a href="@{Calendars.add}">Create a new calendar</a></li>
 		<li><a href="@{Locations.add}">Create a new location</a></li>
-		<li><a href="@{Users.edit(connectedUser.id)}">Edit Profile</a>
+		<li><a href="@{Users.edit()}">Edit Profile</a>
 		<li><a href="@{Search.index}">Search</a></li>
 		<li><a href="@{Search.advanced}">Advanced Eventsearch</a></li>
-		
 	<ul>
 </div>
 </div>
-

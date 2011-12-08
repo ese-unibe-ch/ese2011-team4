@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-
-
 import play.Logger;
 import play.cache.Cache;
 import play.data.validation.Check;
@@ -46,7 +44,7 @@ public class Events extends Controller {
 									boolean isPrivate, 
 									String description,
 									Long locationId,
-									RepeatingType repeating,
+									String repeating,
 									String periodEndDay,
 									int repeatingInterval) {
 		
@@ -68,7 +66,8 @@ public class Events extends Controller {
 	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		}
 		
-		Event event = Event.createEvent(calendar, name, startDate, endDate, repeating, periodEnd, repeatingInterval);
+		Event event = Event.createEvent(calendar, name, startDate, endDate, 
+				RepeatingType.parseFromString(repeating), periodEnd, repeatingInterval);
 		
 		event.isPrivate = isPrivate;
 		event.description = description;

@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 
+import javax.mail.Session;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
@@ -20,23 +21,16 @@ import play.mvc.With;
 @With(Secure.class)
 public class Users extends Controller {
 	
-	
 	public static void index() {
 		List<User> users = User.all().fetch();
-		User connectedUser = User.find("email", Security.connected()).first();
+		User connectedUser = getConnectedUser();
 	    render(users, connectedUser);
 	}
-	public static void edit(Long userId) {
-		User connectedUser = User.find("email", Security.connected()).first();
-		User user=User.findById(userId);
-		if(connectedUser.equals(user)) {
-	    	List<Location> locations = Location.all().fetch();
-		    render(user, locations);
-		} else
-    		forbidden("Not your user profile!");
-    }
 	
-
+	public static void edit() {
+		User user = Users.getConnectedUser();
+		render(user);
+    }
 
 	public static void update(	Long userId,
 								String fullname,
@@ -85,18 +79,16 @@ public class Users extends Controller {
 		    			Logger.error(e.message());
 		    		params.flash();
 		            validation.keep();
-		            edit(userId);
+		            edit();
 		    	}
-
-				
 	}
 
 	public static void show(Long id) {
-		User connectedUser = User.find("email", Security.connected()).first();
     	User user = User.findById(id);
-    	render(connectedUser, user);
+    	render(user);
     }
-	public static void addFavorite(Long id, Long userId){
+	
+	public static void addFavorite(Long id, Long userId) {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.addFavorite(favorite);
@@ -105,7 +97,7 @@ public class Users extends Controller {
 	    index();
 	}
 	
-	public static void removeFavorite(Long id, Long userId){
+	public static void removeFavorite(Long id, Long userId) {
 		User connectedUser = User.findById(id);
 		User favorite = User.findById(userId);
 		connectedUser.removeFavorite(favorite);
@@ -114,5 +106,16 @@ public class Users extends Controller {
 		index();
 	}
 	
+	public static void write(Long userId) {
+		User sender = getConnectedUser();
+		User recipient = User.findById(userId);
+		
+		Message message = new Message(sender, recipient);
+		message.saveAsDraft(sender.messageBox);
+		Messages.writeMessage(message.id);
+	}
 	
+	protected static User getConnectedUser() {
+		return User.find("email", Security.connected()).first();
+	}
 }

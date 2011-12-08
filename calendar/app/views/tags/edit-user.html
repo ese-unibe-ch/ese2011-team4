@@ -90,9 +90,9 @@ function date_populate(dayfield, monthfield, yearfield){
 <p>
 #{field 'locationId'}
 	<label for="locationId">Location</label>
-	<select name="${field.name}" id="${field.name}"">
+	<select name="${field.name}" id="${field.name}">
 	<option value="-1">No location</option>
-		#{list items:_locations, as:'location'}
+		#{list items: models.Location.all().fetch(), as:'location'}
 			<option value="${location.id}" #{ifErrors}#{if flash.locationId.toString() == location.id.toString()}selected="selected"#{/if}#{/ifErrors}#{else}#{if _user?.address?.id == location.id}selected="selected"#{/if}#{/else}>${location.toString()}</option>
 		#{/list}
 	</select>

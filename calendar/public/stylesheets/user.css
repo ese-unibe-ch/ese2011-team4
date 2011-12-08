@@ -14,9 +14,9 @@
 	width: 20%;
 }
 
-#user-list .add {
+#user-list .button {
 	display: inline-block;
-	width: 15%;
+	width: 10%;
 }
 
 #user-nav table{
@@ -37,12 +37,34 @@ table a:hover {
 	width: auto;
 }
 
-#user-profile{
+/** User profile **/
+
+h2.withAction {
+	position: relative;
+}
+
+.withAction #action a {
+	position: absolute;
+	display: inline-block;
+	background-color: #fff;
+	color: #333;
+	padding: 5px;
+	right: 0px;
+	top: 0px;
+	font-size: 16px;
+}
+
+.withAction #write a:hover {
+	background-color: #333;
+	color: #fff;
+}
+
+#user-profile {
 	margin-top: 10px;
 	border-spacing: 10px;
 }
 
-#user-profile tr #left{
+#user-profile tr #left {
 	vertical-align: top;
 	width: 200px;
 	font-weight: bold;
@@ -62,4 +84,55 @@ table a:hover {
 }
 #right #description{
 	font-size: 90%;
+}
+
+/** Message box **/
+
+.message-box {
+	margin-bottom: 20px;
+	border-top: #0051FF solid 2px;
+	border-bottom: #0051FF solid 2px;
+	padding: 5px;
+}
+
+.message-box th {
+	text-align: left;	
+}
+
+#inbox .unread {
+	font-weight: bold;
+}
+
+.message-box .timestamp {
+	width: 20%;
+}
+
+.message-box .user {
+	width: 25%;
+}
+
+.message-box .subject {
+	width: 35%;
+}
+
+.message-box .msg-short {
+	font-size: .9em;
+}
+
+#message #message-metadata {
+	width: 80%;
+	font-size: 0.8em;
+	margin-top: 5px;
+	margin-bottom: 15px;
+	display: inline-block;
+}
+
+#message #actions {
+	display: inline-block;
+}
+
+#message #content {
+	background-color: #E4EAFF;
+	padding: 10px;
+	border-radius: 16px;
 }
