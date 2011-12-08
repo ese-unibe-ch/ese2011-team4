@@ -167,4 +167,31 @@ public class EventTest extends UnitTest {
 		assertEquals(-1, singleEvent.compareTo(event2));
 		assertEquals(1, singleEvent.compareTo(event3));
 	}
+	
+	@Test
+	public void invitations() {
+		// Get a calendar
+		Calendar jacksCalendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get a user
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+
+		DateTime start = format.parseDateTime("20.10.2011 10:00");
+		DateTime end = format.parseDateTime("20.10.2011 12:00");
+		
+		// Create a event
+		Event e = Event.createEvent(jacksCalendar, "Private party", start, end, RepeatingType.NONE, null, 0);
+		e.isPrivate = true;
+		assertTrue(e.validateAndSave());
+		
+		assertFalse(e.isVisible(bud));
+		assertEquals(0, e.availableJoins(bud).size());
+		
+		// Add bud to the invitation list
+		e.invitations.add(bud);
+		assertTrue(e.validateAndSave());
+		
+		assertTrue(e.isVisible(bud));
+		assertEquals(1, e.availableJoins(bud).size());
+	}
 }
