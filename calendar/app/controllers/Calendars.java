@@ -3,12 +3,17 @@ package controllers;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import models.BirthdayEvent;
 import models.Calendar;
+import models.EventSeries;
+import models.RepeatingEvent;
+import models.RepeatingType;
 import models.SingleEvent;
 import models.User;
 import play.mvc.Controller;
@@ -49,10 +54,14 @@ public class Calendars extends Controller {
     	
     	DateTime dt = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day);
     	
+    	// Get favorites birthday
+    	List<BirthdayEvent> birthdays = calendar.birthdays(connectedUser, dt);
+    	
+    	// Get events
     	List<SingleEvent> events = calendar.events(connectedUser, dt);
     	User calendarOwner = calendar.owner;
     	
-    	render(calendar, dt, events, connectedUser, calendarOwner);
+    	render(calendar, dt, events, birthdays, connectedUser, calendarOwner);
     }
     
     public static void delete(Long id) {

@@ -46,7 +46,7 @@
 				#{/if}
 					
 				#{list items:calendar.getDaysInMonth(dt), as:'day'}
-					<td class="#{if calendar.events(connectedUser, day).size() > 0}events#{/if}
+					<td class="#{if calendar.events(connectedUser, day).size() > 0 || calendar.birthdays(connectedUser, day).size() > 0}events#{/if}
 						#{if day.getDayOfMonth() == dt.getDayOfMonth()}selected#{/if}">
 						#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
 						${day.getDayOfMonth()}
@@ -68,9 +68,19 @@
 	</div>
 	
 	<div id="events">
-		#{if events.size() > 0}
+		#{if birthdays.size() > 0}
 			<ul>
 				<hr />
+				#{list items:birthdays, as:'birthday'}
+					#{birthday calendar:calendar, birthday:birthday, connectedUser:connectedUser, dt:dt /}
+					<hr />
+				#{/list}
+			</ul>
+		#{/if}
+	
+		#{if events.size() > 0}
+			<ul>
+				#{if birthdays.size() == 0}<hr />#{/if}
 				#{list items:events, as:'event'}
 					#{event calendar:calendar, event:event, connectedUser:connectedUser /}
 					<hr />
@@ -78,11 +88,11 @@
 			</ul>
 		#{/if}
 		
-		#{else}
+		#{if events.size() == 0 && birthdays.size() == 0}
 			<div class="empty">
 	       		There are no events for the selected date.
 	   		</div>
-		#{/else}
+		#{/if}
 	</div>
 </div>
 

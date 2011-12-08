@@ -43,6 +43,10 @@
 	color: #fff;
 }
 
+.event .actions .button {
+	float: right;
+}
+
 .event-menu ol {
 	list-style: none;
 	padding: 0;

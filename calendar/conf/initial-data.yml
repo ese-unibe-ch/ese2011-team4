@@ -10,6 +10,8 @@ User(bud):
     email:          bud.white@lapd.com
     password:       secret
     fullname:       Bud White
+    birthday:       1989-12-11 01:00:00
+    visiblebirthday: true
     
 User(ed):
     email:          ed.exley@lapd.com
