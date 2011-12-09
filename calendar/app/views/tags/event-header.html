@@ -1,0 +1,98 @@
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
+<div class="event-header">
+	<div class="event-title">
+		${_event.name}
+	</div>
+	<div class="event-metadata">
+		<span class="date">
+			${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}
+		</span>
+		%{ participants = _event.participants() }%
+		#{if !_event.invitations?.isEmpty() || !participants.isEmpty()}
+			<div class="participation">
+							
+				#{if _event.isPrivate}
+					<span class="private">Private Event</span>
+				#{/if}
+				#{if !_event.origin.equals(calendar)}
+					<span class="owner">created by #{a @Users.show(_event.origin.owner.id)}${_event.origin.owner.toString()}#{/a}</span>
+				#{/if}
+				<div class="participation-summary">	
+					<a href="" class="expand">(+)</a>						
+					${participants.size()} participant${participants.size().pluralize()}
+					#{if !_event.invitations?.isEmpty()}- ${_event.invitations?.size()} invitation${_event.invitations.size().pluralize()}#{/if}
+				</div>
+				<div class="participation-details">		
+					<ul class="participants">
+					Participants:
+					#{list items:participants, as:'participant'}
+						<li>#{a @Users.show(participant.id)}${participant.toString()}#{/a}</li>	
+					#{/list}
+					</ul>
+					
+					#{if !_event.invitations?.isEmpty()}
+					<ul class="invitations">
+					Invitations:
+					#{list items:_event.invitations, as:'invitations'}
+						<li>#{a @Users.show(invitations.id)}${invitations.toString()}#{/a}</li>		
+					#{/list}
+					</ul>
+					#{/if}
+				</div>
+			</div>
+		#{/if}
+		#{if _event.location }
+			<div class="location">#{a @Locations.show(_event.location.id)}${_event.location.toString()}#{/a}</div>
+		#{/if}
+	</div>
+	<div class="event-menu">
+		<ol>
+			<li><span class="actions">Actions</span>
+				<ol>
+					<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
+					#{if connectedUser.equals(_calendar.owner)}
+						#{if _event.type == models.RepeatingType.NONE || _event.origin != _calendar}
+							<li>#{a @Events.edit(_calendar.id, _event.id)}Edit#{/a}</li>
+							<li>#{a @Events.delete(_calendar.id, _event.id)}Delete#{/a}</li>
+						#{/if}
+						#{else}
+							<li class="more"><span class="actions">Edit</span>
+								<ul>
+									<li>#{a @Events.edit(_calendar.id, _event.id)}Series#{/a}</li>
+									<li>#{a @Events.deatachAndEdit(_calendar.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+								</ul>
+							</li>							
+							<li class="more"><span class="actions">Delete</span>
+								<ul>
+									<li>#{a @Events.delete(_calendar.id, _event.id)}Series#{/a}</li>
+									<li>#{a @Events.deatach(_calendar.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+								</ul>
+							</li>
+						#{/else}
+					#{/if}
+					#{if _event.availableJoins(connectedUser).size() > 0}
+						<li class="more"><span class="actions">Join</span>
+							<ul>
+								#{list items:_event.availableJoins(connectedUser), as:'availableCalendar'}
+									<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
+								#{/list}
+							</ul>
+						</li>
+					#{/if}
+				</ol>
+			</li>
+		</ol>
+	</div>
+</div>
+
+<script type="text/javascript" >
+	$(".participation-details").ready(function() {
+		$('.participation-details').addClass("invisible");
+	});
+	
+	$(".expand").click(function(event) {
+		event.preventDefault()
+		$(this).parent().siblings(".participation-details").toggleClass("invisible");
+	});
+</script>

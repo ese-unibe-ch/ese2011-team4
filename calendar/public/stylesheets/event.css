@@ -7,20 +7,29 @@
 .event-title {
 	font-weight: bold;
 	font-size: 1.2em;
-	display: inline;
+	display: inline-block;
+	margin-bottom: 10px;
 }
 
 .event-metadata {
-	font-size: 0.8em;
+	font-size: .85em;
 	font-weight: bold;
 }
 
-.private {
-	margin-left: 10px;
+.participation-details {
+	padding-left: 10px;
 }
 
-.location {
-	display: block;
+.event-metadata .participants {
+	vertical-align: top;
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.event-metadata .invitations {
+	vertical-align: top;
+	display: inline-block;
+	margin-left: 20px;
 }
 
 /** Event menu **/

@@ -28,18 +28,18 @@ public class Comments extends Controller {
     	render(event, connectedUser);
     }
 
-    public static void update(Long id, Long userId, String content ) {
-    	Event event = Event.findById(id);
+    public static void update(Long eventId, String content ) {
+    	Event event = Event.findById(eventId);
     	assert event != null;
     	
-    	User author = User.findById(userId);
+    	User author = Users.getConnectedUser();
     	assert author != null;
     	
-    	Comment comment = new Comment(author.fullname, event);
+    	Comment comment = new Comment(author, event);
     	comment.content = content;
  
     	if(comment.validateAndSave()) {
-    		flash.success("Thanks for posting %s", author);
+    		flash.success("Thanks for posting %s", author.toString());
     		show(event.id);
     	} else {
     		params.flash();

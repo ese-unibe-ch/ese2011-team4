@@ -9,6 +9,7 @@
 		<h2 class="title">Edit Event</h2>
 		<div id="event-form">
 		#{form @Events.update(calendar.id, event.id)}
+			%{ locations = models.Location.all().fetch() }%
 			#{event-form calendar:calendar, event:event, locations:locations /}
 		#{/form}
 		</div>

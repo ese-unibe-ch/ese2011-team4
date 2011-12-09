@@ -6,11 +6,11 @@
 
 <body onload="window.scrollTo(0, getDocHeight())">
 	<div id="main-left">
-		#{comment event:event, connectedUser:connectedUser /}
+		#{comment event:event /}
 		<div id="add-comment">
 			<hr>
 			<h3>Post a comment</h3>		
- 			#{form @Comments.update(event.id, connectedUser.id)}
+ 			#{form @Comments.update(event.id)}
     			<p>
     			    <label for="content">Message: </label>
     			    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>

@@ -34,7 +34,7 @@ public class EventTest extends UnitTest {
         EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
 		event.type = RepeatingType.WEEKLY;
 		event.save();
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 	}
 	
 	@After
@@ -96,9 +96,12 @@ public class EventTest extends UnitTest {
 		// Get a calendar
 		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
 		
+		// Get a user
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
 		// Get an event
 		EventSeries serie = EventSeries.find("byName", "Weekly Meeting").first();
-		serie.addComment("autor", "test");
+		serie.addComment(bud, "test");
 		serie.calendars.add(eds);
 		
 		SingleEvent singleEvent = Event.convertFromSeries(serie);
@@ -125,9 +128,12 @@ public class EventTest extends UnitTest {
 		// Get a calendar
 		Calendar eds = Calendar.find("byName", "Ed's Future Calandar").first();
 		
+		// Get a user
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
 		// Get an event
 		SingleEvent singleEvent = SingleEvent.find("byName", "Meet Lynn Bracken").first();
-		singleEvent.addComment("autor", "test");
+		singleEvent.addComment(bud, "test");
 		singleEvent.calendars.add(eds);
 		
 		Event serie = Event.convertFromSingleEvent(singleEvent, RepeatingType.WEEKLY);

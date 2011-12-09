@@ -22,17 +22,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.persistence.Table;
 
-
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
 
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
-
 
 /**
  * The Event class represents a temporary and scheduled happening with a defined 
@@ -204,6 +201,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		if(repeatingInterval == 0) {
 			repeatingInterval = 1;
 		}
+		
 		if(repeating == RepeatingType.NONE) {
 			return new SingleEvent(calendar, name, startDate, endDate);
 		} else {
@@ -232,10 +230,13 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			commentCopy.postedAt = comment.postedAt;
 			event.comments.add(commentCopy);
 		}
+		
 		for (Calendar calendar : series.calendars) {
-			if(!calendar.equals(event.origin))
+			if(!calendar.equals(event.origin)) {
 				event.calendars.add(calendar);
+			}
 		}
+		
 		series.delete();
 		return event;
 	}
@@ -294,7 +295,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @since 	Iteration-2
 	 * @see 	Comment
 	 */
-	public void addComment(String author, String content) {
+	public void addComment(User author, String content) {
 	    Comment newComment = new Comment(author, this);
 	    newComment.content = content;
 	    newComment.save();

@@ -82,7 +82,7 @@
 			<ul>
 				#{if birthdays.size() == 0}<hr />#{/if}
 				#{list items:events, as:'event'}
-					#{event calendar:calendar, event:event, connectedUser:connectedUser /}
+					#{event calendar:calendar, event:event /}
 					<hr />
 				#{/list}
 			</ul>

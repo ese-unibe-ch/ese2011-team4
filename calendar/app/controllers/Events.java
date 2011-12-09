@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -46,7 +50,8 @@ public class Events extends Controller {
 									Long locationId,
 									String repeating,
 									String periodEndDay,
-									int repeatingInterval) {
+									int repeatingInterval,
+									String invitations) {
 		
 		Calendar calendar = Calendar.findById(calendarId);
 		assert calendar != null;
@@ -75,6 +80,14 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
+		if(!invitations.isEmpty()) {
+			for(String s : invitations.split(",")) {
+				// TODO improve that
+				User usr = User.find("byName", s.trim()).first();
+				event.invitations.add(usr);
+			}
+		}
+		
 	    if (event.validateAndSave()) {
 	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	    }
@@ -90,11 +103,10 @@ public class Events extends Controller {
 
 	public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
-    	List<Location> locations = Location.all().fetch();
     	
     	if(Security.check(event)) {
     		Calendar calendar = Calendar.findById(calendarId);
-	    	render(calendar, event, locations);
+	    	render(calendar, event);
     	} else
     		forbidden("Not your event!");
     }
@@ -111,7 +123,8 @@ public class Events extends Controller {
 								Long locationId,
 								RepeatingType repeating,
 								String periodEndDay,
-								int repeatingInterval) throws Exception {
+								int repeatingInterval,
+								String invitations) throws Exception {
     	
 		if(repeatingInterval == 0) {
 			repeatingInterval = 1;
@@ -151,9 +164,12 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-		if(repeating != RepeatingType.NONE) {
-			EventSeries series = (EventSeries) event;
-			series.setRepeatingInterval(repeatingInterval);
+		if(!invitations.isEmpty()) {
+			for(String s : invitations.split(",")) {
+				// TODO improve that
+				User usr = User.find("byName", s.trim()).first();
+				event.invitations.add(usr);
+			}
 		}
 		
 		// Validate and save

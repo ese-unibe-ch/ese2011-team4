@@ -1,22 +1,9 @@
 <h2 class="title"><span id="event-title">${_event.name}</span></h2>
+
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
 <div id="event">
-	<div class="event-metadata">
-		<span class="date">
-			${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}
-		</span>
-		#{if _event.isPrivate}
-			<span class="private">Private Event</span>
-		#{/if}
-		#{if !_event.origin.equals(calendar)}
-			<span class="owner">owned by #{a @Calendars.show(_event.origin.id, _event.startDate.getYear(), _event.startDate.getMonthOfYear(), _event.startDate.getDayOfMonth())}
-			${_event.origin.owner.fullname}
-		#{/a}</span>
-		#{/if}
-		#{if _event.location }
-			<span class="location">${_event.location.toString()}</span>
-		#{/if}
-	</div>
-	
+	#{event-metadata event:_event /}
 	<div id="event-content">
 		${_event.description}
 		#{if flash.success}
@@ -38,7 +25,7 @@
 								<tr>
 									<td class="comment-content">${comment.content}</td>
 									<td class="deleteComment">
-										#{if _connectedUser.fullname.equals(comment.author)}
+										#{if connectedUser.fullname.equals(comment.author)}
 											<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
 										#{/if}
 									</td>
