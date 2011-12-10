@@ -261,7 +261,7 @@ public class Calendar extends Model implements Printable{
 				DateTime start = favorite.birthday.withTime(0, 0, 0, 0);
 				DateTime end = start.plusDays(1);
 				EventSeries birthday = new EventSeries( this, 
-														"Brithday-Alert", 
+														"Brithday-Alert!", 
 														start, 
 														end, 
 														RepeatingType.YEARLY);

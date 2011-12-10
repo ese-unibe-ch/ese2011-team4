@@ -64,7 +64,7 @@ public class BirthdayEvent extends SingleEvent {
 	 * @see User
 	 */
 	public BirthdayEvent(EventSeries series, User user) {
-		super(series.origin, "Birthday-Alert!", series.startDate, series.endDate);
+		super(series.origin, series.name, series.startDate, series.endDate);
 		this.description = series.description;
 		this.type = series.type;
 		this.series = series;

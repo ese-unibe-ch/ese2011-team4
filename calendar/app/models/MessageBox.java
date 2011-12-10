@@ -25,6 +25,7 @@ public class MessageBox extends Model {
 	public MessageBox(User owner) {
 		this.owner = owner;
 		inbox = new ArrayList();
+		drafts = new ArrayList();
 	}
 	
 	public int countUnread() {

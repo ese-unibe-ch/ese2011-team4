@@ -33,6 +33,8 @@ public class Message extends Model {
 	public Message(User sender, User recipient) {
 		this.sender = sender;
 		this.recipient = recipient;
+		this.subject = "";
+		this.content = "";
 		this.read = false;
 	}
 	

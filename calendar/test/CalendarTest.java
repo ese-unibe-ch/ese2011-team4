@@ -283,4 +283,34 @@ public class CalendarTest extends UnitTest {
 		assertEquals(1, calendar.numberOfAllEventsInCalendarByDayAndTime(start3, end3));
 		assertEquals(0, calendar.numberOfAllEventsInCalendarByDayAndTime(start1.withHourOfDay(1), start1.withHourOfDay(2)));
 	}
+
+	@Test
+	public void birthdays() {
+		// Get users
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		// Add a favorite
+		jack.addFavorite(bud);
+		
+		// Get a calendar
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		DateTime day = new DateTime().withMonthOfYear(bud.birthday.getMonthOfYear()).withDayOfMonth(bud.birthday.getDayOfMonth());
+		List<BirthdayEvent> birthdays1 = calendar.birthdays(jack, day);
+		List<BirthdayEvent> birthdays2 = calendar.birthdays(jack, day.plusYears(1));
+		List<BirthdayEvent> birthdays3 = calendar.birthdays(jack, day.plusDays(1));
+		List<BirthdayEvent> birthdays4 = calendar.birthdays(jack, day.minusDays(1));
+		
+		assertEquals(1, birthdays1.size());
+		assertEquals(bud.birthday.withTime(0, 0, 0, 0), birthdays1.get(0).startDate);
+		assertEquals(bud.birthday.withTime(0, 0, 0, 0).plusDays(1), birthdays1.get(0).endDate);
+		
+		assertEquals(1, birthdays2.size());
+		assertEquals(bud.birthday.withTime(0, 0, 0, 0), birthdays2.get(0).startDate);
+		assertEquals(bud.birthday.withTime(0, 0, 0, 0).plusDays(1), birthdays2.get(0).endDate);
+		
+		assertEquals(0, birthdays3.size());
+		assertEquals(0, birthdays4.size());
+	}
 }

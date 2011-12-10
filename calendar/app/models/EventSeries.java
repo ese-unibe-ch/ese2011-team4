@@ -183,7 +183,7 @@ public class EventSeries extends Event {
 		assert isThisDay(day);
 		BirthdayEvent birthday = new BirthdayEvent(this, user);
 		birthday.startDate = this.startDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
-		birthday.endDate = this.endDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
+		birthday.endDate = birthday.startDate.plusDays(1);
 		return birthday;
 	}
 	
