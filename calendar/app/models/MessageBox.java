@@ -13,9 +13,6 @@ import play.db.jpa.Model;
 
 @Entity
 public class MessageBox extends Model {
-	@OneToOne
-	public User owner;
-	
 	@OneToMany(mappedBy="inbox", cascade=CascadeType.ALL)
 	public List<Message> inbox;
 	
@@ -23,7 +20,6 @@ public class MessageBox extends Model {
 	public List<Message> drafts;
 	
 	public MessageBox(User owner) {
-		this.owner = owner;
 		inbox = new ArrayList();
 		drafts = new ArrayList();
 	}
@@ -38,7 +34,6 @@ public class MessageBox extends Model {
 	}
 	
 	public void getMessage(Message msg) {
-		assert msg.recipient == owner;
 		assert msg.sender != null;
 		
 		inbox.add(msg);

@@ -4,14 +4,10 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main">
-	<div id="main-left">
-		<h2 class="title">Edit Event</h2>
-		<div id="event-form">
-		#{form @Events.update(calendar.id, event.id)}
-			%{ locations = models.Location.all().fetch() }%
-			#{event-form calendar:calendar, event:event, locations:locations /}
-		#{/form}
-		</div>
-	</div>
+<h2 class="title">Edit Event</h2>
+<div id="event-form">
+#{form @Events.update(calendar.id, event.id)}
+	%{ locations = models.Location.all().fetch() }%
+	#{event-form calendar:calendar, event:event, locations:locations /}
+#{/form}
 </div>

@@ -4,23 +4,19 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main">
-	<div id="main-left">
-		<h2 class="title">Edit Location</h2>
-		#{ifErrors}
-   		<span class="error">
-   			Oops...
-   			<ul>
-   			#{errors}
-       		<li>${error}</li>
-   			#{/errors}
-   			</ul>
-		</span>
-		#{/ifErrors}
-		<div id="location-form">
-		#{form @Locations.update(location.id)}
-			#{location-form location:location /}
-		#{/form}
-		</div>
-	</div>
+<h2 class="title">Edit Location</h2>
+#{ifErrors}
+	<span class="error">
+		Oops...
+		<ul>
+		#{errors}
+ 		<li>${error}</li>
+		#{/errors}
+		</ul>
+</span>
+#{/ifErrors}
+<div id="location-form">
+#{form @Locations.update(location.id)}
+	#{location-form location:location /}
+#{/form}
 </div>

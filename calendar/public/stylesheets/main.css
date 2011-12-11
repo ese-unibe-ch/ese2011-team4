@@ -20,6 +20,10 @@ body {
 	min-height: 100%
 }
 
+.invisible {
+	display: none;
+}
+
 /** Application header **/	
 
 header {
@@ -168,7 +172,7 @@ form p {
 	color: #333;
 }
 
-#main a {
+a {
 	color: #fff;
 	text-decoration: none;
 }
@@ -262,7 +266,6 @@ form p.box label{
 
 #login {
 	background: #93B4FA;
-	margin: 0px 250px 0px 250px;
 	padding: 5px;
 	border-radius: 16px;
 }
@@ -274,7 +277,6 @@ form p.box label{
 	border-radius: 16px;
 	width: 600px;
 	margin: auto;
-	padding: 10px;
 }
 
 #register .title {

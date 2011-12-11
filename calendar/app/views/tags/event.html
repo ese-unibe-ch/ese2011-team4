@@ -1,12 +1,148 @@
+<!----
+	Renders a single event
+	requires the event as parameter
+	if second parameter 'comments' is true, it also displays the comments
+---->
+
+%{ 
+	connectedUser = models.User.find("email", session.username).first();
+	isOwner = connectedUser.equals(_event.origin.owner);
+}%
+
 <div class="event">
-	#{event-header event:_event, calendar:_calendar/}
+	<div class="event-header">
+		<div class="event-title">${_event.name}</div>
+		#{if _event.isPrivate}<span class="private">Private</span>#{/if}
+		<div class="date">${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
+		
+		<div class="event-metadata">
+			%{ participants = _event.participants() }%
+			#{if !_event.invitations?.isEmpty() || !participants.isEmpty()}
+			<div class="participation">		
+				<div class="participation-summary">	
+					<a href="" class="expand">(+)</a>						
+					${participants.size()} participant${participants.size().pluralize()}
+					#{if !_event.invitations?.isEmpty()}- ${_event.invitations?.size()} invitation${_event.invitations.size().pluralize()}#{/if}
+				</div>
+				
+				<div class="participation-details">		
+					<ul class="participants">
+					Participants:
+					#{list items:participants, as:'participant'}
+						<li>#{a @Users.show(participant.id)}${participant.toString()}#{/a}</li>	
+					#{/list}
+					</ul>
+						
+					#{if !_event.invitations?.isEmpty()}
+					<ul class="invitations">
+					Invitations:
+					#{list items:_event.invitations, as:'invitations'}
+						<li>#{a @Users.show(invitations.id)}${invitations.toString()}#{/a}</li>		
+					#{/list}
+					</ul>
+					#{/if}
+				</div>
+			</div>
+			#{/if}
+			
+			#{if _event.location }
+				<div class="location">#{a @Locations.show(_event.location.id)}${_event.location.toString()}#{/a}</div>
+			#{/if}
+		</div>
+
+		<div class="event-menu">
+			<ol>
+				<li><span class="actions">Actions</span>
+					<ol>
+						<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
+						#{if isOwner}
+							#{if _event.type == models.RepeatingType.NONE }
+								<li>#{a @Events.edit(_event.origin.id, _event.id)}Edit#{/a}</li>
+								<li>#{a @Events.delete(_event.origin.id, _event.id)}Delete#{/a}</li>
+							#{/if}
+							#{else}
+								<li class="more"><span class="actions">Edit</span>
+									<ul>
+										<li>#{a @Events.edit(_event.origin.id, _event.id)}Series#{/a}</li>
+										<li>#{a @Events.deatachAndEdit(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+									</ul>
+								</li>							
+								<li class="more"><span class="actions">Delete</span>
+									<ul>
+										<li>#{a @Events.delete(_event.origin.id, _event.id)}Series#{/a}</li>
+										<li>#{a @Events.deatach(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+									</ul>
+								</li>
+							#{/else}
+						#{/if}
+						#{if _event.availableJoins(connectedUser).size() > 0}
+							<li class="more"><span class="actions">Join</span>
+								<ul>
+									#{list items:_event.availableJoins(connectedUser), as:'availableCalendar'}
+										<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
+									#{/list}
+								</ul>
+							</li>
+						#{/if}
+					</ol>
+				</li>
+			</ol>
+		</div>
+	</div>
 
 	<div class="event-content">
 		${_event.description}
+		#{if _event.comments.size() != 0 && !_comments}
+		<a href="" class="show-comments">show comment${_event.comments.size().pluralize()} (${_event.comments.size()})</a>
+		#{/if}
+	</div>
+	
+	<div class="comments">
+	#{if flash.success}
+   	<p class="success">${flash.success}</p>
+	#{/if}
+	#{if _event.comments.size() > 0}
+	<hr>
+	#{/if}
+		#{list items:_event.comments, as:'comment'}
 		<div class="comment">
-			#{if _event.comments.size() != 0}
-				#{a @Comments.show(_event.id)}(${_event.comments.size()}) comment${_event.comments.size().pluralize()} #{/a}
-			#{/if}
-		</div>  
+			<div class="comment-metadata">
+				<span class="comment-author">by ${comment.author},</span>
+   			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
+			</div>
+			<table>
+				<tr>
+					<td class="comment-content">${comment.content}</td>
+					<td class="delete-comment">
+						#{if connectedUser.equals(comment.author)}
+						<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
+						#{/if}
+					</td>
+				</tr>
+			</table>
+		</div>
+		#{/list}
 	</div>
 </div>
+
+<script type="text/javascript" >
+	$(".participation-details").ready(function() {
+		$('.participation-details').addClass("invisible");
+	});
+	
+	$(".expand").click(function(event) {
+		event.preventDefault();
+		$(this).parent().siblings(".participation-details").toggleClass("invisible");
+	});
+	
+	#{if !_comments}
+	$(".comments").ready(function() {
+		$('.comments').addClass("invisible");
+	});
+	#{/if}
+	
+	$(".show-comments").click(function(event) {
+		event.preventDefault();
+		$(this).parent().siblings(".comments").toggleClass("invisible");
+	});
+</script>

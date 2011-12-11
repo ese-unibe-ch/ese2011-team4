@@ -4,37 +4,21 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<body onload="window.scrollTo(0, getDocHeight())">
-	<div id="main-left">
-		#{comment event:event /}
-		<div id="add-comment">
-			<hr>
-			<h3>Post a comment</h3>		
+#{set 'options'}
+	<li><a class="navigation" href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">Go back</a></li>
+#{/set}
+
+#{event event:event, comments:true /}
+<div id="add-comment">
+	<hr>
+	<h3>Post a comment</h3>		
  			#{form @Comments.update(event.id)}
-    			<p>
-    			    <label for="content">Message: </label>
-    			    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
-    			</p>
-    			<p>
-    		    	<input type="submit" value="Submit your comment" />
-    			</p>
-			#{/form}
-		</div>
-	</div>
-
-	<div id="main-right">
-		#{comment-nav event:event /}
-	</div>
-</body>
-
-<script type="text/javascript">
-	function getDocHeight() {
-    	var D = document;
-    	return Math.max(
-        	Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
-        	Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
-        	Math.max(D.body.clientHeight, D.documentElement.clientHeight)
-    	);
-	}
-</script>
-<script>$(document).ready(function() { $('span:empty').remove(); });</script>
+ 			<p>
+ 			    <label for="content">Message: </label>
+ 			    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
+ 			</p>
+ 			<p>
+ 		    	<input type="submit" value="Submit your comment" />
+ 			</p>
+	#{/form}
+</div>

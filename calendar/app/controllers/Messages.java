@@ -5,7 +5,9 @@ import models.*;
 import play.Logger;
 import play.data.validation.Validation;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
 public class Messages extends Controller {
 	public static void messageBox() {
 		User connectedUser = Users.getConnectedUser();
