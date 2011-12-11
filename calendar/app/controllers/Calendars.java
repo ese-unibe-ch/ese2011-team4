@@ -35,8 +35,9 @@ public class Calendars extends Controller {
     }
 	
 	public static void showCurrentMonth(Long id, boolean print) {
-		if(print)
+		if(print) {
 			print((Calendar)Calendar.findById(id));
+		}
 		DateTime dt = new DateTime();
 		show(id, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	}

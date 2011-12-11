@@ -1,26 +1,25 @@
 #{extends 'main.html' /}
 #{set title:'Search'/}
 
-<div id="main">
-	<div id="main-left">
-		<h2 class="title">Advanced Search</h2>
-		#{ifErrors}
-   		<span class="error">
-   			Oops...
-   			<ul>
-   			#{errors}
-       		<li>${error}</li>
-   			#{/errors}
-   			</ul>
-		</span>
-		#{/ifErrors}
-		<div id="search-form">
-		#{form @Search.advancedSearch()}
-			#{advancedSearch-form locations:locations /}
-		#{/form}
-		</div>
-	</div>
-	<div id="main-right">
-		#{search-nav name:name /}
-	</div>
+#{set 'options'}
+	<li><a class="navigation" href="@{Users.index()}">Go back</a></li>
+	<li><a class="navigation" href="@{Search.index()}">Search</a></li>
+#{/set}
+
+<h2 class="title">Advanced Search</h2>
+#{ifErrors}
+	<span class="error">
+		Oops...
+		<ul>
+		#{errors}
+ 		<li>${error}</li>
+		#{/errors}
+		</ul>
+	</span>
+#{/ifErrors}
+
+<div id="search-form">
+	#{form @Search.advancedSearch()}
+		#{advancedSearch-form locations:locations /}
+	#{/form}
 </div>

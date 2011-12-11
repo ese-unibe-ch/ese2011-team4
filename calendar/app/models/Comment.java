@@ -28,7 +28,8 @@ public class Comment extends Model {
 	 * Author of the comment.
 	 */
 	@Required
-    public String author;
+	@ManyToOne
+    public User author;
 	
 	/**
 	 * Date at which the comment was posted.
@@ -62,7 +63,7 @@ public class Comment extends Model {
      * @see 	User
      * @see 	Event
      */
-    public Comment(String author, Event event) {
+    public Comment(User author, Event event) {
     	this.author = author;
         this.event = event;
         this.postedAt = new DateTime();

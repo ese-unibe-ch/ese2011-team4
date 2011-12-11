@@ -349,7 +349,7 @@ public class Calendar extends Model implements Printable{
 	 * Returns a list of all days of a certain month.
 	 * 
 	 * @param 	dt	the month for which to get the days
-	 * @return a list of all days for this month
+	 * @return 	a list of all days for this month
 	 * @since 	Iteration-1
 	 */
 	public static List<DateTime> getDaysInMonth(DateTime dt) {
@@ -362,6 +362,18 @@ public class Calendar extends Model implements Printable{
 		days.add(last);
 		
 		return days;
+	}
+	
+	/**
+	 * Returns true if a specific day is today,
+	 * 
+	 * @param 	the day used to compare
+	 * @return	true if it is the same day
+	 * @since	Iteration-5
+	 */
+	public static boolean isToday(DateTime day) {
+		DateTime dt = new DateTime();
+		return dt.getDayOfYear() == day.getDayOfYear() && dt.getYear() == day.getYear();
 	}
 	
 	/**

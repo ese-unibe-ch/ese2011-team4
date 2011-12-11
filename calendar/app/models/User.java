@@ -88,6 +88,12 @@ public class User extends Model {
 	public List<Calendar> calendars;
 	
 	/**
+	 * This is the users default calendar.
+	 */
+	@OneToOne
+	private Calendar defaultCalendar;
+	
+	/**
 	 * This user's favorite users.
 	 */
 	@ManyToMany
@@ -179,7 +185,7 @@ public class User extends Model {
 		this.password = password;
 		this.fullname = fullname;
 		this.favorites = new LinkedList<User>();
-		this.messageBox = new MessageBox(this);
+		this.messageBox = new MessageBox(this).save()	;
 	}
 	
 	/**
@@ -461,6 +467,23 @@ public class User extends Model {
 	 */
 	public void setDescripton(String desc){
 		this.descriptionUser=desc;
+	}
+	
+	/**
+	 * Returns the user's default calendar, which is the first calendar created if no other specified.
+	 * @return <code>Calendar</code> the default calendar or the first calendar created
+	 */
+	public Calendar getDefaultCalendar() {
+		return defaultCalendar != null ? defaultCalendar : calendars.get(0);
+	}
+	
+	/**
+	 * Sets the user's default calendar. It has to be a calendar from his calendars.
+	 * @param calendar : the new default calendar
+	 */
+	public void setDefaultCalendar(Calendar calendar) {
+		assert calendars.contains(calendar);
+		this.defaultCalendar = calendar;
 	}
 	
 	static class uniqueMailCheck extends Check {

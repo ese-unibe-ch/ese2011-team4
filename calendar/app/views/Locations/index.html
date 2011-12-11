@@ -1,7 +1,27 @@
-#{extends 'home-view.html' /}
+#{extends 'main.html' /}
 #{set title: 'Locations' /}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-#{location-list locations:locations, connectedUser:connectedUser /}
+%{ connectedUser = models.User.find("email", session.username).first() }%
+
+<div id="location-list">
+	<h2 class="title">
+		Locations
+	</h2>
+	#{if locations.size() > 0}
+		<ul>
+			#{list items:locations, as:'location'}
+				<li><a href="@{Locations.show(location.id)}">${location.toString()}</a>
+					<span class="location-metadata"> - used by ${location.numberOfAllEvents()} events (${location.numberOfAllEvents()-location.numberOfVisibleEvents(connectedUser)} private)</span>
+				</li>
+			#{/list}
+		</ul>
+	#{/if}
+	#{else}
+		<div class="empty">
+	       	There are no locations.
+	   	</div>
+	#{/else}
+</div>

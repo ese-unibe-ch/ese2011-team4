@@ -4,36 +4,33 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/location.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main-right">
-	<h2 class="title">Actions</h2>
+#{set 'options'}
+	<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
+	<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
+	<li><a href="@{Locations.delete(location.id)}">Delete this location</a></li>
+#{/set}	
+
+<h2 class="title">Infos about this Location</h2>
+ <div id="location">
+	<p>
+		<ul>
+			<li>${location.street} ${location.num}</li>
+			<li>${location.pincode} ${location.city}</li>
+			<li>${location.country} </li>
+		</ul>
+	</p>
+</div>
+<div id="map_canvas">Loading...</div>
+
+<h3>Upcoming events</h3>
+<p>
+	${numberOfEvents} upcoming events are using this location (${numberOfEvents-events.size()} private):
 	<ul>
-		<li><a class="navigation" href="@{Locations.add()}">Add a location</a></li>
-		<li><a class="navigation" href="@{Locations.edit(location.id)}">Edit this location</a></li>
-		<li><a href="@{Locations.delete(location.id)}">Delete this location</a></li>
+	#{list items:events, as:'event'}
+		<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">${event.name}</a></li>
+	#{/list}
 	</ul>
-</div>	
-<div id="main-left">
-	<h2 class="title">Infos about this Location</h2>
-    	<div id="location">
-			<p>
-				<ul>
-					<li>${location.street} ${location.num}</li>
-					<li>${location.pincode} ${location.city}</li>
-					<li>${location.country} </li>
-				</ul>
-			</p>
-		</div>
-		<div id="map_canvas">Loading...</div>
-		
-		<h3>Upcoming events</h3>
-		<p>
-			${numberOfEvents} upcoming events are using this location (${numberOfEvents-events.size()} private):
-			<ul>
-			#{list items:events, as:'event'}
-				<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}">${event.name}</a></li>
-			#{/list}
-			</ul>
-		</p>
+</p>
 
 <script type="text/javascript">
      $(document.getElementById('map_canvas')).ready(function() {
@@ -41,9 +38,11 @@
      	codeAddress('${location.toString()}');
  	});
 </script>
+
 <script type="text/javascript"
     src="http://maps.googleapis.com/maps/api/js?sensor=false">
 </script>
+
 <script type="text/javascript">
 var geocoder;
   var map;
