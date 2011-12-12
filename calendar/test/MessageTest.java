@@ -139,10 +139,4 @@ public class MessageTest extends UnitTest{
 		message.read();
 		assertEquals(0, bud.messageBox.countUnread());
 	}
-	
-	@Ignore("Not implemented yet")
-	@Test
-	public void getHtmlContent() {
-		
-	}
 }

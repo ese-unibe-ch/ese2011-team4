@@ -69,10 +69,4 @@ public class Message extends Model {
 			this.save();
 		}
 	}
-	
-	public String getHtmlContent() {
-		return content;
-		// TODO doesn't work yet, don't know how it would work. Anybody?
-		// return content.replace("\n", "&#10;");
-	}
 }
