@@ -62,13 +62,13 @@ public class CommentTest extends UnitTest {
 	 
 	    Comment firstComment = eventComments.get(0);
 	    assertNotNull(firstComment);
-	    assertEquals("Jeff", firstComment.author);
+	    assertEquals(bud, firstComment.author);
 	    assertEquals("Nice post", firstComment.content);
 	    assertNotNull(firstComment.postedAt);
 	 
 	    Comment secondComment = eventComments.get(1);
 	    assertNotNull(secondComment);
-	    assertEquals("Tom", secondComment.author);
+	    assertEquals(ed, secondComment.author);
 	    assertEquals("I knew that !", secondComment.content);
 	    assertNotNull(secondComment.postedAt);
 	}

@@ -75,7 +75,7 @@ public class CalendarTest extends UnitTest {
 		Long id = calendar.id;
 		
 		// Count events
-		assertEquals(9, Event.count());
+		assertEquals(10, Event.count());
 		
 		// Delete it
 		calendar.delete();
@@ -312,5 +312,14 @@ public class CalendarTest extends UnitTest {
 		
 		assertEquals(0, birthdays3.size());
 		assertEquals(0, birthdays4.size());
+	}
+	
+	@Test
+	public void isToday() {
+		DateTime today = new DateTime();
+		assertTrue(Calendar.isToday(today));
+		assertFalse(Calendar.isToday(today.plusDays(1)));
+		assertFalse(Calendar.isToday(today.plusYears(1)));
+		assertFalse(Calendar.isToday(today.minusDays(1)));
 	}
 }

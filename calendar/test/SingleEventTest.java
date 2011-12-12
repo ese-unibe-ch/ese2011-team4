@@ -33,7 +33,7 @@ public class SingleEventTest extends UnitTest {
         EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
 		event.type = RepeatingType.WEEKLY;
 		event.save();
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 	}
 	
 	@After
@@ -54,7 +54,7 @@ public class SingleEventTest extends UnitTest {
 												format.parseDateTime("20.10.2011 12:00"));
 		
 		assertTrue(event.validateAndSave());
-		assertEquals(8, SingleEvent.count());
+		assertEquals(9, SingleEvent.count());
 		
 		// Retrieve data
 		SingleEvent e = SingleEvent.findById(event.id);
@@ -75,7 +75,7 @@ public class SingleEventTest extends UnitTest {
 		boolean isPrivate = event.isPrivate;
 
 		assertTrue(event.validateAndSave());
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 		
 		// Retrieve data
 		SingleEvent e = SingleEvent.findById(event.id);
@@ -97,7 +97,7 @@ public class SingleEventTest extends UnitTest {
 		
 		// Try to find it
 		assertNull(SingleEvent.findById(id));
-		assertEquals(6, SingleEvent.count());
+		assertEquals(7, SingleEvent.count());
 		
 		// Count comments
 		assertEquals(1, Comment.count());
@@ -154,7 +154,7 @@ public class SingleEventTest extends UnitTest {
 		assertTrue(event.calendars.contains(budCalendar));
 				
 		// Make sure there weren't created any objects
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 		assertEquals(4, Calendar.count());
 	}
 	
@@ -186,7 +186,7 @@ public class SingleEventTest extends UnitTest {
 		
 		// Try to save it
 		assertFalse(event.validateAndSave());
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 	}
 	
 	@Test
