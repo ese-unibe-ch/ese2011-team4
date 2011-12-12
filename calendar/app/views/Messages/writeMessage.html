@@ -7,7 +7,7 @@
 
 <h2 class="title">Write a Message</h2>
 <div id="message-form">
-#{form @Messages.sendMessage(message.id), id:'writeForm'}
+#{form @Messages.handleMessage(message.id), id:'writeForm'}
 	<p>
 	#{field 'recipient'}
    	<label for="recipient">To</label>
@@ -29,23 +29,13 @@
 	#{/field}
 	</p>
 	<p class="button">
-		<input type="submit" value="Send" />
+		<input type="submit" name="sendMessage" value="Send" />
 	</p>
 	<p class="button">
-		<input type="submit" value="Save Draft" id="draft" />
+		<input type="submit" name="saveDraft" value="Save Draft" id="draft" />
 	</p>
 	<p class="button">
-		<input type="submit" value="Delete Draft" id="cancel" />	
+		<input type="submit" name="deleteDraft" value="Delete Draft" id="cancel" />	
 	</p>
 #{/form}
 </div>
-
-<script type="text/javascript">
-	$('#draft').bind('click', function() {
-		$('#writeForm').attr("action", "/message/save-draft/${connectedUser.messageBox.id}/${message.id}");
-	});
-	
-	$('#cancel').bind('click', function() {
-		$('#writeForm').attr("action", "/message/delete-draft/${connectedUser.messageBox.id}/${message.id}");
-	});
-</script>

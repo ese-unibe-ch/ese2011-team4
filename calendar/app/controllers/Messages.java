@@ -27,6 +27,17 @@ public class Messages extends Controller {
 		}
 	}
 	
+	public static void handleMessage(	Long msgId,
+										String subject,
+										String content) {
+		if(params.get("sendMessage")!=null)
+			sendMessage(msgId, subject, content);
+		else if(params.get("saveDraft")!=null)
+			saveDraft(msgId, subject, content);
+		else
+			deleteDraft(msgId);
+	}
+	
 	public static void writeMessage(Long msgId) {
 		Message message = Message.findById(msgId);
 		assert message.sender != null && message.recipient != null;
