@@ -107,7 +107,7 @@
 		#{list items:_event.comments, as:'comment'}
 		<div class="comment">
 			<div class="comment-metadata">
-				<span class="comment-author">by ${comment.author},</span>
+				<span class="comment-author">by #{a @Users.show(comment.author.id)}${comment.author}#{/a},</span>
    			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
 			</div>
 			<table>
@@ -124,25 +124,3 @@
 		#{/list}
 	</div>
 </div>
-
-<script type="text/javascript" >
-	$(".participation-details").ready(function() {
-		$('.participation-details').addClass("invisible");
-	});
-	
-	$(".expand").click(function(event) {
-		event.preventDefault();
-		$(this).parent().siblings(".participation-details").toggleClass("invisible");
-	});
-	
-	#{if !_comments}
-	$(".comments").ready(function() {
-		$('.comments').addClass("invisible");
-	});
-	#{/if}
-	
-	$(".show-comments").click(function(event) {
-		event.preventDefault();
-		$(this).parent().siblings(".comments").toggleClass("invisible");
-	});
-</script>

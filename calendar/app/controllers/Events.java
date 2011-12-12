@@ -80,12 +80,11 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-		if(!invitations.isEmpty()) {
-			for(String s : invitations.split(",")) {
-				// TODO improve that
-				User usr = User.find("byName", s.trim()).first();
-				event.invitations.add(usr);
-			}
+		event.invitations.clear();
+		for(String s : invitations.split(",")) {
+			// TODO improve that
+			User usr = User.find("byFullName", s.trim()).first();
+			event.invitations.add(usr);
 		}
 		
 	    if (event.validateAndSave()) {
@@ -164,12 +163,11 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-		if(!invitations.isEmpty()) {
-			for(String s : invitations.split(",")) {
-				// TODO improve that
-				User usr = User.find("byName", s.trim()).first();
-				event.invitations.add(usr);
-			}
+		event.invitations.clear();
+		for(String s : invitations.split(",")) {
+			// TODO improve that
+			User usr = User.find("byFullName", s.trim()).first();
+			event.invitations.add(usr);
 		}
 		
 		// Validate and save

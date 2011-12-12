@@ -70,7 +70,7 @@ public class MessageBoxTest extends UnitTest{
 		MessageBox messageBox = new MessageBox(jack);
 		
 		assertTrue(messageBox.validateAndSave());
-		assertEquals(jack, messageBox.owner);
+		assertEquals(jack.messageBox, messageBox);
 		assertNotNull(messageBox);
 	}
 	

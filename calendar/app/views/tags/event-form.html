@@ -74,6 +74,13 @@ function checkEventCollision() {
 </p>
 
 <p>
+#{field 'invitations'}
+	<label for="invitations">Invitations</label>
+	<input type="text" name="${field.name}" id="{field.name"} value="#{ifErrors}${flash.endDay}#{/ifErrors}#{else}${_event?.getInvitationString()}#{/else}"/>
+#{/field}
+</p>
+
+<p>
 #{field 'isPrivate'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
 	<label for="isPrivate" id="isPrivate">Private event</label>

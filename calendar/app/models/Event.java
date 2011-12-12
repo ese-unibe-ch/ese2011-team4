@@ -1,10 +1,5 @@
 package models;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,7 +66,7 @@ import play.db.jpa.Model;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
-public abstract class Event extends Model implements Comparable<Event>, Serializable{
+public abstract class Event extends Model implements Comparable<Event> {
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -322,6 +317,23 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			query.setParameter(2, this);
 			return query.getResultList();
 		}
+	}
+	
+	/**
+	 * Returns the list of invited users as a string.
+	 * 
+	 * @return	<code>String</code> representation of invited users
+	 */
+	public String getInvitationString() {
+		String s = "";
+		for(int i = 0; i < invitations.size(); i++) {
+			s += invitations.get(i);
+			if(i < invitations.size() - 1) {
+				s += ", ";
+			}
+		}
+		
+		return s;
 	}
 	
 	/**
