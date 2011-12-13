@@ -191,8 +191,11 @@ public class Events extends Controller {
     	Event event = Event.findById(eventId);
     	if(Security.check(calendar)) {
     		if(Security.check(event)) {
+    			int year = event.startDate.getYear();
+    			int month = event.startDate.getMonthOfYear();
+    			int day = event.startDate.getDayOfMonth();
     			event.delete();
-    			Calendars.showCurrentMonth(calendarId,false);
+    			Calendars.show(calendarId, year, month, day);
     		} else {
     			// Delete a joined event
     			assert calendar.events.contains(event);
