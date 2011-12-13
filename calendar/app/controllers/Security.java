@@ -21,6 +21,13 @@ public class Security extends Secure.Security {
 		return false;
 	}
 	
+	static boolean check(Message message) {
+		if(message != null) {
+			return (Users.getConnectedUser().messageBox.inbox.contains(message) || Users.getConnectedUser().messageBox.drafts.contains(message));
+		}
+		return false;
+	}
+	
 	static void onDisconnected() {
 		Application.index();
 	}

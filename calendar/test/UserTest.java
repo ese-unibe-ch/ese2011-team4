@@ -177,15 +177,6 @@ public class UserTest extends UnitTest{
 	}
 	
 	@Test
-	public void getDefaultCalendar() {
-		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
-		
-		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
-		
-		assertEquals(calendar, jack.getDefaultCalendar());
-	}
-	
-	@Test
 	public void get_setDefaultCalendar() {
 		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
 		
