@@ -216,18 +216,22 @@ a:hover.show-comments {
 	display: block;
 }
 
-#isPrivate {
+#event-form #private {
 	display: inline;
 }
 
-#repeating-details {
+label.favorite-check {
+	display: inline;
+}
+
+.options {
 	margin: 5px 0px 5px 0px;
 	background-color: #E4EAFF;
 	border-radius: 16px;
 	padding: 10px;
 }
 
-#repeating-details .hint {
+.hint {
 	font-size: 0.8em;
 }
 
