@@ -18,9 +18,7 @@ public class Application extends Controller {
     	User connectedUser = User.find("email", Security.connected()).first();
     	if(connectedUser == null)
 			try {
-				System.out.println("abc");
 				render("public/index.html");
-				//Secure.login();
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
