@@ -42,10 +42,10 @@
 
 <script type="text/javascript">
 	$('#draft').bind('click', function() {
-		$('#writeForm').attr("action", "/message/save-draft/${connectedUser.messageBox.id}/${message.id}");
+		$('#writeForm').attr("action", "/message/save-draft/${message.id}");
 	});
 	
 	$('#cancel').bind('click', function() {
-		$('#writeForm').attr("action", "/message/delete-draft/${connectedUser.messageBox.id}/${message.id}");
+		$('#writeForm').attr("action", "/message/delete-draft/${message.id}");
 	});
 </script>

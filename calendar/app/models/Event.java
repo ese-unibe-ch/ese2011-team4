@@ -117,7 +117,7 @@ public abstract class Event extends Model implements Comparable<Event> {
 	/**
 	 * Users able to participate on this event. If empty everybody is.
 	 */
-	@OneToMany
+	@ManyToMany
 	public List<User> invitations;
 	
 	/**
