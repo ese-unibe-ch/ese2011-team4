@@ -33,7 +33,7 @@ public class EmailTest extends UnitTest {
         EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();
 		event.type = RepeatingType.WEEKLY;
 		event.save();
-		assertEquals(7, SingleEvent.count());
+		assertEquals(8, SingleEvent.count());
 	}
 	
 	@After

@@ -108,6 +108,36 @@ public class RepeatingEventTest extends UnitTest {
 	}
 	
 	@Test
+	public void creationOfDummyBirthdayEvent() {
+		// Get a calendar
+		Calendar jacksCalendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get a user
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
+		// Create an event
+        DateTime start = bud.birthday.withTime(0, 0, 0, 0);
+        DateTime end = start.plusDays(1);
+        EventSeries birthday = new EventSeries(
+        		jacksCalendar,
+        		"Brithday-Alert!",
+        		start,
+        		end,
+        		RepeatingType.YEARLY);
+		
+        birthday.validateAndSave();
+		
+		// Create the dummy
+		BirthdayEvent dummy = birthday.createDummyBirthdayEvent(start, bud);
+		
+		assertEquals(birthday.name, dummy.name);
+		assertEquals(start, dummy.startDate);
+		assertEquals(end, dummy.endDate);
+		assertEquals(RepeatingType.YEARLY, dummy.type);
+		assertEquals(bud, dummy.user);
+	}
+	
+	@Test
 	public void mutateEvent() {
 		// Get a event
 		EventSeries event = EventSeries.find("byName", "Weekly Meeting").first();

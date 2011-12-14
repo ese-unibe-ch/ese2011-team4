@@ -4,23 +4,19 @@
 	<link rel="stylesheet" href="@{'/public/stylesheets/user.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-<div id="main">
-	<div id="main-left">
-		<h2 class="title">${user.email}</h2>
-		#{ifErrors}
-   		<span class="error">
-   			Oops...
-   			<ul>
-   			#{errors}
-       		<li>${error}</li>
-   			#{/errors}
-   			</ul>
-		</span>
-		#{/ifErrors}
-		<div id="edit">
-		#{form @Users.update(user.id)}
-			#{edit-user user:user /}
-		#{/form}
-		</div>
-	</div>
+<h2 class="title">${user.email}</h2>
+#{ifErrors}
+	<span class="error">
+		Oops...
+		<ul>
+		#{errors}
+ 		<li>${error}</li>
+		#{/errors}
+		</ul>
+</span>
+#{/ifErrors}
+<div id="edit">
+#{form @Users.update(user.id)}
+	#{edit-user user:user /}
+#{/form}
 </div>

@@ -1,0 +1,21 @@
+<div class="event">
+	<div class="event-header">
+		<div class="event-title">
+			${_birthday.name}
+		</div>
+		<div class="event-menu">
+			<ol>
+				<li><span class="actions">Actions</span>
+					<ol>
+						<li><a href="mailto:${_birthday.user.email}">EMail</a></li>
+						<li>#{a @Users.write(_birthday.user.id)}Message#{/a}</li>
+					</ol>
+				</li>
+			</ol>
+		</div>
+	</div>
+	
+	<div class="event-content">
+		Today is #{a @Users.show(_birthday.user.id)}${_birthday.user.fullname}s#{/a} ${_dt.getYear()-_birthday.user.birthday.getYear()}th birthday.
+	</div>
+</div>

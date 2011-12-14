@@ -1,10 +1,5 @@
 package models;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,17 +17,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.persistence.Table;
 
-
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
 
 import play.data.validation.Check;
 import play.data.validation.CheckWith;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
-
 
 /**
  * The Event class represents a temporary and scheduled happening with a defined 
@@ -74,7 +66,7 @@ import play.db.jpa.Model;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="EVENTTYPE", discriminatorType=DiscriminatorType.STRING)
 @Table(name="Event")
-public abstract class Event extends Model implements Comparable<Event>, Serializable{
+public abstract class Event extends Model implements Comparable<Event> {
 	
 	/**
 	 * Calendar to which this events initially belongs.
@@ -118,9 +110,15 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	public RepeatingType type;
 	
 	/**
-	 * Visibility of this event.
+	 * Visibility of this event either only me or invitations.
 	 */
 	public Boolean isPrivate;
+	
+	/**
+	 * Users able to participate on this event. If empty everybody is.
+	 */
+	@ManyToMany
+	public List<User> invitations;
 	
 	/**
 	 * Location at which this event takes place.
@@ -166,6 +164,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		this.calendars = new LinkedList<Calendar>();
 		this.calendars.add(calendar);
 		this.isPrivate = false;
+		this.invitations = new LinkedList<User>();
 		this.type = repeating;
 	}
 	
@@ -197,6 +196,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 		if(repeatingInterval == 0) {
 			repeatingInterval = 1;
 		}
+		
 		if(repeating == RepeatingType.NONE) {
 			return new SingleEvent(calendar, name, startDate, endDate);
 		} else {
@@ -225,10 +225,13 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 			commentCopy.postedAt = comment.postedAt;
 			event.comments.add(commentCopy);
 		}
+		
 		for (Calendar calendar : series.calendars) {
-			if(!calendar.equals(event.origin))
+			if(!calendar.equals(event.origin)) {
 				event.calendars.add(calendar);
+			}
 		}
+		
 		series.delete();
 		return event;
 	}
@@ -269,6 +272,9 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @since 	Iteration-2
 	 */
 	public void joinCalendar(Calendar calendar) {
+		// Either there are no invitations or the owner of the calender is in there
+		assert invitations.isEmpty() || invitations.contains(calendar.owner);
+		
 		calendars.add(calendar);
 		calendar.events.add(this);
 		calendar.save();
@@ -284,7 +290,7 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @since 	Iteration-2
 	 * @see 	Comment
 	 */
-	public void addComment(String author, String content) {
+	public void addComment(User author, String content) {
 	    Comment newComment = new Comment(author, this);
 	    newComment.content = content;
 	    newComment.save();
@@ -293,7 +299,6 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	}
 	
 	/**
-	 *
 	 * Returns a list of all calendars available for joining the event given for a certain user
 	 * 
 	 * @param	user 	The user which requests the join 
@@ -302,15 +307,33 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	 * @since	Iteration-1
 	 */	
 	public List<Calendar> availableJoins(User user) {
-		if(!isPrivate) {
+		if(isPrivate && !invitations.contains(user)) {
+			return new LinkedList<Calendar>();
+		} else {
 			Query query = JPA.em().createQuery("SELECT c FROM Calendar c " +
 					"WHERE c.owner = ?1 "+
 					"AND ?2 NOT MEMBER OF c.events");
 			query.setParameter(1, user);
 			query.setParameter(2, this);
 			return query.getResultList();
-		} else
-			return new LinkedList<Calendar>();
+		}
+	}
+	
+	/**
+	 * Returns the list of invited users as a string.
+	 * 
+	 * @return	<code>String</code> representation of invited users
+	 */
+	public String getInvitationString() {
+		String s = "";
+		for(int i = 0; i < invitations.size(); i++) {
+			s += invitations.get(i);
+			if(i < invitations.size() - 1) {
+				s += ", ";
+			}
+		}
+		
+		return s;
 	}
 	
 	/**
@@ -325,15 +348,16 @@ public abstract class Event extends Model implements Comparable<Event>, Serializ
 	
 	/**
 	 * Returns true if the given user is the owner of this event or the
-	 * event is public.
+	 * event is public or the given user is on the invitations.
 	 * 
 	 * @param 	visitor who wants to see this event
-	 * @return <code>true</code> if visitor is owner of this event or if this event is public, otherwise <code>false</code>
+	 * @return <code>true</code> if visitor is owner of this event or if this event is public 
+	 * or if the visitor is on the invitations, otherwise <code>false</code>
 	 * @since 	Iteration-1
 	 * @see 	User
 	 */
 	public boolean isVisible(User visitor) {
-		return origin.owner.equals(visitor) || !isPrivate;
+		return origin.owner.equals(visitor) || !isPrivate || invitations.contains(visitor);
 	}
 	
 	/**

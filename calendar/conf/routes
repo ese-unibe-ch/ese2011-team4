@@ -22,9 +22,10 @@ GET		/message/show//{msgId}							Messages.message
 GET		/message/write/{msgId}							Messages.writeMessage
 GET		/message/reply//{msgId}							Messages.reply
 GET		/message/delete/{msgId}							Messages.delete
-POST	/message/send/{msgId}							Messages.sendMessage
-POST	/message/save-draft//{msgId}					Messages.saveDraft
-POST	/message/delete-draft/{msgId}					Messages.deleteDraft
+POST	/message/handle/{msgId}							Messages.handleMessage
+GET		/message/send/{msgId}							Messages.sendMessage
+GET		/message/save-draft//{msgId}					Messages.saveDraft
+GET		/message/delete-draft/{msgId}					Messages.deleteDraft
 GET     /event/{id}/comments                   			Comments.show
 GET     /event/{id}/comment	                   			Comments.add
 POST	/comment/{id}/update							Comments.update

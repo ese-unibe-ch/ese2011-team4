@@ -1,33 +1,4 @@
-<script type="text/javascript">
-function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
-   $('#LocationCollisionResponse').load(
-       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   )
-}
-</script>
-
-<script type="text/javascript">
-function checkEventCollision() {
-   var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
-   $('#EventCollisionResponse').load(
-       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   )
-}
-</script>
-
-<script type="text/javascript">
-	$.ajaxSetup ({
-   		// Disable caching of AJAX responses
-    	cache: false
-	});
-     $(document.getElementById('LocationCollisionResponse')).ready(function() {
-     	checkLocationCollision();
- 	});
-     $(document.getElementById('EventCollisionResponse')).ready(function() {
-     	checkEventCollision();
- 	});
-</script>
+%{ connectedUser = models.User.find("email", session.username).first() }%
 
 #{ifErrors}
 	<span class="error">
@@ -76,8 +47,27 @@ function checkEventCollision() {
 <p>
 #{field 'isPrivate'}
 	<input type="checkbox" name="${field.name}" id="${field.name}" #{ifErrors}#{if flash.isPrivate}checked="checked"#{/if}#{/ifErrors}#{else}#{if _event?.isPrivate}checked="checked"#{/if}#{/else}/>
-	<label for="isPrivate" id="isPrivate">Private event</label>
+	<label for="${field.name}" id="private">Private event</label>
 #{/field}
+</p>
+
+<p>
+#{field 'invitations'}
+	<label for="invitations">Invitations</label>
+	<input type="text" name="${field.name}" id="{field.name"} value="#{ifErrors}${flash.invitations}#{/ifErrors}#{else}${_event?.getInvitationString()}#{/else}"/>
+#{/field}
+	<button id="contact-button" type="button" #{if connectedUser.favorites.isEmpty()}disabled="disabled"#{/if}>Contacts</button>
+	<span class="hint">(Will send messages.)</span>
+	<div id="contact-list" class="options">
+			<h3 class="title">Your contacts</h3>
+			#{field 'contacts'}			
+			<select name="${field.name}" id="${field.name}" multiple="multiple">		
+			#{list items:connectedUser.favorites, as:'fav'}
+			<option value="${fav.id}" #{if _event?.invitations?.contains(fav)} selected#{/if}>${fav.toString()}</option>			
+			#{/list}
+			</select>
+			#{/field}
+	</div>
 </p>
 
 <p>
@@ -105,7 +95,7 @@ function checkEventCollision() {
 	#{/field}
 </p>
 
-<div id="repeating-details">
+<div id="repeating-details" class="options">
 Repeating configuration details	
 	<p>
 	#{field 'periodEndDay'}
@@ -139,21 +129,59 @@ Repeating configuration details
 </p>
 
 <script type="text/javascript" >
+	$('#contact-button').ready(function() {
+		$('#contact-list').hide();
+	});
+	
+	$('#contact-button').click(function(event) {
+		$('#contact-list').slideToggle('slow');
+	});	
+</script>
+
+<script type="text/javascript" >
 	$('#repeating').ready(function() {
 		if($('#repeating option:selected').attr("value") == 'NONE')
 		{
-			$('#repeating-details').addClass("invisible");
+			$('#repeating-details').hide();
 		}
 	});
 
 	$('#repeating').change(function() {
 		if($('#repeating option:selected').attr("value") == 'NONE')
 		{
-			$('#repeating-details').addClass("invisible");
+			$('#repeating-details').hide('slow');
 		}
 		else
 		{
-			$('#repeating-details').removeClass("invisible");
+			$('#repeating-details').show('slow');
 		}
 	});
+</script>
+
+<script type="text/javascript">
+function checkLocationCollision() {
+   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
+   $('#LocationCollisionResponse').load(
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   )
+}
+</script>
+
+<script type="text/javascript">
+	function checkEventCollision() {
+   	var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
+   	$('#EventCollisionResponse').load(
+			action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   	)
+}
+</script>
+
+<script type="text/javascript">
+	$('#LocationCollisionResponse').ready(function() {
+     	checkLocationCollision();
+ 	});
+   
+   $('#EventCollisionResponse').ready(function() {
+     	checkEventCollision();
+ 	});
 </script>

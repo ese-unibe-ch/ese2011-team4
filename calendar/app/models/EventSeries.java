@@ -169,6 +169,25 @@ public class EventSeries extends Event {
 	}
 	
 	/**
+	 * Creates and returns a dummy {@link BirthdayEvent} out of this <code>EventSeries</code>,
+	 * if the argument date is between this event's period start and this event's period end.
+	 * 
+	 * @param day	start date of the created <code>BirthdayEvent</code>
+	 * @param user	<code>User</code> to whom the created <code>BirthdayEvent</code> belongs
+	 * @return a new dummy <code>BirthdayEvent</code>
+	 * @see BirthdayEvent
+	 * @see User
+	 * @since Iteration-7
+	 */
+	public BirthdayEvent createDummyBirthdayEvent(DateTime day, User user) {
+		assert isThisDay(day);
+		BirthdayEvent birthday = new BirthdayEvent(this, user);
+		birthday.startDate = this.startDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
+		birthday.endDate = birthday.startDate.plusDays(1);
+		return birthday;
+	}
+	
+	/**
 	 * Detaches a repeating event from its series and transforms it to
      * a single event by creating a new single event with the argument date as start date.
      * 

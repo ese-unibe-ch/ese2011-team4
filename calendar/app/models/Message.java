@@ -33,6 +33,8 @@ public class Message extends Model {
 	public Message(User sender, User recipient) {
 		this.sender = sender;
 		this.recipient = recipient;
+		this.subject = "";
+		this.content = "";
 		this.read = false;
 	}
 	
@@ -66,11 +68,5 @@ public class Message extends Model {
 			inbox.save();
 			this.save();
 		}
-	}
-	
-	public String getHtmlContent() {
-		return content;
-		// TODO doesn't work yet, don't know how it would work. Anybody?
-		// return content.replace("\n", "&#10;");
 	}
 }

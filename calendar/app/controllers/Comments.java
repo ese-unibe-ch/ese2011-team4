@@ -8,8 +8,7 @@ import models.*;
 public class Comments extends Controller {
     public static void add(Long id){
     	Event event = Event.findById(id);
-    	User connectedUser = User.find("email", Security.connected()).first();
-        render(event, connectedUser);
+        render(event);
     }
 	
     public static void delete(Long eventId, Long commentId){
@@ -19,28 +18,23 @@ public class Comments extends Controller {
     	assert comment != null;
     	
     	comment.delete();
-    	show(event.id);
-    }
-    
-    public static void show(Long id){
-    	Event event = Event.findById(id);
-    	User connectedUser = User.find("email", Security.connected()).first();
-    	render(event, connectedUser);
+    	flash.success("Comment sucessfully deleted.");
+    	add(event.id);
     }
 
-    public static void update(Long id, Long userId, String content ) {
-    	Event event = Event.findById(id);
+    public static void update(Long eventId, String content ) {
+    	Event event = Event.findById(eventId);
     	assert event != null;
     	
-    	User author = User.findById(userId);
+    	User author = Users.getConnectedUser();
     	assert author != null;
     	
-    	Comment comment = new Comment(author.fullname, event);
+    	Comment comment = new Comment(author, event);
     	comment.content = content;
  
     	if(comment.validateAndSave()) {
-    		flash.success("Thanks for posting %s", author);
-    		show(event.id);
+    		flash.success("Thanks for posting %s", author.toString());
+    		add(event.id);
     	} else {
     		params.flash();
     		validation.keep();

@@ -234,6 +234,45 @@ public class Calendar extends Model implements Printable{
 	}
 
 	/**
+	 * Returns a list of all <code>BirthdayEvent</code>s at a specific day for a certain <code>
+	 * User</code>.
+	 * <p>
+	 * Birthdays of other <code>User</code>s are listed only if the <code>User</code> is in the
+	 * argument <code>User</code>s favorite list and if the birthday is visible.
+	 * 
+	 * @param 	visitor		<code>User</code> who wants to see the <code>BirthdayEvent</code>s of
+	 * his favorite <code>Users</code>
+	 * @param	day			the day to check for <code>BirthdayEvent</code>s
+	 * 
+	 * @return	list of available <code>BirthdayEvents</code> at the given day and under the 
+	 * defined constrictions
+	 * @see 	BirthdayEvent
+	 * @see		User
+	 * @since 	Iteration-7
+	 */
+	public List<BirthdayEvent> birthdays(User visitor, DateTime day) {
+		LinkedList<BirthdayEvent> list = new LinkedList<BirthdayEvent>();
+		
+		for(User favorite : visitor.favorites){
+			if(favorite.birthday != null && favorite.birthday.getMonthOfYear() == day.getMonthOfYear() 
+					&& favorite.birthday.getDayOfMonth() == day.getDayOfMonth() && favorite.birthday.getYear() < day.getYear() 
+					&& favorite.visiblebirthday == true) {
+				
+				DateTime start = favorite.birthday.withTime(0, 0, 0, 0);
+				DateTime end = start.plusDays(1);
+				EventSeries birthday = new EventSeries( this, 
+														"Brithday-Alert!", 
+														start, 
+														end, 
+														RepeatingType.YEARLY);
+				list.add(birthday.createDummyBirthdayEvent(start, favorite));
+			}
+		}
+		
+		return list;
+	}
+	
+	/**
 	 * Returns a list of all events available at a specific location for a certain user.
 	 * <p>
 	 * An event is only visible to the user if he is the owner of that event or the event
@@ -310,7 +349,7 @@ public class Calendar extends Model implements Printable{
 	 * Returns a list of all days of a certain month.
 	 * 
 	 * @param 	dt	the month for which to get the days
-	 * @return a list of all days for this month
+	 * @return 	a list of all days for this month
 	 * @since 	Iteration-1
 	 */
 	public static List<DateTime> getDaysInMonth(DateTime dt) {
@@ -323,6 +362,18 @@ public class Calendar extends Model implements Printable{
 		days.add(last);
 		
 		return days;
+	}
+	
+	/**
+	 * Returns true if a specific day is today,
+	 * 
+	 * @param 	the day used to compare
+	 * @return	true if it is the same day
+	 * @since	Iteration-5
+	 */
+	public static boolean isToday(DateTime day) {
+		DateTime dt = new DateTime();
+		return dt.getDayOfYear() == day.getDayOfYear() && dt.getYear() == day.getYear();
 	}
 	
 	/**

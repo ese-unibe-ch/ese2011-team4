@@ -1,4 +1,4 @@
-#{extends 'home-view.html' /}
+#{extends 'main.html' /}
 #{set title: Users /}
 
 #{set 'moreStyles'}
@@ -47,7 +47,7 @@
 				<tr>
 					<td>${msg.timeStamp.toString("dd.MM.yy HH:mm")}</td>
 					<td>#{a @Users.show(msg.recipient.id)}${msg.recipient}#{/a}</td>
-					<td>#{a @Messages.message(msg.id)}${msg.subject}#{/a}</td>
+					<td>#{a @Messages.message(msg.id)}#{if msg.subject.isEmpty()}&lt;No subject&gt;#{/if}#{else}${msg.subject}#{/else}#{/a}</td>
 					<td>
 						<span class="button">#{a @Messages.sendMessage(msg.id)}Send#{/a}</span>
 						<span class="delete button">#{a @Messages.delete(msg.id)}Delete#{/a}</span>

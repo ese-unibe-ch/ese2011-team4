@@ -44,10 +44,14 @@ public class CommentTest extends UnitTest {
 	public void postComments() {
 		// Get a event
 		SingleEvent event = SingleEvent.find("byName", "Collections").first();
-	 
+		
+		// Get some users
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		User ed = User.find("byEmail", "ed.exley@lapd.com").first();
+		
 	    // Post a first comment
-		event.addComment("Jeff", "Nice post");
-	    event.addComment("Tom", "I knew that !");
+		event.addComment(bud, "Nice post");
+	    event.addComment(ed, "I knew that !");
 	 
 	    // Retrieve all comments for this event
 	    List<Comment> eventComments = Comment.find("byEvent", event).fetch();
@@ -58,21 +62,24 @@ public class CommentTest extends UnitTest {
 	 
 	    Comment firstComment = eventComments.get(0);
 	    assertNotNull(firstComment);
-	    assertEquals("Jeff", firstComment.author);
+	    assertEquals(bud, firstComment.author);
 	    assertEquals("Nice post", firstComment.content);
 	    assertNotNull(firstComment.postedAt);
 	 
 	    Comment secondComment = eventComments.get(1);
 	    assertNotNull(secondComment);
-	    assertEquals("Tom", secondComment.author);
+	    assertEquals(ed, secondComment.author);
 	    assertEquals("I knew that !", secondComment.content);
 	    assertNotNull(secondComment.postedAt);
 	}
 	
 	@Test
 	public void deleteComments() {
+		// Get a User
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		
 		// Get a comment
-		Comment comment = Comment.find("byAuthor", "Michael").first();
+		Comment comment = Comment.find("byAuthor", bud).first();
 		
 		comment.delete();
 		

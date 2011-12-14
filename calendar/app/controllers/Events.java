@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -14,6 +18,7 @@ import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.libs.Codec;
 import play.libs.Images;
+import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 import models.*;
@@ -46,7 +51,8 @@ public class Events extends Controller {
 									Long locationId,
 									String repeating,
 									String periodEndDay,
-									int repeatingInterval) {
+									int repeatingInterval,
+									String invitations) {
 		
 		Calendar calendar = Calendar.findById(calendarId);
 		assert calendar != null;
@@ -75,7 +81,32 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
+		List<String> notFound = new LinkedList<String>();
+		List<Message> messages = new LinkedList<Message>();
+		if(!invitations.isEmpty()) {
+			for(String s : invitations.split(",")) {
+				User usr = User.find("byFullName", s.trim()).first();
+				if(usr == null) {
+					notFound.add(s.trim());
+				} else {
+					event.invitations.add(usr);
+					messages.add(getInviationMessage(event.origin.owner, usr, event));
+				}
+			}
+		}
+			
 	    if (event.validateAndSave()) {
+	    	for(Message message : messages) {
+	    		try {
+					message.send();
+				} catch (Exception e) {
+					Logger.error(e.getStackTrace().toString());
+					flash.error("An error occured during sending an inivation to %.", message.recipient.toString());
+				}
+	    	}
+	    	for(String s : notFound) {
+	    		flash.error("Couldn't find a user with the name % .", s);
+	    	}
 	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	    }
 	    else {
@@ -87,14 +118,20 @@ public class Events extends Controller {
 	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	    }
 	}
+    
+    private static Message getInviationMessage(User sender, User recipient, Event event) {    	
+    	Message message = new Message(sender, recipient);
+    	message.subject = "Invitation for "+event.name;
+    	message.content = "You have been invited to join "+sender+"'s event: "+event.name;
+    	return message.save();
+    }
 
 	public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
-    	List<Location> locations = Location.all().fetch();
     	
     	if(Security.check(event)) {
     		Calendar calendar = Calendar.findById(calendarId);
-	    	render(calendar, event, locations);
+	    	render(calendar, event);
     	} else
     		forbidden("Not your event!");
     }
@@ -111,7 +148,8 @@ public class Events extends Controller {
 								Long locationId,
 								RepeatingType repeating,
 								String periodEndDay,
-								int repeatingInterval) throws Exception {
+								int repeatingInterval,
+								String invitations) throws Exception {
     	
 		if(repeatingInterval == 0) {
 			repeatingInterval = 1;
@@ -151,9 +189,11 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-		if(repeating != RepeatingType.NONE) {
-			EventSeries series = (EventSeries) event;
-			series.setRepeatingInterval(repeatingInterval);
+		event.invitations.clear();
+		for(String s : invitations.split(",")) {
+			// TODO improve that
+			User usr = User.find("byFullName", s.trim()).first();
+			event.invitations.add(usr);
 		}
 		
 		// Validate and save
@@ -175,8 +215,11 @@ public class Events extends Controller {
     	Event event = Event.findById(eventId);
     	if(Security.check(calendar)) {
     		if(Security.check(event)) {
+    			int year = event.startDate.getYear();
+    			int month = event.startDate.getMonthOfYear();
+    			int day = event.startDate.getDayOfMonth();
     			event.delete();
-    			Calendars.showCurrentMonth(calendarId,false);
+    			Calendars.show(calendarId, year, month, day);
     		} else {
     			// Delete a joined event
     			assert calendar.events.contains(event);

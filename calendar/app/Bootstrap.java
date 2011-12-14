@@ -1,9 +1,11 @@
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import play.Logger;
 import play.Play;
+import play.db.jpa.GenericModel.JPAQuery;
 import play.db.jpa.JPA;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
@@ -33,6 +35,15 @@ public class Bootstrap extends Job {
             // YAML can't load enum
             loadEnums();
             Logger.info("Loaded enums");
+            
+            // Initialize some variables
+            List<Event> events = Event.findAll();
+            for(Event e : events) {
+            	if(e.invitations == null) {
+	            	e.invitations = new LinkedList<User>();
+	            	e.save();
+            	}
+            }
         }
     }
     

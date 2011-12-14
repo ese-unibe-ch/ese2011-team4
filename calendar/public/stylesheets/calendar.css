@@ -95,11 +95,12 @@ table a:hover {
 	font-weight: bold;
 }
 
+#month td.today a {
+	color: red;
+}
+
 #month td.selected {
 	background-color: #333;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
 }
 
 #month td a {

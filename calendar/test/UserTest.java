@@ -175,4 +175,16 @@ public class UserTest extends UnitTest{
 		assertEquals("12345", telephone);
 		assertTrue(telephoneVisibility);		
 	}
+	
+	@Test
+	public void get_setDefaultCalendar() {
+		User jack = User.find("byEmail", "jack.vincennes@lapd.com").first();
+		
+		Calendar calendar = Calendar.find("byName", "Jacks Agenda").first();
+		Calendar calendar2 = Calendar.find("byName", "Jacks Secret Agenda").first();
+		
+		assertEquals(calendar, jack.getDefaultCalendar());
+		jack.setDefaultCalendar(calendar2);
+		assertEquals(calendar2, jack.getDefaultCalendar());
+	}
 }

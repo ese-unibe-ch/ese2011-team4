@@ -10,6 +10,8 @@ User(bud):
     email:          bud.white@lapd.com
     password:       secret
     fullname:       Bud White
+    birthday:       1989-12-11 01:00:00
+    visiblebirthday: true
     
 User(ed):
     email:          ed.exley@lapd.com
@@ -105,6 +107,17 @@ SingleEvent(e6):
     origin:         edCalendar
     description:    This is public event from Ed.
     isPrivate:      true
+    
+SingleEvent(e7):
+    name:           Legendary party
+    startDate:      2011-12-22 21:00:00
+    endDate:        2011-12-23 05:00:00
+    calendars:      firstJackCalendar
+    origin:         firstJackCalendar
+    description:    This is a private event with a invitation list.
+    invitations:      
+     - bud
+    isPrivate:      true
 
 EventSeries(r1):
     name:           Weekly Meeting
@@ -131,21 +144,21 @@ EventSeries(r2):
     repeatingInterval:       2
     
 Comment(c1):
-    author:         Michael
+    author:         jack
     postedAt:       2011-11-13 09:00:00
     content:        first post
     event:          e1
     
 Comment(c2):
-    author:         Marc
+    author:         bud
     postedAt:       2011-11-13 10:00:00
     content:        second post
     event:          e1
     
 Comment(c3):
-    author:         Jack Vincennes
+    author:         jack
     postedAt:       2011-10-21 11:00:00
-    content:        Jack is the owner of this event so he can add comments even if the event is private
+    content:        Jack is the owner of this event so he can add comments even if the event is private.
     event:          e2
 
 Message(msg1):

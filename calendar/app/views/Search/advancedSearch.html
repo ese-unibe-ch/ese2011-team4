@@ -1,20 +1,20 @@
 #{extends 'main.html' /}
 #{set title:'Search'/}
-<div id="main">
-	<div id="main-left">
-	#{if match.size() == 0}
-		No event found
-	#{/if}
-	#{else}
-		Following events were found:
-	<ul>
-		#{list items: match, as: 'event'}
-			<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(),event.startDate.getDayOfMonth())}">${event.toString()}</a></li>
-		#{/list}
-	</ul>
-	#{/else}
-	</div>
-	<div id="main-right">
-		#{search-nav /}
-	</div>
+
+#{set 'options'}
+	<li><a class="navigation" href="@{Users.index()}">Go back</a></li>
+	<li><a class="navigation" href="@{Search.index()}">Search</a></li>
+#{/set}
+
+#{if match.size() == 0}
+	No event found
+#{/if}
+#{else}
+	Following events were found:
+<ul>
+	#{list items: match, as: 'event'}
+		<li><a href="@{Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(),event.startDate.getDayOfMonth())}">${event.toString()}</a></li>
+	#{/list}
+</ul>
+#{/else}
 </div>
