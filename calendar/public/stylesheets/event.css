@@ -170,12 +170,11 @@ a:hover.show-comments {
 	display: block;
 }
 
-.comment table{
-	width:84%;
+.comment table {
+	width: 75%;
 }
 
 .comment-content {
-	width: 75%;
 	position: relative;
 	background: #E4EAFF;
 	text-align: left;
@@ -184,6 +183,10 @@ a:hover.show-comments {
 	border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
+}
+
+.delete-comment {
+	width: 50px;
 }
 
 /** Event form **/

@@ -18,7 +18,9 @@ public class Application extends Controller {
     	User connectedUser = User.find("email", Security.connected()).first();
     	if(connectedUser == null)
 			try {
-				Secure.login();
+				System.out.println("abc");
+				render("public/index.html");
+				//Secure.login();
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
@@ -28,7 +30,7 @@ public class Application extends Controller {
    
     public static void register() {
     	String randomID = Codec.UUID();
-		render("/Users/register.html", randomID);
+		render("/public/register.html", randomID);
 	}
 	
 	public static void newUser(	String email, 
@@ -59,4 +61,9 @@ public class Application extends Controller {
 	    Cache.set(id, code, "10mn");
 	    renderBinary(captcha);
 	}
+	
+    public static void event(Long  id) {
+    	Event event = Event.findById(id);
+    	render("public/event.html", event);
+    }
 }
