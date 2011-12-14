@@ -227,6 +227,10 @@ label.favorite-check {
 	display: inline;
 }
 
+label.contact {
+	display: inline;
+}
+
 .options {
 	margin: 5px 0px 5px 0px;
 	background-color: #E4EAFF;
