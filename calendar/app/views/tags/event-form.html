@@ -1,34 +1,3 @@
-<script type="text/javascript">
-function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
-   $('#LocationCollisionResponse').load(
-       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   )
-}
-</script>
-
-<script type="text/javascript">
-function checkEventCollision() {
-   var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
-   $('#EventCollisionResponse').load(
-       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   )
-}
-</script>
-
-<script type="text/javascript">
-	$.ajaxSetup ({
-   		// Disable caching of AJAX responses
-    	cache: false
-	});
-     $(document.getElementById('LocationCollisionResponse')).ready(function() {
-     	checkLocationCollision();
- 	});
-     $(document.getElementById('EventCollisionResponse')).ready(function() {
-     	checkEventCollision();
- 	});
-</script>
-
 #{ifErrors}
 	<span class="error">
    Oops...
@@ -70,6 +39,13 @@ function checkEventCollision() {
 #{field 'endTime'}
 	<label for="endTime" class="time">Time</label>
     <input size=5px type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endTime}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('HH:mm')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getHourOfDay())}:${String.format("%02d", _selected.plusHours(1).getMinuteOfHour())}#{/else}#{/else}"/>
+#{/field}
+</p>
+
+<p>
+#{field 'invitations'}
+	<label for="invitations">Invitations</label>
+	<input type="text" name="${field.name}" id="{field.name"} value="#{ifErrors}${flash.invitations}#{/ifErrors}#{else}${_event?.getInvitationString()}#{/else}"/>
 #{/field}
 </p>
 
@@ -156,4 +132,32 @@ Repeating configuration details
 			$('#repeating-details').removeClass("invisible");
 		}
 	});
+</script>
+
+<script type="text/javascript">
+function checkLocationCollision() {
+   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
+   $('#LocationCollisionResponse').load(
+       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   )
+}
+</script>
+
+<script type="text/javascript">
+	function checkEventCollision() {
+   	var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
+   	$('#EventCollisionResponse').load(
+			action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+   	)
+}
+</script>
+
+<script type="text/javascript">
+	$('#LocationCollisionResponse').ready(function() {
+     	checkLocationCollision();
+ 	});
+   
+   $('#EventCollisionResponse').ready(function() {
+     	checkEventCollision();
+ 	});
 </script>

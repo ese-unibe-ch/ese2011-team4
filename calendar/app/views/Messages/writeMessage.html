@@ -39,3 +39,13 @@
 	</p>
 #{/form}
 </div>
+
+<script type="text/javascript">
+	$('#draft').bind('click', function() {
+		$('#writeForm').attr("action", "/message/save-draft/${message.id}");
+	});
+	
+	$('#cancel').bind('click', function() {
+		$('#writeForm').attr("action", "/message/delete-draft/${message.id}");
+	});
+</script>

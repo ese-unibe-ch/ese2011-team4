@@ -101,9 +101,6 @@ table a:hover {
 
 #month td.selected {
 	background-color: #333;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
 }
 
 #month td a {

@@ -80,15 +80,32 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
+		List<String> notFound = new LinkedList<String>();
+		List<Message> messages = new LinkedList<Message>();
 		if(!invitations.isEmpty()) {
 			for(String s : invitations.split(",")) {
-				// TODO improve that
-				User usr = User.find("byName", s.trim()).first();
-				event.invitations.add(usr);
+				User usr = User.find("byFullName", s.trim()).first();
+				if(usr == null) {
+					notFound.add(s.trim());
+				} else {
+					event.invitations.add(usr);
+					messages.add(getInviationMessage(event.origin.owner, usr, event));
+				}
 			}
 		}
-		
+			
 	    if (event.validateAndSave()) {
+	    	for(Message message : messages) {
+	    		try {
+					message.send();
+				} catch (Exception e) {
+					Logger.error(e.getStackTrace().toString());
+					flash.error("An error occured during sending an inivation to %.", message.recipient.toString());
+				}
+	    	}
+	    	for(String s : notFound) {
+	    		flash.error("Couldn't find a user with the name % .", s);
+	    	}
 	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	    }
 	    else {
@@ -100,6 +117,13 @@ public class Events extends Controller {
 	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 	    }
 	}
+    
+    private static Message getInviationMessage(User sender, User recipient, Event event) {    	
+    	Message message = new Message(sender, recipient);
+    	message.subject = "Invitation for "+event.name;
+    	message.content = "You have been invited to join "+sender+"'s event: "+event.name;
+    	return message.save();
+    }
 
 	public static void edit(Long calendarId, Long eventId) {
     	Event event = Event.findById(eventId);
@@ -164,12 +188,11 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
-		if(!invitations.isEmpty()) {
-			for(String s : invitations.split(",")) {
-				// TODO improve that
-				User usr = User.find("byName", s.trim()).first();
-				event.invitations.add(usr);
-			}
+		event.invitations.clear();
+		for(String s : invitations.split(",")) {
+			// TODO improve that
+			User usr = User.find("byFullName", s.trim()).first();
+			event.invitations.add(usr);
 		}
 		
 		// Validate and save

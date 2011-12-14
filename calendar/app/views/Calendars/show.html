@@ -104,3 +104,23 @@
 		#{/if}
 	</div>
 </div>
+
+<script type="text/javascript" >
+	$(".participation-details").ready(function() {
+		$('.participation-details').addClass("invisible");
+	});
+	
+	$(".expand").click(function(event) {
+		event.preventDefault();
+		$(this).parent().siblings(".participation-details").toggleClass("invisible");
+	});
+	
+	$(".comments").ready(function() {
+		$('.comments').addClass("invisible");
+	});
+	
+	$(".show-comments").click(function(event) {
+		event.preventDefault();
+		$(this).parent().siblings(".comments").toggleClass("invisible");
+	});
+</script>
