@@ -54,7 +54,7 @@
 			#{/if}
 				
 			#{list items:calendar.getDaysInMonth(dt), as:'day'}
-				<td class="#{if calendar.events(connectedUser, day).size() > 0}events#{/if}
+				<td class="#{if calendar.events(connectedUser, day).size() > 0 || calendar.birthdays(connectedUser, day).size() > 0}events#{/if}
 				#{if day.getDayOfMonth() == dt.getDayOfMonth()} selected#{/if} 
 				#{if models.Calendar.isToday(day)} today#{/if}">
 					#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
