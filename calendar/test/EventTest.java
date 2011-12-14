@@ -174,7 +174,6 @@ public class EventTest extends UnitTest {
 		assertEquals(1, singleEvent.compareTo(event3));
 	}
 	
-	@Ignore("Not working yet")
 	@Test
 	public void invitations() {
 		// Get a calendar
@@ -200,5 +199,29 @@ public class EventTest extends UnitTest {
 		
 		assertTrue(e.isVisible(bud));
 		assertEquals(1, e.availableJoins(bud).size());
+	}
+	
+	@Test
+	public void getInvitationString() {
+		// Get a calendar
+		Calendar jacksCalendar = Calendar.find("byName", "Jacks Agenda").first();
+		
+		// Get a users
+		User bud = User.find("byEmail", "bud.white@lapd.com").first();
+		User ed = User.find("byEmail", "ed.exley@lapd.com").first();
+
+		DateTime start = format.parseDateTime("20.10.2011 10:00");
+		DateTime end = format.parseDateTime("20.10.2011 12:00");
+		
+		// Create a event
+		Event e = Event.createEvent(jacksCalendar, "Test", start, end, RepeatingType.NONE, null, 0);
+		assertTrue(e.validateAndSave());
+		
+		// Add bud to the invitation list
+		e.invitations.add(bud);
+		e.invitations.add(ed);
+		assertTrue(e.validateAndSave());
+
+		assertEquals("Bud White, Ed Exley", e.getInvitationString());
 	}
 }
