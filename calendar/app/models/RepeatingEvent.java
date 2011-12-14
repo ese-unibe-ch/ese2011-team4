@@ -68,6 +68,8 @@ public class RepeatingEvent extends SingleEvent {
 		this.comments = series.comments;
 		this.type = series.type;
 		this.series = series;
+		this.isPrivate = series.isPrivate;
+		this.invitations = series.invitations;
 		id = series.id;
 	}
 }

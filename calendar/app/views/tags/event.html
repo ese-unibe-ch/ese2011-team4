@@ -107,7 +107,7 @@
 		#{list items:_event.comments, as:'comment'}
 		<div class="comment">
 			<div class="comment-metadata">
-				<span class="comment-author">by #{a @Users.show(comment.author.id)}${comment.author}#{/a},</span>
+				<span class="comment-author">by #{a @Users.show(comment.author.id)}${comment.author}#{/a}</span>
    			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
 			</div>
 			<table>
