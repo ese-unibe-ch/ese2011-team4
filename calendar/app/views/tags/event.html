@@ -11,7 +11,7 @@
 
 <div class="event">
 	<div class="event-header">
-		<div class="event-title">${_event.name}</div>
+		<div class="event-title">#{a @Application.event(_event.id)}${_event.name}#{/a}</div>
 		#{if _event.isPrivate}<span class="private">Private</span>#{/if}
 		<div class="date">${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
 		

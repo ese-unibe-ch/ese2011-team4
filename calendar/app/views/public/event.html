@@ -1,80 +1,98 @@
-#{extends 'public.html' /}
+%{
+	connectedUser = models.User.find("email", session.username).first();
+	layout = (connectedUser == null)?"public":"main";
+	isOwner = event?.origin?.owner?.equals(connectedUser);
+}%
+
+#{extends layout+'.html' /}
 #{set title:'Home' /}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
-#{if event != null && !event.isPrivate}
-	<div class="event">
-		<div class="event-header">
-			<div class="event-title">${event.name}</div>
-			<div class="date">${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
-			
-			<div class="event-metadata">
-				%{ participants = event.participants() }%
-				#{if !event.invitations?.isEmpty() || !participants.isEmpty()}
-				<div class="participation">		
-					<div class="participation-summary">
-						<a href="" class="expand">(+)</a>						
-						${participants.size()} participant${participants.size().pluralize()}
-						#{if !event.invitations?.isEmpty()}- ${event.invitations?.size()} invitation${event.invitations.size().pluralize()}#{/if}
-					</div>
+#{if event != null}
+	#{if !event.isPrivate || isOwner}
+		#{if connectedUser != null}
+			#{event event:event /}
+		#{/if}
+		#{else}
+			<div class="event">
+				<div class="event-header">
+					<div class="event-title">${event.name}</div>
+					<div class="date">${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
 					
-					<div class="participation-details">		
-						<ul class="participants">
-						Participants:
-						#{list items:participants, as:'participant'}
-							<li>${participant.toString()}</li>	
-						#{/list}
-						</ul>
+					<div class="event-metadata">
+						%{ participants = event.participants() }%
+						#{if !event.invitations?.isEmpty() || !participants.isEmpty()}
+						<div class="participation">		
+							<div class="participation-summary">
+								<a href="" class="expand">(+)</a>						
+								${participants.size()} participant${participants.size().pluralize()}
+								#{if !event.invitations?.isEmpty()}- ${event.invitations?.size()} invitation${event.invitations.size().pluralize()}#{/if}
+							</div>
 							
-						#{if !event.invitations?.isEmpty()}
-						<ul class="invitations">
-						Invitations:
-						#{list items:event.invitations, as:'invitations'}
-							<li>invitations.toString()</li>		
-						#{/list}
-						</ul>
+							<div class="participation-details">		
+								<ul class="participants">
+								Participants:
+								#{list items:participants, as:'participant'}
+									<li>${participant.toString()}</li>	
+								#{/list}
+								</ul>
+									
+								#{if !event.invitations?.isEmpty()}
+								<ul class="invitations">
+								Invitations:
+								#{list items:event.invitations, as:'invitations'}
+									<li>invitations.toString()</li>		
+								#{/list}
+								</ul>
+								#{/if}
+							</div>
+						</div>
+						#{/if}
+						
+						#{if event.location }
+							<div class="location">${event.location.toString()}</div>
 						#{/if}
 					</div>
 				</div>
-				#{/if}
-				
-				#{if event.location }
-					<div class="location">${event.location.toString()}</div>
-				#{/if}
-			</div>
-		</div>
-	
-		<div class="event-content">
-			${event.description}
-			#{if event.comments.size() != 0 && !comments}
-			<a href="" class="show-comments">show comment${event.comments.size().pluralize()} (${event.comments.size()})</a>
-			#{/if}
-		</div>
-		
-		<div class="comments">
-		#{if flash.success}
-	   	<p class="success">${flash.success}</p>
-		#{/if}
-		#{if event.comments.size() > 0}
-		<hr>
-		#{/if}
-			#{list items:event.comments, as:'comment'}
-			<div class="comment">
-				<div class="comment-metadata">
-					<span class="comment-author">by ${comment.author},</span>
-	   			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
+			
+				<div class="event-content">
+					${event.description}
+					#{if event.comments.size() != 0 && !comments}
+					<a href="" class="show-comments">show comment${event.comments.size().pluralize()} (${event.comments.size()})</a>
+					#{/if}
 				</div>
-				<table>
-					<tr>
-						<td class="comment-content">${comment.content}</td>
-					</tr>
-				</table>
+				
+				<div class="comments">
+				#{if flash.success}
+			   	<p class="success">${flash.success}</p>
+				#{/if}
+				#{if event.comments.size() > 0}
+				<hr>
+				#{/if}
+					#{list items:event.comments, as:'comment'}
+					<div class="comment">
+						<div class="comment-metadata">
+							<span class="comment-author">by ${comment.author},</span>
+			   			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
+						</div>
+						<table>
+							<tr>
+								<td class="comment-content">${comment.content}</td>
+							</tr>
+						</table>
+					</div>
+					#{/list}
+				</div>
 			</div>
-			#{/list}
+		#{/else}
+	#{/if}
+	#{else}
+		<div class="empty">
+			Event is private.
 		</div>
-	</div>
+	#{/else}
 #{/if}
 #{else}
 	<div class="empty">
