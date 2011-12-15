@@ -49,7 +49,6 @@
 					<td>#{a @Users.show(msg.recipient.id)}${msg.recipient}#{/a}</td>
 					<td>#{a @Messages.message(msg.id)}#{if msg.subject.isEmpty()}&lt;No subject&gt;#{/if}#{else}${msg.subject}#{/else}#{/a}</td>
 					<td>
-						<span class="button">#{a @Messages.sendMessage(msg.id)}Send#{/a}</span>
 						<span class="delete button">#{a @Messages.delete(msg.id)}Delete#{/a}</span>
 					</td>
 				</tr>

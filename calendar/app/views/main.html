@@ -69,6 +69,7 @@
 						<h2 class"title">Options</h2>
 						<ul>
 							#{get 'options' /}
+							<li>#{a @Calendars.add()}Create a new calendar#{/a}</li>
 							<li>#{a @Locations.add()}Create a new location#{/a}</li>
 							<li>#{a @Users.edit()}Edit your Profile#{/a}
 							<li>#{a @Search.index()}Search#{/a} #{a @Search.advanced()}(Advanced)#{/a}</li>

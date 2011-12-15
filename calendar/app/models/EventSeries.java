@@ -163,6 +163,7 @@ public class EventSeries extends Event {
 	public RepeatingEvent createDummyEvent(DateTime day) {
 		assert isThisDay(day);
 		RepeatingEvent event = new RepeatingEvent(this);
+		// TODO fix that for events over multiple days
 		event.startDate = this.startDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
 		event.endDate = this.endDate.withDayOfYear(day.getDayOfYear()).withYear(day.getYear());
 		return event;
