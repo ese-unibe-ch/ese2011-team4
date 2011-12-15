@@ -41,7 +41,11 @@ public class Calendars extends Controller {
     	List<BirthdayEvent> birthdays = new LinkedList();
     	if(calendars.size() > 0) {
     		birthdays = calendars.get(0).birthdays(user, dt);
-    	}    	
+    	}
+    	else{
+    		Calendar calendar = new Calendar(user, "birthday");
+    		birthdays = calendar.birthdays(user, dt);
+    	}
     	
     	// Get events
     	List<SingleEvent> events = new LinkedList();
@@ -57,6 +61,7 @@ public class Calendars extends Controller {
     				upcoming.addAll(calendar.events(user, dt.plusDays(i)));
     			}
     		}
+    		else break;
     	}
     	
     	render(user, birthdays, events, upcoming);
