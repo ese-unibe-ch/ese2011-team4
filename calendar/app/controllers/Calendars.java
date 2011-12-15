@@ -38,7 +38,10 @@ public class Calendars extends Controller {
     	DateTime dt = new DateTime();
     	
     	// Get favorites birthday
-    	List<BirthdayEvent> birthdays = calendars.get(0).birthdays(user, dt);
+    	List<BirthdayEvent> birthdays = new LinkedList();
+    	if(calendars.size() > 0) {
+    		birthdays = calendars.get(0).birthdays(user, dt);
+    	}    	
     	
     	// Get events
     	List<SingleEvent> events = new LinkedList();
