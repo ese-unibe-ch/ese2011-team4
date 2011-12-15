@@ -15,7 +15,7 @@
  		#{form @Comments.update(event.id)}
  		<p>
  		    <label for="content">Message: </label>
- 		    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
+ 		    <textarea name="content" id="content" maxlength="360" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
  		</p>
  		<p>
  		  	<input type="submit" value="Submit your comment" />
