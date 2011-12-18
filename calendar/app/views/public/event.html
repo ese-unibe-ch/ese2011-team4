@@ -2,16 +2,61 @@
 	connectedUser = models.User.find("email", session.username).first();
 	layout = (connectedUser == null)?"public":"main";
 	isOwner = event?.origin?.owner?.equals(connectedUser);
+	dt = (event != null)?event.startDate:new org.joda.time.DateTime();
 }%
 
 #{extends layout+'.html' /}
 #{set title:'Home' /}
 #{set 'moreStyles'}
 	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
 #{/set}
 
 #{if event != null}
 	#{if !event.isPrivate || isOwner}
+		<div id="calendar">
+			<div id="calendar-navigation">
+				<span id="current-month">
+					- ${dt.monthOfYear().getAsText(new Locale("en","US"))}, ${dt.getYear()} -
+				</span>
+			</div>
+		
+			<table id="month">
+				<tr>
+					<th class="title">Mon</th>
+					<th class="title">Tue</th>
+					<th class="title">Wed</th>
+					<th class="title">Thu</th>
+					<th class="title">Fri</th>
+					<th class="title">Sat</th>
+					<th class="title">Sun</th>
+				</tr>
+				<tr>
+					#{if (models.Calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7 > 0}
+						#{list items:1..(models.Calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7, as:'i'}
+							<td></td>
+						#{/list}
+					#{/if}
+						
+					#{list items:models.Calendar.getDaysInMonth(dt), as:'day'}
+						<td class="#{if day.getDayOfMonth() == dt.getDayOfMonth()} selected#{/if}
+						#{if models.Calendar.isToday(day)} today#{/if}">
+							${day.getDayOfMonth()}
+						</td>
+			
+						#{if day.getDayOfWeek()==7}
+							</tr><tr>
+						#{/if}
+					#{/list}
+		
+					#{if models.Calendar.getDaysInMonth(dt)[models.Calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 > 0}
+						#{list items:models.Calendar.getDaysInMonth(dt)[models.Calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 .. 6, as:'i'}
+							<td></td>
+						#{/list}
+					#{/if}		
+				</tr>
+			</table>
+		</div>
 		#{if connectedUser != null}
 			#{event event:event /}
 		#{/if}

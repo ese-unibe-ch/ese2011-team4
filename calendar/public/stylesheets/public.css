@@ -3,3 +3,17 @@
 #main-left {
 	width: 100%;
 }
+
+
+/** Event **/
+#current-month {
+	width: 100% !important;
+}
+
+#month td {
+	color:#FFF;
+}
+
+#month td.today {
+	color: red;
+}
