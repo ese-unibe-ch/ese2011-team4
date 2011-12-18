@@ -16,7 +16,7 @@
 	#{if !event.isPrivate || isOwner}
 		<div id="calendar">
 			<div id="calendar-navigation">
-				<span id="current-month">
+				<span id="current-month" style="width: 100%;">
 					- ${dt.monthOfYear().getAsText(new Locale("en","US"))}, ${dt.getYear()} -
 				</span>
 			</div>

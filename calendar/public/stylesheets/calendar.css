@@ -87,6 +87,7 @@ table a:hover {
 }
 
 #month td {
+	color: #fff;
 	border: solid 1px #000;
 	padding: 1px;
 }
@@ -95,7 +96,7 @@ table a:hover {
 	font-weight: bold;
 }
 
-#month td.today a {
+#month td.today, #month td.today a {
 	color: red;
 }
 
@@ -113,10 +114,10 @@ table#month th.title {
 	font-weight: bold;
 }
 
-#month td.events a {
+#month td.events, #month td.events a {
 	color: #0051FF;
 }
 
-#month td.selected a {
+#month td.selected, #month td.selected a {
 	color: #fff;
 }

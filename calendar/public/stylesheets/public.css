@@ -6,10 +6,6 @@
 
 
 /** Event **/
-#current-month {
-	width: 100% !important;
-}
-
 #month td {
 	color:#FFF;
 }
