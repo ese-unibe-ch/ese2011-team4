@@ -14,123 +14,13 @@
 
 #{if event != null}
 	#{if !event.isPrivate || isOwner}
-		<div id="calendar">
-			<div id="calendar-navigation">
-				<span id="current-month" style="width: 100%;">
-					- ${dt.monthOfYear().getAsText(new Locale("en","US"))}, ${dt.getYear()} -
-				</span>
-			</div>
-		
-			<table id="month">
-				<tr>
-					<th class="title">Mon</th>
-					<th class="title">Tue</th>
-					<th class="title">Wed</th>
-					<th class="title">Thu</th>
-					<th class="title">Fri</th>
-					<th class="title">Sat</th>
-					<th class="title">Sun</th>
-				</tr>
-				<tr>
-					#{if (models.Calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7 > 0}
-						#{list items:1..(models.Calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7, as:'i'}
-							<td></td>
-						#{/list}
-					#{/if}
-						
-					#{list items:models.Calendar.getDaysInMonth(dt), as:'day'}
-						<td class="#{if day.getDayOfMonth() == dt.getDayOfMonth()} selected#{/if}
-						#{if models.Calendar.isToday(day)} today#{/if}">
-							${day.getDayOfMonth()}
-						</td>
-			
-						#{if day.getDayOfWeek()==7}
-							</tr><tr>
-						#{/if}
-					#{/list}
-		
-					#{if models.Calendar.getDaysInMonth(dt)[models.Calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 > 0}
-						#{list items:models.Calendar.getDaysInMonth(dt)[models.Calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 .. 6, as:'i'}
-							<td></td>
-						#{/list}
-					#{/if}		
-				</tr>
-			</table>
-		</div>
+		#{calendar calendar:calendar, dt:dt /}
+
 		#{if connectedUser != null}
 			#{event event:event /}
 		#{/if}
 		#{else}
-			<div class="event">
-				<div class="event-header">
-					<div class="event-title">${event.name}</div>
-					<div class="date">${event.startDate.toString('dd.MM.yyyy HH:mm')} - ${event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
-					
-					<div class="event-metadata">
-						%{ participants = event.participants() }%
-						#{if !event.invitations?.isEmpty() || !participants.isEmpty()}
-						<div class="participation">		
-							<div class="participation-summary">
-								<a href="" class="expand">(+)</a>						
-								${participants.size()} participant${participants.size().pluralize()}
-								#{if !event.invitations?.isEmpty()}- ${event.invitations?.size()} invitation${event.invitations.size().pluralize()}#{/if}
-							</div>
-							
-							<div class="participation-details">		
-								<ul class="participants">
-								Participants:
-								#{list items:participants, as:'participant'}
-									<li>${participant.toString()}</li>	
-								#{/list}
-								</ul>
-									
-								#{if !event.invitations?.isEmpty()}
-								<ul class="invitations">
-								Invitations:
-								#{list items:event.invitations, as:'invitations'}
-									<li>invitations.toString()</li>		
-								#{/list}
-								</ul>
-								#{/if}
-							</div>
-						</div>
-						#{/if}
-						
-						#{if event.location }
-							<div class="location">${event.location.toString()}</div>
-						#{/if}
-					</div>
-				</div>
-			
-				<div class="event-content">
-					${event.description}
-					#{if event.comments.size() != 0 && !comments}
-					<a href="" class="show-comments">show comment${event.comments.size().pluralize()} (${event.comments.size()})</a>
-					#{/if}
-				</div>
-				
-				<div class="comments">
-				#{if flash.success}
-			   	<p class="success">${flash.success}</p>
-				#{/if}
-				#{if event.comments.size() > 0}
-				<hr>
-				#{/if}
-					#{list items:event.comments, as:'comment'}
-					<div class="comment">
-						<div class="comment-metadata">
-							<span class="comment-author">by ${comment.author},</span>
-			   			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
-						</div>
-						<table>
-							<tr>
-								<td class="comment-content">${comment.content}</td>
-							</tr>
-						</table>
-					</div>
-					#{/list}
-				</div>
-			</div>
+			#{event event:event /}
 		#{/else}
 	#{/if}
 	#{else}

@@ -11,7 +11,14 @@
 
 <div class="event">
 	<div class="event-header">
-		<div class="event-title">#{a @Application.event(_event.id)}${_event.name}#{/a}</div>
+		<div class="event-title">
+			#{if connectedUser}
+				#{a @Application.event(_event.id)}${_event.name}#{/a}
+			#{/if}
+			#{else}
+				${_event.name}
+			#{/else}
+		</div>
 		#{if _event.isPrivate}<span class="private">Private</span>#{/if}
 		<div class="date">${_event.startDate.toString('dd.MM.yyyy HH:mm')} - ${_event.endDate.toString('dd.MM.yyyy HH:mm')}</div>
 		
@@ -29,7 +36,14 @@
 					<ul class="participants">
 					Participants:
 					#{list items:participants, as:'participant'}
-						<li>#{a @Users.show(participant.id)}${participant.toString()}#{/a}</li>	
+						<li>
+							#{if connectedUser}
+								#{a @Users.show(participant.id)}${participant.toString()}#{/a}
+							#{/if}
+							#{else}
+								${participant.toString()}
+							#{/else}
+						</li>
 					#{/list}
 					</ul>
 						
@@ -37,7 +51,14 @@
 					<ul class="invitations">
 					Invitations:
 					#{list items:_event.invitations, as:'invitations'}
-						<li>#{a @Users.show(invitations.id)}${invitations.toString()}#{/a}</li>		
+						<li>
+							#{if connectedUser}
+								#{a @Users.show(invitations.id)}${invitations.toString()}#{/a}
+							#{/if}
+							#{else}
+								${invitations.toString()}
+							#{/else}
+						</li>	
 					#{/list}
 					</ul>
 					#{/if}
@@ -45,49 +66,58 @@
 			</div>
 			#{/if}
 			
-			#{if _event.location }
-				<div class="location">#{a @Locations.show(_event.location.id)}${_event.location.toString()}#{/a}</div>
+			#{if _event.location}
+				<div class="location">
+					#{if connectedUser}
+						#{a @Locations.show(_event.location.id)}${_event.location.toString()}#{/a}
+					#{/if}
+					#{else}
+						${_event.location.toString()}
+					#{/else}
+				</div>
 			#{/if}
 		</div>
 
-		<div class="event-menu">
-			<ol>
-				<li><span class="actions">Actions</span>
-					<ol>
-						<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
-						#{if isOwner}
-							#{if _event.type == models.RepeatingType.NONE }
-								<li>#{a @Events.edit(_event.origin.id, _event.id)}Edit#{/a}</li>
-								<li>#{a @Events.delete(_event.origin.id, _event.id)}Delete#{/a}</li>
+		#{if connectedUser}
+			<div class="event-menu">
+				<ol>
+					<li><span class="actions">Actions</span>
+						<ol>
+							<li>#{a @Comments.add(_event.id)}Comment#{/a}</li>
+							#{if isOwner}
+								#{if _event.type == models.RepeatingType.NONE }
+									<li>#{a @Events.edit(_event.origin.id, _event.id)}Edit#{/a}</li>
+									<li>#{a @Events.delete(_event.origin.id, _event.id)}Delete#{/a}</li>
+								#{/if}
+								#{else}
+									<li class="more"><span class="actions">Edit</span>
+										<ul>
+											<li>#{a @Events.edit(_event.origin.id, _event.id)}Series#{/a}</li>
+											<li>#{a @Events.deatachAndEdit(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+										</ul>
+									</li>							
+									<li class="more"><span class="actions">Delete</span>
+										<ul>
+											<li>#{a @Events.delete(_event.origin.id, _event.id)}Series#{/a}</li>
+											<li>#{a @Events.deatach(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+										</ul>
+									</li>
+								#{/else}
 							#{/if}
-							#{else}
-								<li class="more"><span class="actions">Edit</span>
+							#{if _event.availableJoins(connectedUser).size() > 0}
+								<li class="more"><span class="actions">Join</span>
 									<ul>
-										<li>#{a @Events.edit(_event.origin.id, _event.id)}Series#{/a}</li>
-										<li>#{a @Events.deatachAndEdit(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
-									</ul>
-								</li>							
-								<li class="more"><span class="actions">Delete</span>
-									<ul>
-										<li>#{a @Events.delete(_event.origin.id, _event.id)}Series#{/a}</li>
-										<li>#{a @Events.deatach(_event.origin.id, _event.id, _event.startDate.getDayOfYear(), _event.startDate.getYear())}Event#{/a}</li>									
+										#{list items:_event.availableJoins(connectedUser), as:'availableCalendar'}
+											<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
+										#{/list}
 									</ul>
 								</li>
-							#{/else}
-						#{/if}
-						#{if _event.availableJoins(connectedUser).size() > 0}
-							<li class="more"><span class="actions">Join</span>
-								<ul>
-									#{list items:_event.availableJoins(connectedUser), as:'availableCalendar'}
-										<li>#{a @Events.joinCalendar(availableCalendar.id, _event.id)}${availableCalendar.name}#{/a}
-									#{/list}
-								</ul>
-							</li>
-						#{/if}
-					</ol>
-				</li>
-			</ol>
-		</div>
+							#{/if}
+						</ol>
+					</li>
+				</ol>
+			</div>
+		#{/if}
 	</div>
 
 	<div class="event-content">
@@ -107,17 +137,24 @@
 		#{list items:_event.comments, as:'comment'}
 		<div class="comment">
 			<div class="comment-metadata">
-				<span class="comment-author">by #{a @Users.show(comment.author.id)}${comment.author}#{/a}</span>
+				#{if connectedUser}
+					<span class="comment-author">by #{a @Users.show(comment.author.id)}${comment.author}#{/a}</span>
+				#{/if}
+				#{else}
+					<span class="comment-author">by ${comment.author}</span>
+				#{/else}
    			<span class="comment-date">${comment.postedAt.toString('dd.MM.yyyy HH:mm')	}</span>
 			</div>
 			<table>
 				<tr>
 					<td class="comment-content">${comment.content}</td>
-					<td class="delete-comment">
-						#{if connectedUser.equals(comment.author)}
-						<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
-						#{/if}
-					</td>
+					#{if connectedUser}
+						<td class="delete-comment">
+							#{if connectedUser.equals(comment.author)}
+							<span class="delete button">#{a @Comments.delete(_event.id, comment.id)}Delete#{/a}</span>
+							#{/if}
+						</td>
+					#{/if}
 				</tr>
 			</table>
 		</div>

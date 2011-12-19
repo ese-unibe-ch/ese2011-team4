@@ -1,0 +1,84 @@
+<!----
+	Renders a calendar
+	requires the date as parameter
+	requires the calendar as parameter
+---->
+
+%{ 
+	connectedUser = models.User.find("email", session.username).first();
+	showPublicCalendar = (connectedUser == null || _calendar == null);
+}%
+
+<div id="calendar">
+	<div id="calendar-navigation">
+		#{if !showPublicCalendar}
+			<span id="previous-month">
+				#{a @Calendars.show(_calendar.id, _dt.minusMonths(1).getYear(), _dt.minusMonths(1).getMonthOfYear(), _dt.minusMonths(1).getDayOfMonth())}
+				<< ${_dt.minusMonths(1).monthOfYear().getAsText(new Locale("en","US"))}
+				#{/a}
+			</span>
+		#{/if}
+		<span id="current-month"#{if showPublicCalendar} style="width:100%;"#{/if}>
+			- ${_dt.monthOfYear().getAsText(new Locale("en","US"))}, ${_dt.getYear()} -
+		</span>
+		#{if !showPublicCalendar}
+			<span id="next-month">
+				#{a @Calendars.show(_calendar.id, _dt.plusMonths(1).getYear(), _dt.plusMonths(1).getMonthOfYear(), _dt.plusMonths(1).getDayOfMonth())}
+				${_dt.plusMonths(1).monthOfYear().getAsText(new Locale("en","US"))} >>
+				#{/a}
+			</span>
+		#{/if}
+	</div>
+
+	#{if flash.success}
+		<p class="success">${flash.success}</p>
+	#{/if}
+	
+	#{if flash.get("notfound")?.length() > 2}
+		<p class="warning">Could not find the following users: ${flash.get("notfound")}</p>
+	#{/if}
+
+	<table id="month">
+		<tr>
+			<th class="title">Mon</th>
+			<th class="title">Tue</th>
+			<th class="title">Wed</th>
+			<th class="title">Thu</th>
+			<th class="title">Fri</th>
+			<th class="title">Sat</th>
+			<th class="title">Sun</th>
+		</tr>
+		<tr>
+			#{if (models.Calendar.getDaysInMonth(_dt)[0].getDayOfWeek()+6)%7 > 0}
+				#{list items:1..(models.Calendar.getDaysInMonth(_dt)[0].getDayOfWeek()+6)%7, as:'i'}
+					<td></td>
+				#{/list}
+			#{/if}
+				
+			#{list items:models.Calendar.getDaysInMonth(_dt), as:'day'}
+					<td class="#{if _calendar?.events(connectedUser, day)?.size() > 0 || _calendar?.birthdays(connectedUser, day)?.size() > 0}events#{/if}
+				#{if day.getDayOfMonth() == _dt.getDayOfMonth()} selected#{/if} 
+				#{if models.Calendar.isToday(day)} today#{/if}">
+					#{if !showPublicCalendar}
+						#{a @Calendars.show(_calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
+						${day.getDayOfMonth()}
+						#{/a}
+					#{/if}
+					#{else}
+						${day.getDayOfMonth()}
+					#{/else}
+				</td>
+	
+				#{if day.getDayOfWeek()==7}
+					</tr><tr>
+				#{/if}
+			#{/list}
+
+			#{if models.Calendar.getDaysInMonth(_dt)[models.Calendar.getDaysInMonth(_dt).size-1].getDayOfWeek()%7 > 0}
+				#{list items:models.Calendar.getDaysInMonth(_dt)[models.Calendar.getDaysInMonth(_dt).size-1].getDayOfWeek()%7 .. 6, as:'i'}
+					<td></td>
+				#{/list}
+			#{/if}		
+		</tr>
+	</table>
+</div>

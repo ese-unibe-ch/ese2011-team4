@@ -15,70 +15,7 @@
 #{/set}
 
 <h2 class="title"><span id="calendar-name">${calendar.name}</span></h2>
-<div id="calendar">
-	<div id="calendar-navigation">
-		<span id="previous-month">
-			#{a @Calendars.show(calendar.id, dt.minusMonths(1).getYear(), dt.minusMonths(1).getMonthOfYear(), dt.minusMonths(1).getDayOfMonth())}
-			<< ${dt.minusMonths(1).monthOfYear().getAsText(new Locale("en","US"))}
-			#{/a}
-		</span>
-		<span id="current-month">
-			- ${dt.monthOfYear().getAsText(new Locale("en","US"))}, ${dt.getYear()} -
-		</span>
-		<span id="next-month">
-			#{a @Calendars.show(calendar.id, dt.plusMonths(1).getYear(), dt.plusMonths(1).getMonthOfYear(), dt.plusMonths(1).getDayOfMonth())}
-			${dt.plusMonths(1).monthOfYear().getAsText(new Locale("en","US"))} >>
-			#{/a}
-		</span>
-	</div>
-
-	#{if flash.success}
-		<p class="success">${flash.success}</p>
-	#{/if}
-	
-	#{if flash.get("notfound")?.length() > 2}
-		<p class="warning">Could not find the following users: ${flash.get("notfound")}</p>
-	#{/if}
-
-	<table id="month">
-		<tr>
-			<th class="title">Mon</th>
-			<th class="title">Tue</th>
-			<th class="title">Wed</th>
-			<th class="title">Thu</th>
-			<th class="title">Fri</th>
-			<th class="title">Sat</th>
-			<th class="title">Sun</th>
-		</tr>
-		<tr>
-			#{if (models.Calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7 > 0}
-				#{list items:1..(calendar.getDaysInMonth(dt)[0].getDayOfWeek()+6)%7, as:'i'}
-					<td></td>
-				#{/list}
-			#{/if}
-				
-			#{list items:calendar.getDaysInMonth(dt), as:'day'}
-				<td class="#{if calendar.events(connectedUser, day).size() > 0 || calendar.birthdays(connectedUser, day).size() > 0}events#{/if}
-				#{if day.getDayOfMonth() == dt.getDayOfMonth()} selected#{/if} 
-				#{if models.Calendar.isToday(day)} today#{/if}">
-					#{a @Calendars.show(calendar.id, day.getYear(), day.getMonthOfYear(), day.getDayOfMonth())}
-					${day.getDayOfMonth()}
-					#{/a}
-				</td>
-	
-				#{if day.getDayOfWeek()==7}
-					</tr><tr>
-				#{/if}
-			#{/list}
-
-			#{if calendar.getDaysInMonth(dt)[calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 > 0}
-				#{list items:calendar.getDaysInMonth(dt)[calendar.getDaysInMonth(dt).size-1].getDayOfWeek()%7 .. 6, as:'i'}
-					<td></td>
-				#{/list}
-			#{/if}		
-		</tr>
-	</table>
-</div>
+#{calendar calendar:calendar, dt:dt /}
 	
 <div id="events">
 	<div id="events">
