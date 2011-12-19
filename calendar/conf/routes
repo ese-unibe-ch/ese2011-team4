@@ -8,6 +8,7 @@
 # Home page
 GET     /                                       		Application.index
 GET     /captcha                              			Application.captcha
+GET     /home                                           Users.home
 GET		/calendar/{id}									Calendars.showCurrentMonth
 GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
 GET		/calendars/index/{userId}						Calendars.index
@@ -24,7 +25,7 @@ GET		/message/reply//{msgId}							Messages.reply
 GET		/message/delete/{msgId}							Messages.delete
 POST	/message/handle/{msgId}							Messages.handleMessage
 GET		/message/send/{msgId}							Messages.sendMessage
-GET		/message/save-draft//{msgId}					Messages.saveDraft
+POST	/message/save-draft//{msgId}					Messages.saveDraft
 GET		/message/delete-draft/{msgId}					Messages.deleteDraft
 GET     /event/{id}/comments                   			Comments.show
 GET     /event/{id}/comment	                   			Comments.add

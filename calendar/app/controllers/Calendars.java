@@ -29,44 +29,6 @@ public class Calendars extends Controller {
         render(calendars, connectedUser, user);
     }
     
-    public static void home() {
-    	User user = User.find("email", Security.connected()).first();
-    	List<Calendar> calendars = Calendar.find("owner", user).fetch();
-    	assert user != null;
-    	assert calendars != null;
-    	
-    	DateTime dt = new DateTime();
-    	
-    	// Get favorites birthday
-    	List<BirthdayEvent> birthdays = new LinkedList();
-    	if(calendars.size() > 0) {
-    		birthdays = calendars.get(0).birthdays(user, dt);
-    	}
-    	else{
-    		Calendar calendar = new Calendar(user, "birthday");
-    		birthdays = calendar.birthdays(user, dt);
-    	}
-    	
-    	// Get events
-    	List<SingleEvent> events = new LinkedList();
-    	for(Calendar calendar : calendars){
-    		events.addAll(calendar.events(user, dt));
-    	}
-    	
-    	// Get upcoming events for the next 7 days
-    	List<SingleEvent> upcoming = new LinkedList();
-    	for(int i = 1; i < 8; i++){
-    		if(upcoming.size() < 6){
-    			for(Calendar calendar : calendars){
-    				upcoming.addAll(calendar.events(user, dt.plusDays(i)));
-    			}
-    		}
-    		else break;
-    	}
-    	
-    	render(user, birthdays, events, upcoming);
-    }
-    
     public static void add() {
     	User connectedUser = User.find("email", Security.connected()).first();
 	    render(connectedUser);

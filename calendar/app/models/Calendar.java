@@ -190,7 +190,7 @@ public class Calendar extends Model implements Printable{
 	
 	/**
 	 * Returns a list of all events available in this calendar 
-	 * at a specific day for a certain user.
+	 * at a specific date for a certain user.
 	 * <p>
 	 * The event is only visible when the given user is the owner of this event
 	 * or the event itself is public.
