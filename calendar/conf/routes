@@ -8,6 +8,7 @@
 # Home page
 GET     /                                       		Application.index
 GET     /captcha                              			Application.captcha
+GET     /home                                           Users.home
 GET		/calendar/{id}									Calendars.showCurrentMonth
 GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
 GET		/calendars/index/{userId}						Calendars.index
