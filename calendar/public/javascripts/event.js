@@ -76,4 +76,15 @@ function setupEventForm() {
 			$('#repeating-details').show('slow');
 		}
 	});
+	
+	$.datepicker.setDefaults(
+  		$.extend(
+    		{'dateFormat':'dd.mm.yyyy'},
+    		$.datepicker.regional['de-CH']
+  		)
+	);
+
+	$(function() {
+		$(".datepicker").datepicker();
+	});
 }
