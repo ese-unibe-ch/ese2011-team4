@@ -29,35 +29,25 @@ function setupEventForm() {
 	});
 	
 	$('.contact-check').change(function() {
-		var contacts = $('#invitations').val().split(",");
+		var val = $('#invitations').val().trim();
+		var contacts = (val.length>0)?val.split(","):new Array();
 		var current = $(this).attr("name");
 		if($(this).is(':checked')) {
-			contacts[contacts.length] = current;
+			contacts.push(current);
 		} else {
 			for(i=0; i < contacts.length; i++) {
-				if(contacts[i].trim() == current) {
-					contacts[i] = "";
+				contacts[i] = contacts[i].trim();
+				if(contacts[i] == current) {
+					contacts.splice(i,1);
+					i--;
 				}
 			}
 		}
 		
-		var str = buildContactString(contacts);		
+		var str = contacts.join(", ");
 		
 		$('#invitations').val(str);
 	});
-	
-	function buildContactString(contacts) {
-		var str = "";
-		for(i=0; i < contacts.length; i++) {
-			if(contacts[i] != "") {
-				str += contacts[i];
-				if(i < contacts.length-1) {
-					str += ", ";
-				}
-			}
-		}
-		return str;
-	}
 	
 	$('#repeating').ready(function() {
 		if($('#repeating option:selected').attr("value") == 'NONE')
