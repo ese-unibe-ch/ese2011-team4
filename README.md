@@ -30,6 +30,7 @@ Okay, there is one thing you should do. Run the following command within the fol
 Since __CalPal__ runs with the play! framework (see link below), you have to run this application via command-lines. So you have to open up the os specific prompt and switch to the folder, where the application is in (e.g. if your folder is `C:\Users\Username\CalPal` you type in `cd users/username/CalPal`).
 
 Now you can run the application with the following command: play run calendar. There should be a tex like this:
+
              _            _
        _ __ | | __ _ _  _| |
       | '_ \| |/ _' | || |_|
