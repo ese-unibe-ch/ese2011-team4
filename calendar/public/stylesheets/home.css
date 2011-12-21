@@ -3,6 +3,20 @@ h4 {
 }
 
 ul {
+	padding-left: 0px;
 	margin-top: 2px;
 	list-style: none;
+}
+
+.portlet {
+	background-color: #3399FF;
+	border-radius: 16px;
+	padding: 8px;
+	margin: 5px;
+	display: inline-block;
+	width: 60%;
+}
+
+.portlet .metadata {
+	font-size: .8em;
 }

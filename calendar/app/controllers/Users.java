@@ -54,13 +54,8 @@ public class Users extends Controller {
     	
     	// Get upcoming events for the next 7 days
     	List<SingleEvent> upcoming = new LinkedList();
-    	for(int i = 1; i < 8; i++){
-    		if(upcoming.size() < 6){
-    			for(Calendar calendar : calendars){
-    				upcoming.addAll(calendar.events(user, dt.plusDays(i)));
-    			}
-    		}
-    		else break;
+    	for(Calendar calendar : calendars){
+    		upcoming.addAll(calendar.events(user, dt.plusDays(1), dt.plusDays(8)));
     	}
     	
     	render(user, birthdays, events, upcoming);
