@@ -12,13 +12,21 @@
 <div id="add-comment">
 	<hr>
 	<h3>Post a comment</h3>		
- 			#{form @Comments.update(event.id)}
- 			<p>
- 			    <label for="content">Message: </label>
- 			    <textarea name="content" id="content" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
- 			</p>
- 			<p>
- 		    	<input type="submit" value="Submit your comment" />
- 			</p>
-	#{/form}
+ 		#{form @Comments.update(event.id)}
+ 		<p>
+ 		    <label for="content">Message: </label>
+ 		    <textarea name="content" id="content" maxlength="360" placeholder="Remember, be nice!" autofocus="autofocus"}>${flash.content}</textarea>
+ 		</p>
+ 		<p>
+ 		  	<input type="submit" value="Submit your comment" />
+ 		</p>
+		#{/form}
 </div>
+
+#{set 'moreScripts'}
+	<script src="@{'/public/javascripts/event.js'}"></script>
+#{/set}
+
+<script type="text/javascript" >
+	setupCalendar(true);
+</script>

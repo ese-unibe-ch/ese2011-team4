@@ -1,0 +1,44 @@
+%{
+	connectedUser = models.User.find("email", session.username).first();
+	layout = (connectedUser == null)?"public":"main";
+	isOwner = event?.origin?.owner?.equals(connectedUser);
+	dt = (event != null)?event.startDate:new org.joda.time.DateTime();
+}%
+
+#{extends layout+'.html' /}
+#{set title:'Home' /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/event.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+	<link rel="stylesheet" href="@{'/public/stylesheets/calendar.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+#{if event != null}
+	#{if !event.isPrivate || isOwner}
+		#{calendar calendar:calendar, dt:dt /}
+
+		#{if connectedUser != null}
+			#{event event:event /}
+		#{/if}
+		#{else}
+			#{event event:event /}
+		#{/else}
+	#{/if}
+	#{else}
+		<div class="empty">
+			Event is private.
+		</div>
+	#{/else}
+#{/if}
+#{else}
+	<div class="empty">
+		Event not found.
+	</div>
+#{/else}
+
+#{set 'moreScripts'}
+	<script src="@{'/public/javascripts/event.js'}"></script>
+#{/set}
+
+<script type="text/javascript" >
+	setupCalendar();
+</script>

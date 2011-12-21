@@ -1,5 +1,11 @@
 %{ connectedUser = models.User.find("email", session.username).first() }%
 
+#{set 'moreScripts'}
+	<script src="@{'/public/javascripts/event.js'}"></script>
+	<script src="@{'/public/javascripts/jquery-ui-1.8.16.custom.min.js'}" ></script>
+	<script src="@{'/public/javascripts/jquery.ui.datepicker-de-CH.js'}" ></script>
+#{/set}
+
 #{ifErrors}
 	<span class="error">
    Oops...
@@ -25,7 +31,7 @@
 <p>
 #{field 'startDay'}
     <label for="startDay">Start</label>
-    <input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDay}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
+    <input class="datepicker" type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.startDay}#{/ifErrors}#{else}#{if _event}${_event?.startDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.getDayOfMonth())}.${String.format("%02d", _selected.getMonthOfYear())}.${_selected.getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'startTime'}
 	<label for="startTime" class="time">Time</label>
@@ -36,7 +42,7 @@
 <p>
 #{field 'endDay'}
 	<label for="endDay">End</label>
-	<input type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDay}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
+	<input class="datepicker" type="text" name="${field.name}" id="${field.name}" onblur="javascript:checkLocationCollision();checkEventCollision();" value="#{ifErrors}${flash.endDay}#{/ifErrors}#{else}#{if _event}${_event?.endDate?.toString('dd.MM.yyyy')}#{/if}#{else}${String.format("%02d", _selected.plusHours(1).getDayOfMonth())}.${String.format("%02d", _selected.plusHours(1).getMonthOfYear())}.${_selected.plusHours(1).getYear()}#{/else}#{/else}"/>
 #{/field}
 #{field 'endTime'}
 	<label for="endTime" class="time">Time</label>
@@ -54,19 +60,14 @@
 <p>
 #{field 'invitations'}
 	<label for="invitations">Invitations</label>
-	<input type="text" name="${field.name}" id="{field.name"} value="#{ifErrors}${flash.invitations}#{/ifErrors}#{else}${_event?.getInvitationString()}#{/else}"/>
+	<input type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.invitations}#{/ifErrors}#{else}${_event?.getInvitationString()}#{/else}"/>
 #{/field}
-	<button id="contact-button" type="button" #{if connectedUser.favorites.isEmpty()}disabled="disabled"#{/if}>Contacts</button>
-	<span class="hint">(Will send messages.)</span>
+	<button id="contact-button" type="button" #{if connectedUser.favorites.isEmpty()}disabled="disabled"#{/if}>Show Contacts</button>
 	<div id="contact-list" class="options">
-			<h3 class="title">Your contacts</h3>
-			#{field 'contacts'}			
-			<select name="${field.name}" id="${field.name}" multiple="multiple">		
-			#{list items:connectedUser.favorites, as:'fav'}
-			<option value="${fav.id}" #{if _event?.invitations?.contains(fav)} selected#{/if}>${fav.toString()}</option>			
+			#{list items:connectedUser.favorites, as:'contact'}
+			<input type="checkbox" name="${contact.fullname}" id="${contact.fullname}" class="contact-check" #{if _event?.invitations?.contains(contact)}checked#{/if}/>
+			<label for="${contact.fullname}" class="contact">${contact.toString()}</label>
 			#{/list}
-			</select>
-			#{/field}
 	</div>
 </p>
 
@@ -100,11 +101,10 @@ Repeating configuration details
 	<p>
 	#{field 'periodEndDay'}
 		<label for="periodEndDay">Period end</label>
-    		<input class="repeating" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.periodEndDay}#{/ifErrors}#{else}#{if _event?.type != models.RepeatingType.NONE}${_event?.periodEnd?.toString('dd.MM.yyyy')}#{/if}#{/else}"/>
+    		<input class="repeating datepicker" type="text" name="${field.name}" id="${field.name}" value="#{ifErrors}${flash.periodEndDay}#{/ifErrors}#{else}#{if _event?.type != models.RepeatingType.NONE}${_event?.periodEnd?.toString('dd.MM.yyyy')}#{/if}#{/else}"/>
 	#{/field}
 	<span class="hint">(leave empty for infinite repeating)</span>
 	</p>
-
 	<p>
 	#{field 'repeatingInterval'}
 		<label for="repeatingInterval">Interval</label>
@@ -129,59 +129,27 @@ Repeating configuration details
 </p>
 
 <script type="text/javascript" >
-	$('#contact-button').ready(function() {
-		$('#contact-list').hide();
+	setupEventForm();
+
+	function checkLocationCollision() {
+	   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
+	   $('#LocationCollisionResponse').load(
+			action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+	   )
+	}
+	
+	function checkEventCollision() {
+		var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
+		$('#EventCollisionResponse').load(
+			action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
+		)
+	}
+	
+	$('#LocationCollisionResponse').ready(function() {
+	  	checkLocationCollision();
 	});
 	
-	$('#contact-button').click(function(event) {
-		$('#contact-list').slideToggle('slow');
-	});	
-</script>
-
-<script type="text/javascript" >
-	$('#repeating').ready(function() {
-		if($('#repeating option:selected').attr("value") == 'NONE')
-		{
-			$('#repeating-details').hide();
-		}
+	$('#EventCollisionResponse').ready(function() {
+	  	checkEventCollision();
 	});
-
-	$('#repeating').change(function() {
-		if($('#repeating option:selected').attr("value") == 'NONE')
-		{
-			$('#repeating-details').hide('slow');
-		}
-		else
-		{
-			$('#repeating-details').show('slow');
-		}
-	});
-</script>
-
-<script type="text/javascript">
-function checkLocationCollision() {
-   var action = #{jsAction @checkLocationCollision(':startDay', ':startTime', ':endDay', ':endTime', ':locationId', ':eventId') /}
-   $('#LocationCollisionResponse').load(
-       action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, locationId: document.getElementById('locationId').value, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   )
-}
-</script>
-
-<script type="text/javascript">
-	function checkEventCollision() {
-   	var action = #{jsAction @checkEventCollision(':startDay', ':startTime', ':endDay', ':endTime', ':calendarId', ':eventId') /}
-   	$('#EventCollisionResponse').load(
-			action({startDay: document.getElementById('startDay').value, startTime: document.getElementById('startTime').value, endDay: document.getElementById('endDay').value, endTime: document.getElementById('endTime').value, calendarId: ${_calendar.id}, eventId: #{if _event}${_event.id}#{/if}#{else}-1#{/else}})
-   	)
-}
-</script>
-
-<script type="text/javascript">
-	$('#LocationCollisionResponse').ready(function() {
-     	checkLocationCollision();
- 	});
-   
-   $('#EventCollisionResponse').ready(function() {
-     	checkEventCollision();
- 	});
 </script>

@@ -38,7 +38,7 @@
         	    
 					<nav id="sitenav">
 	        	    	<ol>
-							<li>#{a @Application.index()}Home#{/a}
+							<li>#{a @Users.home()}Home#{/a}
 							<li>#{a @Messages.messageBox()}Messages#{if connectedUser?.messageBox?.countUnread() > 0}<span id="unreadCount">${connectedUser?.messageBox.countUnread()}</span>#{/if}#{/a}
 							<li>#{a @Application.index()}Calendars#{/a}
 							<li>#{a @Users.index()}Users#{/a}
@@ -69,6 +69,7 @@
 						<h2 class"title">Options</h2>
 						<ul>
 							#{get 'options' /}
+							<li>#{a @Calendars.add()}Create a new calendar#{/a}</li>
 							<li>#{a @Locations.add()}Create a new location#{/a}</li>
 							<li>#{a @Users.edit()}Edit your Profile#{/a}
 							<li>#{a @Search.index()}Search#{/a} #{a @Search.advanced()}(Advanced)#{/a}</li>

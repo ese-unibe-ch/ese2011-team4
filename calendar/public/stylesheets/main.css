@@ -20,10 +20,6 @@ body {
 	min-height: 100%
 }
 
-.invisible {
-	display: none;
-}
-
 /** Application header **/	
 
 header {

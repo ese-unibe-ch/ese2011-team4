@@ -60,6 +60,7 @@ public class Calendars extends Controller {
     	
     	// Get events
     	List<SingleEvent> events = calendar.events(connectedUser, dt);
+    	
     	User calendarOwner = calendar.owner;
     	
     	render(calendar, dt, events, birthdays, connectedUser, calendarOwner);

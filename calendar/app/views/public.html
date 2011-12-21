@@ -1,0 +1,47 @@
+<!DOCTYPE html >
+<html>
+    <head>
+        	<title>#{get 'title' /}</title>	
+        	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        	<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}" />
+        	<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/public.css'}" />
+        	<link rel="stylesheet" media="print" type="text/css" href="@{'/public/stylesheets/print.css'}" /> 
+        	#{get 'moreStyles' /}
+        	
+        	<link rel="shortcut icon" type="image/png" 
+            href="@{'/public/images/favicon.png'}" />
+       	<script src="@{'/public/javascripts/jquery-1.7.1.js'}"></script>
+       	#{get 'moreScripts' /}
+    </head>
+    
+    <body>
+    	<div id="wrap">
+			<header>
+				<hgroup>
+					<div id="logo">
+						<a href="@{Application.index()}">calpal.</a>
+						<span id="tagline">look into your cal, pal!</span>
+					</div>
+        	    	<div id="tools">
+						<ol>
+							<li><a href="@{Secure.login()}">Log in</a>
+							<li>#{a @Application.register()}Register#{/a}
+						</ol>
+	        	   </div>
+            	</hgroup>
+        	</header>
+        	
+        	<div id="main">
+				<div id="main-left">
+					#{doLayout /} 
+				</div>
+			</div>
+		</div>
+        	
+		<div id="footer">
+            .calpal is the most powerful calendar engine built with the 
+            <a href="http://www.playframework.org">Play framework</a>
+            for a task in the software engineering course at <a href="http://www.unibe.ch/">University of Berne</a>.
+		</div>
+    </body>
+</html>

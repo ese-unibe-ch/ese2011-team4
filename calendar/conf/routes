@@ -8,10 +8,11 @@
 # Home page
 GET     /                                       		Application.index
 GET     /captcha                              			Application.captcha
+GET     /home                                           Users.home
 GET		/calendar/{id}									Calendars.showCurrentMonth
 GET     /calendar/{id}/{year}-{month}-{day}     		Calendars.show
 GET		/calendars/index/{userId}						Calendars.index
-GET		/register										Users.register
+GET		/register										Application.register
 GET		/favorite/add/{userId}							Users.addContact
 GET		//favorite/delete/{userId}						Users.deleteContact
 GET		/profile/{id}									Users.show
@@ -24,7 +25,7 @@ GET		/message/reply//{msgId}							Messages.reply
 GET		/message/delete/{msgId}							Messages.delete
 POST	/message/handle/{msgId}							Messages.handleMessage
 GET		/message/send/{msgId}							Messages.sendMessage
-GET		/message/save-draft//{msgId}					Messages.saveDraft
+POST	/message/save-draft//{msgId}					Messages.saveDraft
 GET		/message/delete-draft/{msgId}					Messages.deleteDraft
 GET     /event/{id}/comments                   			Comments.show
 GET     /event/{id}/comment	                   			Comments.add
@@ -33,6 +34,7 @@ GET		/calendar/{calendarId}/event/{eventId}/edit		Events.edit
 GET		/calendar/{calendarId}/add/{year}-{month}-{day}	Events.add
 GET		/location/{id}									Locations.show
 GET		/location/{locationId}/edit                     Locations.edit
+GET		/event/{id}										Application.event
 
 # Ignore favicon requests
 GET     /favicon.ico                            		404

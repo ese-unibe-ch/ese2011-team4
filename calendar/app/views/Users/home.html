@@ -1,0 +1,47 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+#{set 'moreStyles'}
+	<link rel="stylesheet" href="@{'/public/stylesheets/home.css'}" type="text/css" media="screen" charset="${_response_encoding}">
+#{/set}
+
+<h2 class="title">${user.fullname}</h2>
+
+#{if birthdays.size() > 0}
+<div id="birthdays" class="portlet">
+
+		<h4>Birthdays:</h4>
+		<ul>
+			#{list items:birthdays, as:'birthday'}
+				<li>Today is #{a @Users.show(birthday.user.id)}${birthday.user.fullname}s#{/a} birthday</li>				
+			#{/list}
+		</ul>	
+</div>
+#{/if}
+
+#{if events.size() > 0}
+<div id="events" class="portlet">
+		<h4>Events today:</h4>
+		<ul>
+			#{list items:events, as:'event'}
+				<li>#{a @Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}${event.name} - <span class="metadata">${event.startDate.toString('dd.MM.yyyy HH:mm')}#{/a}</li> 
+			#{/list}
+		</ul>	
+</div>
+#{/if}
+
+#{if upcoming.size() > 0}
+<div id="upcomingevents" class="portlet">
+		<h4>Upcoming Events:</h4>
+		<ul>
+			#{list items:upcoming, as:'event'}
+				<li>#{a @Calendars.show(event.origin.id, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth())}${event.name} - <span class="metadata">${event.startDate.toString('dd.MM.yyyy HH:mm')}#{/a}</span></li>
+			#{/list}
+		</ul>
+</div>
+#{/if}
+
+#{if birthdays.size()==0 && events.size()==0 && upcoming.size()==0}
+<div id="empty" class="portlet">
+		There are no events for today	
+</div>
+#{/if}

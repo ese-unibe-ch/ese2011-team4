@@ -9,7 +9,7 @@ The Program has following features:
 
 * Register yourself on the page
 * Save events (with a description, starting/ending date, location (is also shown on Google Maps), privacy, location and of course a name)
-* Edit events
+* Edit events with a sweet datepicker
 * Add locations (if there is a conflict with them, you get warned)
 * Repeat events (daily, weekly, monthly, yearly or any other period, you prefer)
 * Save events from other users, into your calendar (Note: If the creator of the event deletes or edits it, the result will be also in your calendar!)
@@ -21,16 +21,16 @@ The Program has following features:
 * Print out the whole calendar or just the event, you want
 * Reminder, which reminds you of events via e-mail
 * A complete user profile (user can decide whether everything is public or not)
+* Send messages to other users
 
 # Installation
-There are no special things to do. Just copy all files in ONE folder. Do not rename anything in these folders! The folder calendar and the Play! files have to be in the same folder otherwise you can not start __CalPal__!
+Okay, there is one thing you should do. Run the following command within the folder of the application: `play dependencies calendar`. Beside of that there are no special things to do. Just copy all files in ONE folder. Do not rename anything in these folders! The folder calendar and the Play! files have to be in the same folder otherwise you can not start __CalPal__!
 
 ## How to run __CalPal__?
 Since __CalPal__ runs with the play! framework (see link below), you have to run this application via command-lines. So you have to open up the os specific prompt and switch to the folder, where the application is in (e.g. if your folder is `C:\Users\Username\CalPal` you type in `cd users/username/CalPal`).
 
+To run __CalPal__ correctly, you need some additional files. But don't worry. They can be automatically downloaded by typing the following command: play dependencies calendar.
 Now you can run the application with the following command: play run calendar. There should be a tex like this:
-
-------------------------------------------------------------------------------------------------
              _            _
        _ __ | | __ _ _  _| |
       | '_ \| |/ _' | || |_|
@@ -56,7 +56,7 @@ Now you can run the application with the following command: play run calendar. T
      16:57:13,996 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL
      16:57:14,928 INFO  ~ Application 'calendar' is now started !
      16:57:15,101 INFO  ~ Loading intial data
-------------------------------------------------------------------------------------------------
+
 
 Now you can register on the page or use our provided demo data (below), to login. After registration you get back to the login page.
 

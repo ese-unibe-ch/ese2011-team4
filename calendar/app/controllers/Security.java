@@ -23,7 +23,8 @@ public class Security extends Secure.Security {
 	
 	static boolean check(Message message) {
 		if(message != null) {
-			return (Users.getConnectedUser().messageBox.inbox.contains(message) || Users.getConnectedUser().messageBox.drafts.contains(message));
+			return (Users.getConnectedUser() == message.sender || 
+					Users.getConnectedUser() == message.recipient);
 		}
 		return false;
 	}

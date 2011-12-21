@@ -58,7 +58,8 @@ public class Events extends Controller {
 		assert calendar != null;
 		DateTime startDate = null;
 		DateTime endDate = null;
-		DateTime periodEnd = null;	
+		DateTime periodEnd = null;
+		
 		try {
 			startDate = format.parseDateTime(startDay+startTime);
 			endDate = format.parseDateTime(endDay+endTime);
@@ -71,7 +72,7 @@ public class Events extends Controller {
 	    	DateTime dt = new DateTime();
 	    	Events.add(calendarId, dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
 		}
-		
+
 		Event event = Event.createEvent(calendar, name, startDate, endDate, 
 				RepeatingType.parseFromString(repeating), periodEnd, repeatingInterval);
 		
@@ -104,9 +105,7 @@ public class Events extends Controller {
 					flash.error("An error occured during sending an inivation to %.", message.recipient.toString());
 				}
 	    	}
-	    	for(String s : notFound) {
-	    		flash.error("Couldn't find a user with the name % .", s);
-	    	}
+	    	flash.put("notfound", notFound);
 	        Calendars.show(calendarId, event.startDate.getYear(), event.startDate.getMonthOfYear(), event.startDate.getDayOfMonth());
 	    }
 	    else {
@@ -189,15 +188,35 @@ public class Events extends Controller {
 		Location location = Location.findById(locationId);
 		event.location = location;
 		
+		List<User> previous = event.invitations;
+		List<String> notFound = new LinkedList<String>();
+		List<Message> messages = new LinkedList<Message>();
 		event.invitations.clear();
-		for(String s : invitations.split(",")) {
-			// TODO improve that
-			User usr = User.find("byFullName", s.trim()).first();
-			event.invitations.add(usr);
+		if(!invitations.isEmpty()) {
+			for(String s : invitations.split(",")) {
+				User usr = User.find("byFullName", s.trim()).first();
+				if(usr == null) {
+					notFound.add(s.trim());
+				} else {
+					if(!previous.contains(usr)) {
+						event.invitations.add(usr);
+						messages.add(getInviationMessage(event.origin.owner, usr, event));
+					}
+				}
+			}
 		}
 		
 		// Validate and save
 		if(event.validateAndSave()) {
+			for(Message message : messages) {
+	    		try {
+					message.send();
+				} catch (Exception e) {
+					Logger.error(e.getStackTrace().toString());
+					flash.error("An error occured during sending an inivation to %.", message.recipient.toString());
+				}
+	    	}
+	    	flash.put("notfound", notFound);
 	    	Calendars.show(calendarId, event.startDate.getYear(), 
 	    							   event.startDate.getMonthOfYear(), 
 	   								   event.startDate.getDayOfMonth());
