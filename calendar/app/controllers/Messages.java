@@ -3,6 +3,7 @@ package controllers;
 import models.*;
 
 import play.Logger;
+import play.data.validation.CheckWith;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -12,7 +13,7 @@ public class Messages extends Controller {
 	public static void messageBox() {
 		User connectedUser = Users.getConnectedUser();
 		MessageBox msgBox = connectedUser.messageBox;
-			
+		
 		render(connectedUser, msgBox);
 	}
 	
@@ -48,8 +49,9 @@ public class Messages extends Controller {
 		
 		if(Security.check(message)) {
 			render(message);
-		} else
+		} else {
 			forbidden("Not your message!");
+		}
 	}
 	
 	public static void reply(Long msgId) {

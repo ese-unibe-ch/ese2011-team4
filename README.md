@@ -31,6 +31,7 @@ Since __CalPal__ runs with the play! framework (see link below), you have to run
 
 To run __CalPal__ correctly, you need some additional files. But don't worry. They can be automatically downloaded by typing the following command: play dependencies calendar.
 Now you can run the application with the following command: play run calendar. There should be a tex like this:
+
              _            _
        _ __ | | __ _ _  _| |
       | '_ \| |/ _' | || |_|
